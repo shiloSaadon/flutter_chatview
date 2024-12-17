@@ -95,10 +95,10 @@ class _ChatScreenState extends State<ChatScreen> {
         chatController: _chatController,
         onSendTap: _onSendTap,
         featureActiveConfig: const FeatureActiveConfig(
-          lastSeenAgoBuilderVisibility: true,
-          receiptsBuilderVisibility: true,
-          enableScrollToBottomButton: true,
-        ),
+            lastSeenAgoBuilderVisibility: true,
+            receiptsBuilderVisibility: true,
+            enableScrollToBottomButton: true,
+            enableOtherUserName: true),
         scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
           backgroundColor: theme.textFieldBackgroundColor,
           border: Border.all(
@@ -169,6 +169,23 @@ class _ChatScreenState extends State<ChatScreen> {
           messageTimeIconColor: theme.messageTimeIconColor,
           messageTimeTextStyle: TextStyle(color: theme.messageTimeTextColor),
           defaultGroupSeparatorConfig: DefaultGroupSeparatorConfiguration(
+            speratorBuilder: (day) {
+              return Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(.2),
+                        borderRadius: BorderRadius.circular(5)),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    child: Text(
+                      day,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              );
+            },
             textStyle: TextStyle(
               color: theme.chatHeaderColor,
               fontSize: 17,

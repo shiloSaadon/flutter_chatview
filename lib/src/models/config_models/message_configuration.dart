@@ -43,6 +43,9 @@ class MessageConfiguration {
   /// To customize reply view for custom message type
   final CustomMessageReplyViewBuilder? customMessageReplyViewBuilder;
 
+  /// To customise the containder of the message
+  final CustomMessageWrapperBuilder? customMessageWrapperBuilder;
+
   const MessageConfiguration({
     this.imageMessageConfig,
     this.messageReactionConfig,
@@ -50,5 +53,6 @@ class MessageConfiguration {
     this.customMessageBuilder,
     this.voiceMessageConfig,
     this.customMessageReplyViewBuilder,
+    this.customMessageWrapperBuilder,
   });
 }

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:chatview/chatview.dart';
-import 'package:chatview/src/widgets/reaction_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +15,7 @@ class VoiceMessageView extends StatefulWidget {
     this.outgoingChatBubbleConfig,
     this.onMaxDuration,
     this.messageReactionConfig,
+    this.useIndernalMessageWrpper = false,
     this.config,
   }) : super(key: key);
 
@@ -40,6 +40,9 @@ class VoiceMessageView extends StatefulWidget {
 
   /// Provides configuration of chat bubble appearance from current user of chat.
   final ChatBubble? outgoingChatBubbleConfig;
+
+  /// Allow the user to disable the message wrapper container
+  final bool useIndernalMessageWrpper;
 
   @override
   State<VoiceMessageView> createState() => _VoiceMessageViewState();
@@ -84,20 +87,27 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
       clipBehavior: Clip.none,
       children: [
         Container(
-          decoration: widget.config?.decoration ??
-              BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: widget.isMessageBySender
-                    ? widget.outgoingChatBubbleConfig?.color
-                    : widget.inComingChatBubbleConfig?.color,
-              ),
-          padding: widget.config?.padding ??
-              const EdgeInsets.symmetric(horizontal: 8),
-          margin: widget.config?.margin ??
-              EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: widget.message.reaction.reactions.isNotEmpty ? 15 : 0,
-              ),
+          decoration: !widget.useIndernalMessageWrpper
+              ? null
+              : widget.config?.decoration ??
+                  BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: widget.isMessageBySender
+                        ? widget.outgoingChatBubbleConfig?.color
+                        : widget.inComingChatBubbleConfig?.color,
+                  ),
+          padding: !widget.useIndernalMessageWrpper
+              ? null
+              : widget.config?.padding ??
+                  const EdgeInsets.symmetric(horizontal: 8),
+          margin: !widget.useIndernalMessageWrpper
+              ? null
+              : widget.config?.margin ??
+                  EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical:
+                        widget.message.reaction.reactions.isNotEmpty ? 15 : 0,
+                  ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -138,12 +148,12 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
             ],
           ),
         ),
-        if (widget.message.reaction.reactions.isNotEmpty)
-          ReactionWidget(
-            isMessageBySender: widget.isMessageBySender,
-            reaction: widget.message.reaction,
-            messageReactionConfig: widget.messageReactionConfig,
-          ),
+        // if (widget.message.reaction.reactions.isNotEmpty)
+        //   ReactionWidget(
+        //     isMessageBySender: widget.isMessageBySender,
+        //     reaction: widget.message.reaction,
+        //     messageReactionConfig: widget.messageReactionConfig,
+        //   ),
       ],
     );
   }

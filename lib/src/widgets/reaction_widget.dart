@@ -91,9 +91,8 @@ class _ReactionWidgetState extends State<ReactionWidget> {
                   right: 10,
                 ),
             decoration: BoxDecoration(
-              color: Colors.grey.shade100.withOpacity(1),
-              // color: messageReactionConfig?.backgroundColor ??
-              //     Colors.grey.shade200,
+              color: messageReactionConfig?.backgroundColor ??
+                  Colors.grey.shade200,
               borderRadius: messageReactionConfig?.borderRadius ??
                   BorderRadius.circular(16),
               border: Border.all(

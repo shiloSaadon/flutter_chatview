@@ -25,7 +25,6 @@ import 'package:flutter/material.dart';
 
 import '../utils/constants/constants.dart';
 import 'link_preview.dart';
-import 'reaction_widget.dart';
 
 class TextMessageView extends StatelessWidget {
   const TextMessageView({
@@ -36,6 +35,7 @@ class TextMessageView extends StatelessWidget {
     this.inComingChatBubbleConfig,
     this.outgoingChatBubbleConfig,
     this.messageReactionConfig,
+    this.useIndernalMessageWrpper = true,
     this.highlightMessage = false,
     this.highlightColor,
   }) : super(key: key);
@@ -64,6 +64,9 @@ class TextMessageView extends StatelessWidget {
   /// Allow user to set color of highlighted message.
   final Color? highlightColor;
 
+  /// Allow the user to disable the message wrapper container
+  final bool useIndernalMessageWrpper;
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -76,18 +79,9 @@ class TextMessageView extends StatelessWidget {
               minWidth: 75,
               maxWidth: chatBubbleMaxWidth ??
                   MediaQuery.of(context).size.width * 0.75),
-          padding: _padding ??
-              const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 10,
-              ),
-          margin: _margin ??
-              EdgeInsets.fromLTRB(
-                  5, 0, 6, message.reaction.reactions.isNotEmpty ? 15 : 2),
-          decoration: BoxDecoration(
-            color: highlightMessage ? highlightColor : _color,
-            borderRadius: _borderRadius(textMessage),
-          ),
+          padding: _padding,
+          margin: _margin,
+          decoration: decoration,
           child: textMessage.isUrl
               ? LinkPreview(
                   linkPreviewConfig: _linkPreviewConfig,
@@ -103,24 +97,34 @@ class TextMessageView extends StatelessWidget {
                       ),
                 ),
         ),
-        if (message.reaction.reactions.isNotEmpty)
-          ReactionWidget(
-            key: key,
-            isMessageBySender: isMessageBySender,
-            reaction: message.reaction,
-            messageReactionConfig: messageReactionConfig,
-          ),
+        // if (message.reaction.reactions.isNotEmpty)
+        //   ReactionWidget(
+        //     key: key,
+        //     isMessageBySender: isMessageBySender,
+        //     reaction: message.reaction,
+        //     messageReactionConfig: messageReactionConfig,
+        //   ),
       ],
     );
   }
 
-  EdgeInsetsGeometry? get _padding => isMessageBySender
-      ? outgoingChatBubbleConfig?.padding
-      : inComingChatBubbleConfig?.padding;
+  EdgeInsetsGeometry? get _padding => !useIndernalMessageWrpper
+      ? null
+      : (isMessageBySender
+              ? outgoingChatBubbleConfig?.padding
+              : inComingChatBubbleConfig?.padding) ??
+          const EdgeInsets.symmetric(
+            horizontal: 12,
+            vertical: 10,
+          );
 
-  EdgeInsetsGeometry? get _margin => isMessageBySender
-      ? outgoingChatBubbleConfig?.margin
-      : inComingChatBubbleConfig?.margin;
+  EdgeInsetsGeometry? get _margin => !useIndernalMessageWrpper
+      ? null
+      : (isMessageBySender
+              ? outgoingChatBubbleConfig?.margin
+              : inComingChatBubbleConfig?.margin) ??
+          EdgeInsets.fromLTRB(
+              5, 0, 6, message.reaction.reactions.isNotEmpty ? 15 : 2);
 
   LinkPreviewConfiguration? get _linkPreviewConfig => isMessageBySender
       ? outgoingChatBubbleConfig?.linkPreviewConfig
@@ -139,6 +143,12 @@ class TextMessageView extends StatelessWidget {
           (message.length < 29
               ? BorderRadius.circular(replyBorderRadius2)
               : BorderRadius.circular(replyBorderRadius2));
+  BoxDecoration? get decoration => !useIndernalMessageWrpper
+      ? null
+      : BoxDecoration(
+          color: highlightMessage ? highlightColor : _color,
+          borderRadius: _borderRadius(message.message),
+        );
 
   Color get _color => isMessageBySender
       ? outgoingChatBubbleConfig?.color ?? Colors.purple

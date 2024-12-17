@@ -57,6 +57,18 @@ typedef ReactedUserCallback = void Function(
 typedef CustomMessageReplyViewBuilder = Widget Function(
   ReplyMessage state,
 );
+
+/// to allow the user edit the container around the message
+typedef CustomMessageWrapperBuilder = Widget Function(
+  bool isMessageBySender,
+  bool highlightMessage,
+  Color highlightColor,
+  Message message,
+  ChatBubble? inComingChatBubbleConfig,
+  ChatBubble? outgoingChatBubbleConfig,
+  Widget messageDataWidget,
+);
+
 typedef MessageSorter = int Function(
   Message message1,
   Message message2,

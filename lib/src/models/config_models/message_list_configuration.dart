@@ -105,9 +105,13 @@ class DefaultGroupSeparatorConfiguration {
   /// e.g. May 21, 2024
   final String chatSeparatorDatePattern;
 
+  /// Allow to fully custom the seperator widget
+  final Widget Function(String)? speratorBuilder;
+
   const DefaultGroupSeparatorConfiguration({
     this.padding,
     this.textStyle,
+    this.speratorBuilder,
     this.chatSeparatorDatePattern = defaultChatSeparatorDatePattern,
   });
 }

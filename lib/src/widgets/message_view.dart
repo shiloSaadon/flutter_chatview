@@ -155,8 +155,6 @@ class _MessageViewState extends State<MessageView>
   }
 
   Widget get _messageView {
-    final message = widget.message.message;
-    final emojiMessageConfiguration = messageConfig?.emojiMessageConfig;
     return Padding(
       padding: EdgeInsets.only(
         bottom: widget.message.reaction.reactions.isNotEmpty ? 6 : 0,
@@ -164,107 +162,131 @@ class _MessageViewState extends State<MessageView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          (() {
-                if (message.isAllEmoji) {
-                  return Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Padding(
-                        padding: emojiMessageConfiguration?.padding ??
-                            EdgeInsets.fromLTRB(
-                              leftPadding2,
-                              4,
-                              leftPadding2,
-                              widget.message.reaction.reactions.isNotEmpty
-                                  ? 14
-                                  : 0,
-                            ),
-                        child: Transform.scale(
-                          scale: widget.shouldHighlight
-                              ? widget.highlightScale
-                              : 1.0,
-                          child: Text(
-                            message,
-                            style: emojiMessageConfiguration?.textStyle ??
-                                const TextStyle(fontSize: 30),
-                          ),
-                        ),
-                      ),
-                      if (widget.message.reaction.reactions.isNotEmpty)
-                        ReactionWidget(
-                          reaction: widget.message.reaction,
-                          messageReactionConfig:
-                              messageConfig?.messageReactionConfig,
-                          isMessageBySender: widget.isMessageBySender,
-                        ),
-                    ],
-                  );
-                } else if (widget.message.messageType.isImage) {
-                  return ImageMessageView(
-                    message: widget.message,
-                    isMessageBySender: widget.isMessageBySender,
-                    imageMessageConfig: messageConfig?.imageMessageConfig,
-                    messageReactionConfig: messageConfig?.messageReactionConfig,
-                    highlightImage: widget.shouldHighlight,
-                    highlightScale: widget.highlightScale,
-                  );
-                } else if (widget.message.messageType.isText) {
-                  return TextMessageView(
-                    inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
-                    outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
-                    isMessageBySender: widget.isMessageBySender,
-                    message: widget.message,
-                    chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
-                    messageReactionConfig: messageConfig?.messageReactionConfig,
-                    highlightColor: widget.highlightColor,
-                    highlightMessage: widget.shouldHighlight,
-                  );
-                } else if (widget.message.messageType.isVoice) {
-                  return VoiceMessageView(
-                    screenWidth: MediaQuery.of(context).size.width,
-                    message: widget.message,
-                    config: messageConfig?.voiceMessageConfig,
-                    onMaxDuration: widget.onMaxDuration,
-                    isMessageBySender: widget.isMessageBySender,
-                    messageReactionConfig: messageConfig?.messageReactionConfig,
-                    inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
-                    outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
-                  );
-                } else if (widget.message.messageType.isCustom &&
-                    messageConfig?.customMessageBuilder != null) {
-                  return messageConfig?.customMessageBuilder!(widget.message);
-                }
-              }()) ??
-              const SizedBox(),
-          ValueListenableBuilder(
-            valueListenable: widget.message.statusNotifier,
-            builder: (context, value, child) {
-              if (widget.isMessageBySender &&
-                  widget.controller?.initialMessageList.last.id ==
-                      widget.message.id &&
-                  widget.message.status == MessageStatus.read) {
-                if (ChatViewInheritedWidget.of(context)
-                        ?.featureActiveConfig
-                        .lastSeenAgoBuilderVisibility ??
-                    true) {
-                  return widget.outgoingChatBubbleConfig?.receiptsWidgetConfig
-                          ?.lastSeenAgoBuilder
-                          ?.call(
-                              widget.message,
-                              applicationDateFormatter(
-                                  widget.message.createdAt)) ??
-                      lastSeenAgoBuilder(widget.message,
-                          applicationDateFormatter(widget.message.createdAt));
-                }
-                return const SizedBox();
-              }
-              return const SizedBox();
-            },
-          )
+          messageWithReaction,
+          lastSeenIndicator,
         ],
       ),
     );
   }
+
+  Widget get messageWithReaction => Stack(
+        children: [
+          singleMessageBubble,
+          if (widget.message.reaction.reactions.isNotEmpty)
+            ReactionWidget(
+              // key: key,
+              isMessageBySender: widget.isMessageBySender,
+              reaction: widget.message.reaction,
+              messageReactionConfig: messageConfig?.messageReactionConfig,
+            ),
+        ],
+      );
+
+  Widget get singleMessageBubble {
+    final message = widget.message.message;
+    final emojiMessageConfiguration = messageConfig?.emojiMessageConfig;
+    final useIndernalMessageWrpper =
+        messageConfig?.customMessageWrapperBuilder == null;
+    Widget? messageData;
+    if (message.isAllEmoji) {
+      messageData = Padding(
+        padding: emojiMessageConfiguration?.padding ??
+            EdgeInsets.fromLTRB(
+              leftPadding2,
+              4,
+              leftPadding2,
+              widget.message.reaction.reactions.isNotEmpty ? 14 : 0,
+            ),
+        child: Transform.scale(
+          scale: widget.shouldHighlight ? widget.highlightScale : 1.0,
+          child: Text(
+            message,
+            style: emojiMessageConfiguration?.textStyle ??
+                const TextStyle(fontSize: 30),
+          ),
+        ),
+      );
+    } else if (widget.message.messageType.isImage) {
+      messageData = ImageMessageView(
+        message: widget.message,
+        isMessageBySender: widget.isMessageBySender,
+        imageMessageConfig: messageConfig?.imageMessageConfig,
+        messageReactionConfig: messageConfig?.messageReactionConfig,
+        highlightImage: widget.shouldHighlight,
+        highlightScale: widget.highlightScale,
+      );
+    } else if (widget.message.messageType.isText) {
+      messageData = TextMessageView(
+        inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
+        outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
+        isMessageBySender: widget.isMessageBySender,
+        message: widget.message,
+        chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
+        messageReactionConfig: messageConfig?.messageReactionConfig,
+        highlightColor: widget.highlightColor,
+        highlightMessage: widget.shouldHighlight,
+        useIndernalMessageWrpper: useIndernalMessageWrpper,
+      );
+    } else if (widget.message.messageType.isVoice) {
+      messageData = VoiceMessageView(
+        screenWidth: MediaQuery.of(context).size.width,
+        message: widget.message,
+        config: messageConfig?.voiceMessageConfig,
+        onMaxDuration: widget.onMaxDuration,
+        isMessageBySender: widget.isMessageBySender,
+        messageReactionConfig: messageConfig?.messageReactionConfig,
+        inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
+        outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
+        useIndernalMessageWrpper: useIndernalMessageWrpper,
+      );
+    } else if (widget.message.messageType.isCustom &&
+        messageConfig?.customMessageBuilder != null) {
+      messageData = messageConfig?.customMessageBuilder!(widget.message);
+    }
+
+    if (messageData == null) {
+      return const SizedBox();
+    }
+
+    //  Custom message wrapper
+    if (messageConfig?.customMessageWrapperBuilder != null) {
+      return messageConfig!.customMessageWrapperBuilder!(
+        widget.isMessageBySender,
+        widget.shouldHighlight,
+        widget.highlightColor,
+        widget.message,
+        widget.outgoingChatBubbleConfig,
+        widget.inComingChatBubbleConfig,
+        messageData,
+      );
+    }
+
+    return messageData;
+  }
+
+  Widget get lastSeenIndicator => ValueListenableBuilder(
+        valueListenable: widget.message.statusNotifier,
+        builder: (context, value, child) {
+          if (widget.isMessageBySender &&
+              widget.controller?.initialMessageList.last.id ==
+                  widget.message.id &&
+              widget.message.status == MessageStatus.read) {
+            if (ChatViewInheritedWidget.of(context)
+                    ?.featureActiveConfig
+                    .lastSeenAgoBuilderVisibility ??
+                true) {
+              return widget.outgoingChatBubbleConfig?.receiptsWidgetConfig
+                      ?.lastSeenAgoBuilder
+                      ?.call(widget.message,
+                          applicationDateFormatter(widget.message.createdAt)) ??
+                  lastSeenAgoBuilder(widget.message,
+                      applicationDateFormatter(widget.message.createdAt));
+            }
+            return const SizedBox();
+          }
+          return const SizedBox();
+        },
+      );
 
   void _onLongPressStart(LongPressStartDetails details) async {
     await _animationController?.forward();
