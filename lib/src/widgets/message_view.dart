@@ -37,6 +37,7 @@ class MessageView extends StatefulWidget {
     required this.isMessageBySender,
     required this.onLongPress,
     required this.isLongPressEnable,
+    required this.senderDataWidgets,
     this.chatBubbleMaxWidth,
     this.inComingChatBubbleConfig,
     this.outgoingChatBubbleConfig,
@@ -89,6 +90,9 @@ class MessageView extends StatefulWidget {
 
   /// Allow user to turn on/off long press tap on chat bubble.
   final bool isLongPressEnable;
+
+  /// Data about the sender to allow differen modes for the ui
+  final SenderDataWidgets senderDataWidgets;
 
   final ChatController? controller;
 
@@ -255,8 +259,10 @@ class _MessageViewState extends State<MessageView>
         widget.shouldHighlight,
         widget.highlightColor,
         widget.message,
-        widget.outgoingChatBubbleConfig,
         widget.inComingChatBubbleConfig,
+        widget.outgoingChatBubbleConfig,
+        messageConfig?.voiceMessageConfig,
+        widget.senderDataWidgets,
         messageData,
       );
     }

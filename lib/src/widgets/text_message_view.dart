@@ -81,7 +81,7 @@ class TextMessageView extends StatelessWidget {
                   MediaQuery.of(context).size.width * 0.75),
           padding: _padding,
           margin: _margin,
-          decoration: decoration,
+          decoration: _decoration,
           child: textMessage.isUrl
               ? LinkPreview(
                   linkPreviewConfig: _linkPreviewConfig,
@@ -126,6 +126,13 @@ class TextMessageView extends StatelessWidget {
           EdgeInsets.fromLTRB(
               5, 0, 6, message.reaction.reactions.isNotEmpty ? 15 : 2);
 
+  BoxDecoration? get _decoration => !useIndernalMessageWrpper
+      ? null
+      : BoxDecoration(
+          color: highlightMessage ? highlightColor : _color,
+          borderRadius: _borderRadius(message.message),
+        );
+
   LinkPreviewConfiguration? get _linkPreviewConfig => isMessageBySender
       ? outgoingChatBubbleConfig?.linkPreviewConfig
       : inComingChatBubbleConfig?.linkPreviewConfig;
@@ -143,12 +150,6 @@ class TextMessageView extends StatelessWidget {
           (message.length < 29
               ? BorderRadius.circular(replyBorderRadius2)
               : BorderRadius.circular(replyBorderRadius2));
-  BoxDecoration? get decoration => !useIndernalMessageWrpper
-      ? null
-      : BoxDecoration(
-          color: highlightMessage ? highlightColor : _color,
-          borderRadius: _borderRadius(message.message),
-        );
 
   Color get _color => isMessageBySender
       ? outgoingChatBubbleConfig?.color ?? Colors.purple

@@ -21,6 +21,7 @@
  */
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatview/chatview.dart';
+import 'package:chatview/src/widgets/profile_circle.dart';
 import 'package:flutter/material.dart';
 
 typedef StringCallback = void Function(String);
@@ -58,6 +59,8 @@ typedef CustomMessageReplyViewBuilder = Widget Function(
   ReplyMessage state,
 );
 
+typedef SenderDataWidgets = (ProfileCircle profileCircle, Widget name);
+
 /// to allow the user edit the container around the message
 typedef CustomMessageWrapperBuilder = Widget Function(
   bool isMessageBySender,
@@ -66,6 +69,8 @@ typedef CustomMessageWrapperBuilder = Widget Function(
   Message message,
   ChatBubble? inComingChatBubbleConfig,
   ChatBubble? outgoingChatBubbleConfig,
+  VoiceMessageConfiguration? voiceMessageConfiguration,
+  SenderDataWidgets senderDataWidgets,
   Widget messageDataWidget,
 );
 

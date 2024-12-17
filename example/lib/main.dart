@@ -1,5 +1,6 @@
 import 'package:chatview/chatview.dart';
 import 'package:example/data.dart';
+import 'package:example/message_wrpper_builder/message_wrpper_builder.dart';
 import 'package:example/models/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -95,10 +96,16 @@ class _ChatScreenState extends State<ChatScreen> {
         chatController: _chatController,
         onSendTap: _onSendTap,
         featureActiveConfig: const FeatureActiveConfig(
-            lastSeenAgoBuilderVisibility: true,
-            receiptsBuilderVisibility: true,
-            enableScrollToBottomButton: true,
-            enableOtherUserName: true),
+          lastSeenAgoBuilderVisibility: true,
+          receiptsBuilderVisibility: true,
+          enableScrollToBottomButton: true,
+          //
+          enableCurrentUserProfileAvatar: false,
+          enableOtherUserProfileAvatar: false,
+
+          //
+          enableOtherUserName: false,
+        ),
         scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
           backgroundColor: theme.textFieldBackgroundColor,
           border: Border.all(
@@ -267,6 +274,7 @@ class _ChatScreenState extends State<ChatScreen> {
           backgroundColor: theme.reactionPopupColor,
         ),
         messageConfig: MessageConfiguration(
+          customMessageWrapperBuilder: messageWrapperBuilder,
           messageReactionConfig: MessageReactionConfiguration(
             backgroundColor: theme.messageReactionBackGroundColor,
             borderColor: theme.messageReactionBackGroundColor,
@@ -301,8 +309,10 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
         profileCircleConfig: const ProfileCircleConfiguration(
-          profileImageUrl: Data.profileImage,
-        ),
+            bottomPadding: 0,
+            padding: EdgeInsets.zero,
+            profileImageUrl: Data.profileImage,
+            circleRadius: 10),
         repliedMessageConfig: RepliedMessageConfiguration(
           backgroundColor: theme.repliedMessageColor,
           verticalBarColor: theme.verticalBarColor,
