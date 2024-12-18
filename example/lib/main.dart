@@ -201,6 +201,9 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           backgroundColor: theme.backgroundColor,
         ),
+        // sendMessageBuilder: (_) => Container(
+        //   color: Colors.red,
+        // ),
         sendMessageConfig: SendMessageConfiguration(
           imagePickerIconsConfig: ImagePickerIconsConfiguration(
             cameraIconColor: theme.cameraIconColor,
