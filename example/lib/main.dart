@@ -102,9 +102,8 @@ class _ChatScreenState extends State<ChatScreen> {
           //
           enableCurrentUserProfileAvatar: false,
           enableOtherUserProfileAvatar: false,
-
-          //
           enableOtherUserName: false,
+          //
         ),
         scrollToBottomButtonConfig: ScrollToBottomButtonConfig(
           backgroundColor: theme.textFieldBackgroundColor,
