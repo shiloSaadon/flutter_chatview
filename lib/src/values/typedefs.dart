@@ -35,6 +35,9 @@ typedef ReplyMessageWithReturnWidget = Widget Function(
 );
 
 typedef SendMessageWithReturnWidget = Widget Function(
+  /// The message bubble key
+  Key? key,
+
   /// Provides call back when user tap on send button on text field.
   StringMessageCallBack onSendTap,
 

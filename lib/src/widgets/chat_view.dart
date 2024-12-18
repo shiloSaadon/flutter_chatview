@@ -305,6 +305,7 @@ class _ChatViewState extends State<ChatView>
 
   Widget sendMessageWidget() {
     return widget.sendMessageBuilder?.call(
+          _sendMessageKey,
           (message, replyMessage, messageType) {
             if (context.suggestionsConfig?.autoDismissOnSelection ?? true) {
               chatController.removeReplySuggestions();

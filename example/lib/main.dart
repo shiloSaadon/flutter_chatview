@@ -201,11 +201,11 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           backgroundColor: theme.backgroundColor,
         ),
-        sendMessageBuilder: (onSendTap, onReplyCallback, onReplyCloseCallback,
-                replyMessageBuilder) =>
-            Container(
-          color: Colors.red,
-        ),
+        // sendMessageBuilder: (onSendTap, onReplyCallback, onReplyCloseCallback,
+        //         replyMessageBuilder) =>
+        //     Container(
+        //   color: Colors.red,
+        // ),
         sendMessageConfig: SendMessageConfiguration(
           imagePickerIconsConfig: ImagePickerIconsConfiguration(
             cameraIconColor: theme.cameraIconColor,
