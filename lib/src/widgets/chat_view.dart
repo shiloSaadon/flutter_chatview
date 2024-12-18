@@ -113,7 +113,7 @@ class ChatView extends StatefulWidget {
   final StringMessageCallBack? onSendTap;
 
   /// Provides builder which helps you to make custom text field and functionality.
-  final ReplyMessageWithReturnWidget? sendMessageBuilder;
+  final SendMessageWithReturnWidget? sendMessageBuilder;
 
   /// Allow user to giving customisation typing indicator.
   final TypeIndicatorConfiguration? typeIndicatorConfig;
@@ -277,27 +277,7 @@ class _ChatViewState extends State<ChatView>
                                 },
                               ),
                             if (featureActiveConfig.enableTextField)
-                              SendMessageWidget(
-                                key: _sendMessageKey,
-                                sendMessageBuilder: widget.sendMessageBuilder,
-                                sendMessageConfig: widget.sendMessageConfig,
-                                onSendTap:
-                                    (message, replyMessage, messageType) {
-                                  if (context.suggestionsConfig
-                                          ?.autoDismissOnSelection ??
-                                      true) {
-                                    chatController.removeReplySuggestions();
-                                  }
-                                  _onSendTap(
-                                      message, replyMessage, messageType);
-                                },
-                                onReplyCallback: (reply) =>
-                                    replyMessage.value = reply,
-                                onReplyCloseCallback: () =>
-                                    replyMessage.value = const ReplyMessage(),
-                                messageConfig: widget.messageConfig,
-                                replyMessageBuilder: widget.replyMessageBuilder,
-                              ),
+                              sendMessageWidget()
                           ],
                         ),
                       ),
@@ -321,6 +301,34 @@ class _ChatViewState extends State<ChatView>
         }),
       ),
     );
+  }
+
+  Widget sendMessageWidget() {
+    return widget.sendMessageBuilder?.call(
+          (message, replyMessage, messageType) {
+            if (context.suggestionsConfig?.autoDismissOnSelection ?? true) {
+              chatController.removeReplySuggestions();
+            }
+            _onSendTap(message, replyMessage, messageType);
+          },
+          (reply) => replyMessage.value = reply,
+          () => replyMessage.value = const ReplyMessage(),
+          widget.replyMessageBuilder,
+        ) ??
+        SendMessageWidget(
+          key: _sendMessageKey,
+          sendMessageConfig: widget.sendMessageConfig,
+          onSendTap: (message, replyMessage, messageType) {
+            if (context.suggestionsConfig?.autoDismissOnSelection ?? true) {
+              chatController.removeReplySuggestions();
+            }
+            _onSendTap(message, replyMessage, messageType);
+          },
+          onReplyCallback: (reply) => replyMessage.value = reply,
+          onReplyCloseCallback: () => replyMessage.value = const ReplyMessage(),
+          messageConfig: widget.messageConfig,
+          replyMessageBuilder: widget.replyMessageBuilder,
+        );
   }
 
   void _onChatListTap(BuildContext context) {

@@ -33,6 +33,21 @@ typedef StringMessageCallBack = void Function(
 typedef ReplyMessageWithReturnWidget = Widget Function(
   ReplyMessage? replyMessage,
 );
+
+typedef SendMessageWithReturnWidget = Widget Function(
+  /// Provides call back when user tap on send button on text field.
+  StringMessageCallBack onSendTap,
+
+  /// Provides callback when user swipes chat bubble for reply.
+  ReplyMessageCallBack? onReplyCallback,
+
+  /// Provides call when user tap on close button which is showed in reply pop-up.
+  VoidCallBack? onReplyCloseCallback,
+
+  /// Provides a callback for the view when replying to message
+  CustomViewForReplyMessage? replyMessageBuilder,
+);
+
 typedef ReplyMessageCallBack = void Function(ReplyMessage replyMessage);
 typedef VoidCallBack = void Function();
 typedef DoubleCallBack = void Function(double, double);
