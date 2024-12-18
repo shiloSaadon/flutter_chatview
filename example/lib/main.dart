@@ -171,6 +171,8 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
         chatBackgroundConfig: ChatBackgroundConfiguration(
+          backgroundImage:
+              'https://st5.depositphotos.com/35914836/63482/i/450/depositphotos_634821438-stock-photo-beautiful-sunset-sea.jpg',
           sortEnable: true,
           messageTimeIconColor: theme.messageTimeIconColor,
           messageTimeTextStyle: TextStyle(color: theme.messageTimeTextColor),

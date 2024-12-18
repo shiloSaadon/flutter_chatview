@@ -108,18 +108,18 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
                 // This has been added to prevent messages from being
                 // displayed below the text field
                 // when the user scrolls the message list.
-                Positioned(
-                  right: 0,
-                  left: 0,
-                  bottom: 0,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height /
-                        ((!kIsWeb && Platform.isIOS) ? 24 : 28),
-                    color:
-                        chatListConfig.chatBackgroundConfig.backgroundColor ??
-                            Colors.white,
-                  ),
-                ),
+                // Positioned(
+                //   right: 0,
+                //   left: 0,
+                //   bottom: 0,
+                //   child: Container(
+                //     height: MediaQuery.of(context).size.height /
+                //         ((!kIsWeb && Platform.isIOS) ? 24 : 28),
+                //     color:
+                //         chatListConfig.chatBackgroundConfig.backgroundColor ??
+                //             Colors.white,
+                //   ),
+                // ),
                 Positioned(
                   right: 0,
                   left: 0,
@@ -140,7 +140,10 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
                             child: const ScrollToBottomButton(),
                           ),
                         ),
-                      Padding(
+                      Container(
+                        color: chatListConfig
+                                .chatBackgroundConfig.backgroundColor ??
+                            Colors.white,
                         key: chatViewIW?.chatTextFieldViewKey,
                         padding: EdgeInsets.fromLTRB(
                           bottomPadding4,
