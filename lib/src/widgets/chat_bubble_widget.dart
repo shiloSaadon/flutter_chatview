@@ -49,7 +49,7 @@ class ChatBubbleWidget extends StatefulWidget {
   final DoubleCallBack onLongPress;
 
   /// Provides callback of when user swipe chat bubble for reply.
-  final MessageCallBack onSwipe;
+  final AssignReplayCallBack onSwipe;
 
   /// Provides slide animation when user swipe whole chat.
   final Animation<Offset>? slideAnimation;
@@ -171,7 +171,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
       chatListConfig.swipeToReplyConfig?.onRightSwipe!(
           widget.message.message, widget.message.sentBy);
     }
-    widget.onSwipe(widget.message);
+    widget.onSwipe(widget.message, context);
   }
 
   void onLeftSwipe() {
@@ -183,7 +183,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
       chatListConfig.swipeToReplyConfig?.onLeftSwipe!(
           widget.message.message, widget.message.sentBy);
     }
-    widget.onSwipe(widget.message);
+    widget.onSwipe(widget.message, context);
   }
 
   void _onAvatarTap(ChatUser? user) {

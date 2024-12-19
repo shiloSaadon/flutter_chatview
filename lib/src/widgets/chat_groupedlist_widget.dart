@@ -48,7 +48,7 @@ class ChatGroupedListWidget extends StatefulWidget {
   final ReplyMessage replyMessage;
 
   /// Provides callback for assigning reply message when user swipe on chat bubble.
-  final MessageCallBack assignReplyMessage;
+  final AssignReplayCallBack assignReplyMessage;
 
   /// Provides callback when user tap anywhere on whole chat.
   final VoidCallBack onChatListTap;
@@ -162,14 +162,25 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
   }
 
   Future<void> _onReplyTap(String id, List<Message>? messages) async {
+    print("ffewfe");
     // Finds the replied message if exists
     final repliedMessages = messages?.firstWhere((message) => id == message.id);
+    print('repliedMessages  -> $repliedMessages');
     final repliedMsgAutoScrollConfig =
         chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig;
     final highlightDuration = repliedMsgAutoScrollConfig?.highlightDuration ??
         const Duration(milliseconds: 300);
     // Scrolls to replied message and highlights
+    if (repliedMessages != null && repliedMessages.key.currentState == null) {
+      int counter = 0;
+      while (repliedMessages.key.currentState == null && counter < 200) {
+        widget.scrollController.jumpTo(widget.scrollController.offset + 10);
+        counter++;
+        await Future.delayed(Duration(milliseconds: 1));
+      }
+    }
     if (repliedMessages != null && repliedMessages.key.currentState != null) {
+      print("dfwgfrwegerethg");
       await Scrollable.ensureVisible(
         repliedMessages.key.currentState!.context,
         // This value will make widget to be in center when auto scrolled.

@@ -168,6 +168,8 @@ class _ChatViewState extends State<ChatView>
   ValueNotifier<ReplyMessage> replyMessage =
       ValueNotifier(const ReplyMessage());
 
+  late SendMessageController sendMessageController;
+
   ChatController get chatController => widget.chatController;
 
   ChatBackgroundConfiguration get chatBackgroundConfig =>
@@ -184,6 +186,19 @@ class _ChatViewState extends State<ChatView>
   void initState() {
     super.initState();
     setLocaleMessages('en', ReceiptsCustomMessages());
+
+    sendMessageController = SendMessageController(
+      onSendTap: (message, replyMessage, messageType) {
+        if (context.suggestionsConfig?.autoDismissOnSelection ?? true) {
+          chatController.removeReplySuggestions();
+        }
+        _onSendTap(message, replyMessage, messageType);
+      },
+      onReplyCallback: (reply) => replyMessage.value = reply,
+      onReplyCloseCallback: () => replyMessage.value = const ReplyMessage(),
+      currentUser: null,
+      repliedUser: null,
+    );
   }
 
   @override
@@ -193,6 +208,19 @@ class _ChatViewState extends State<ChatView>
         chatViewState.hasMessages) {
       chatController.scrollToLastMessage();
     }
+    final sendMessageController = SendMessageController(
+      onSendTap: (message, replyMessage, messageType) {
+        if (context.suggestionsConfig?.autoDismissOnSelection ?? true) {
+          chatController.removeReplySuggestions();
+        }
+        _onSendTap(message, replyMessage, messageType);
+      },
+      onReplyCallback: (reply) => replyMessage.value = reply,
+      onReplyCloseCallback: () => replyMessage.value = const ReplyMessage(),
+      currentUser: null,
+      repliedUser: null,
+    );
+
     return ChatViewInheritedWidget(
       chatController: chatController,
       featureActiveConfig: featureActiveConfig,
@@ -270,14 +298,20 @@ class _ChatViewState extends State<ChatView>
                                     isLastPage: widget.isLastPage,
                                     loadingWidget: widget.loadingWidget,
                                     onChatListTap: widget.onChatListTap,
-                                    assignReplyMessage: (message) =>
-                                        _sendMessageKey.currentState
-                                            ?.assignReplyMessage(message),
+                                    assignReplyMessage: sendMessageController
+                                        .assignReplyMessage,
                                   );
                                 },
                               ),
                             if (featureActiveConfig.enableTextField)
-                              sendMessageWidget()
+                              SendMessageWidget(
+                                key: _sendMessageKey,
+                                sendMessageBuilder: widget.sendMessageBuilder,
+                                sendMessageConfig: widget.sendMessageConfig,
+                                sendMessageController: sendMessageController,
+                                messageConfig: widget.messageConfig,
+                                replyMessageBuilder: widget.replyMessageBuilder,
+                              ),
                           ],
                         ),
                       ),
@@ -303,35 +337,6 @@ class _ChatViewState extends State<ChatView>
     );
   }
 
-  Widget sendMessageWidget() {
-    return widget.sendMessageBuilder?.call(
-          _sendMessageKey,
-          (message, replyMessage, messageType) {
-            if (context.suggestionsConfig?.autoDismissOnSelection ?? true) {
-              chatController.removeReplySuggestions();
-            }
-            _onSendTap(message, replyMessage, messageType);
-          },
-          (reply) => replyMessage.value = reply,
-          () => replyMessage.value = const ReplyMessage(),
-          widget.replyMessageBuilder,
-        ) ??
-        SendMessageWidget(
-          key: _sendMessageKey,
-          sendMessageConfig: widget.sendMessageConfig,
-          onSendTap: (message, replyMessage, messageType) {
-            if (context.suggestionsConfig?.autoDismissOnSelection ?? true) {
-              chatController.removeReplySuggestions();
-            }
-            _onSendTap(message, replyMessage, messageType);
-          },
-          onReplyCallback: (reply) => replyMessage.value = reply,
-          onReplyCloseCallback: () => replyMessage.value = const ReplyMessage(),
-          messageConfig: widget.messageConfig,
-          replyMessageBuilder: widget.replyMessageBuilder,
-        );
-  }
-
   void _onChatListTap(BuildContext context) {
     widget.onChatListTap?.call();
     if (!kIsWeb && (Platform.isIOS || Platform.isAndroid)) {
@@ -346,16 +351,23 @@ class _ChatViewState extends State<ChatView>
     ReplyMessage replyMessage,
     MessageType messageType,
   ) {
-    if (widget.sendMessageBuilder == null) {
-      if (widget.onSendTap != null) {
-        widget.onSendTap!(message, replyMessage, messageType);
-      }
-      _assignReplyMessage();
+    // --- Replace this ---
+    // if (widget.sendMessageBuilder == null) {
+    //   if (widget.onSendTap != null) {
+    //     widget.onSendTap!(message, replyMessage, messageType);
+    //   }
+    //   _assignReplyMessage();
+    // }
+    // ------------------------
+    // --- Whit this ----
+    if (widget.onSendTap != null) {
+      widget.onSendTap!(message, replyMessage, messageType);
     }
+    _assignReplyMessage();
     chatController.scrollToLastMessage();
   }
 
-  void replyMessageViewClose() => _sendMessageKey.currentState?.onCloseTap();
+  void replyMessageViewClose() => sendMessageController.onCloseTap();
 
   void _assignReplyMessage() {
     if (replyMessage.value.message.isNotEmpty) {

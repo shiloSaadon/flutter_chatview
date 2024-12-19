@@ -1,4 +1,5 @@
 import 'package:chatview/chatview.dart';
+import 'package:example/builders/send_messages_builder/send_messages_builder.dart';
 import 'package:example/data.dart';
 import 'package:example/message_wrpper_builder/message_wrpper_builder.dart';
 import 'package:example/models/theme.dart';
@@ -201,6 +202,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           backgroundColor: theme.backgroundColor,
         ),
+        sendMessageBuilder: sendMessageBuilder,
         // sendMessageBuilder: (onSendTap, onReplyCallback, onReplyCloseCallback,
         //         replyMessageBuilder) =>
         //     Container(

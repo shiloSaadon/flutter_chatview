@@ -21,6 +21,7 @@
  */
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatview/chatview.dart';
+import 'package:chatview/src/controller/send_message_controller.dart';
 import 'package:chatview/src/widgets/profile_circle.dart';
 import 'package:flutter/material.dart';
 
@@ -35,26 +36,15 @@ typedef ReplyMessageWithReturnWidget = Widget Function(
 );
 
 typedef SendMessageWithReturnWidget = Widget Function(
-  /// The message bubble key
-  Key? key,
-
-  /// Provides call back when user tap on send button on text field.
-  StringMessageCallBack onSendTap,
-
-  /// Provides callback when user swipes chat bubble for reply.
-  ReplyMessageCallBack? onReplyCallback,
-
-  /// Provides call when user tap on close button which is showed in reply pop-up.
-  VoidCallBack? onReplyCloseCallback,
-
-  /// Provides a callback for the view when replying to message
-  CustomViewForReplyMessage? replyMessageBuilder,
+  SendMessageController replyMessage,
 );
 
 typedef ReplyMessageCallBack = void Function(ReplyMessage replyMessage);
 typedef VoidCallBack = void Function();
 typedef DoubleCallBack = void Function(double, double);
 typedef MessageCallBack = void Function(Message message);
+typedef AssignReplayCallBack = void Function(
+    Message message, BuildContext context);
 typedef VoidCallBackWithFuture = Future<void> Function();
 typedef StringsCallBack = void Function(String emoji, String messageId);
 typedef StringWithReturnWidget = Widget Function(String separator);

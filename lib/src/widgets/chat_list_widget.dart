@@ -60,7 +60,7 @@ class ChatListWidget extends StatefulWidget {
 
   /// Provides callback for assigning reply message when user swipe to chat
   /// bubble.
-  final MessageCallBack assignReplyMessage;
+  final AssignReplayCallBack assignReplyMessage;
 
   /// Provides callback when user tap anywhere on whole chat.
   final VoidCallBack? onChatListTap;
@@ -214,7 +214,7 @@ class _ChatListWidgetState extends State<ChatListWidget>
                     );
                   },
                   onReplyTap: () {
-                    widget.assignReplyMessage(message);
+                    widget.assignReplyMessage(message, context);
                     if (featureActiveConfig?.enableReactionPopup ?? false) {
                       chatViewIW?.showPopUp.value = false;
                     }
