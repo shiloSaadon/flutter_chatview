@@ -257,78 +257,99 @@ class _ChatViewState extends State<ChatView>
                           )
                         : null,
                   ),
-                  padding: chatBackgroundConfig.padding,
-                  margin: chatBackgroundConfig.margin,
-                  child: Column(
+                ),
+                Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: Stack(
                     children: [
-                      if (widget.appBar != null) widget.appBar!,
-                      Expanded(
-                        child: Stack(
+                      Container(
+                        height: chatBackgroundConfig.height ??
+                            MediaQuery.of(context).size.height,
+                        width: chatBackgroundConfig.width ??
+                            MediaQuery.of(context).size.width,
+                        padding: chatBackgroundConfig.padding,
+                        margin: chatBackgroundConfig.margin,
+                        child: Column(
                           children: [
-                            if (chatViewState.isLoading)
-                              ChatViewStateWidget(
-                                chatViewStateWidgetConfig:
-                                    chatViewStateConfig?.loadingWidgetConfig,
-                                chatViewState: chatViewState,
-                              )
-                            else if (chatViewState.noMessages)
-                              ChatViewStateWidget(
-                                chatViewStateWidgetConfig:
-                                    chatViewStateConfig?.noMessageWidgetConfig,
-                                chatViewState: chatViewState,
-                                onReloadButtonTap:
-                                    chatViewStateConfig?.onReloadButtonTap,
-                              )
-                            else if (chatViewState.isError)
-                              ChatViewStateWidget(
-                                chatViewStateWidgetConfig:
-                                    chatViewStateConfig?.errorWidgetConfig,
-                                chatViewState: chatViewState,
-                                onReloadButtonTap:
-                                    chatViewStateConfig?.onReloadButtonTap,
-                              )
-                            else if (chatViewState.hasMessages)
-                              ValueListenableBuilder<ReplyMessage>(
-                                valueListenable: replyMessage,
-                                builder: (_, state, child) {
-                                  return ChatListWidget(
-                                    replyMessage: state,
-                                    chatController: widget.chatController,
-                                    loadMoreData: widget.loadMoreData,
-                                    isLastPage: widget.isLastPage,
-                                    loadingWidget: widget.loadingWidget,
-                                    onChatListTap: widget.onChatListTap,
-                                    assignReplyMessage: sendMessageController
-                                        .assignReplyMessage,
-                                  );
-                                },
+                            if (widget.appBar != null) widget.appBar!,
+                            Expanded(
+                              child: Stack(
+                                children: [
+                                  if (chatViewState.isLoading)
+                                    ChatViewStateWidget(
+                                      chatViewStateWidgetConfig:
+                                          chatViewStateConfig
+                                              ?.loadingWidgetConfig,
+                                      chatViewState: chatViewState,
+                                    )
+                                  else if (chatViewState.noMessages)
+                                    ChatViewStateWidget(
+                                      chatViewStateWidgetConfig:
+                                          chatViewStateConfig
+                                              ?.noMessageWidgetConfig,
+                                      chatViewState: chatViewState,
+                                      onReloadButtonTap: chatViewStateConfig
+                                          ?.onReloadButtonTap,
+                                    )
+                                  else if (chatViewState.isError)
+                                    ChatViewStateWidget(
+                                      chatViewStateWidgetConfig:
+                                          chatViewStateConfig
+                                              ?.errorWidgetConfig,
+                                      chatViewState: chatViewState,
+                                      onReloadButtonTap: chatViewStateConfig
+                                          ?.onReloadButtonTap,
+                                    )
+                                  else if (chatViewState.hasMessages)
+                                    ValueListenableBuilder<ReplyMessage>(
+                                      valueListenable: replyMessage,
+                                      builder: (_, state, child) {
+                                        return ChatListWidget(
+                                          replyMessage: state,
+                                          chatController: widget.chatController,
+                                          loadMoreData: widget.loadMoreData,
+                                          isLastPage: widget.isLastPage,
+                                          loadingWidget: widget.loadingWidget,
+                                          onChatListTap: widget.onChatListTap,
+                                          assignReplyMessage:
+                                              sendMessageController
+                                                  .assignReplyMessage,
+                                        );
+                                      },
+                                    ),
+                                  if (featureActiveConfig.enableTextField)
+                                    SendMessageWidget(
+                                      key: _sendMessageKey,
+                                      sendMessageBuilder:
+                                          widget.sendMessageBuilder,
+                                      sendMessageConfig:
+                                          widget.sendMessageConfig,
+                                      sendMessageController:
+                                          sendMessageController,
+                                      messageConfig: widget.messageConfig,
+                                      replyMessageBuilder:
+                                          widget.replyMessageBuilder,
+                                    ),
+                                ],
                               ),
-                            if (featureActiveConfig.enableTextField)
-                              SendMessageWidget(
-                                key: _sendMessageKey,
-                                sendMessageBuilder: widget.sendMessageBuilder,
-                                sendMessageConfig: widget.sendMessageConfig,
-                                sendMessageController: sendMessageController,
-                                messageConfig: widget.messageConfig,
-                                replyMessageBuilder: widget.replyMessageBuilder,
-                              ),
+                            ),
                           ],
                         ),
                       ),
+                      if (featureActiveConfig.enableReactionPopup)
+                        ValueListenableBuilder<bool>(
+                          valueListenable: context.chatViewIW!.showPopUp,
+                          builder: (_, showPopupValue, child) {
+                            return ReactionPopup(
+                              key: context.chatViewIW!.reactionPopupKey,
+                              onTap: () => _onChatListTap(context),
+                              showPopUp: showPopupValue,
+                            );
+                          },
+                        ),
                     ],
                   ),
                 ),
-                if (featureActiveConfig.enableReactionPopup)
-                  ValueListenableBuilder<bool>(
-                    valueListenable: context.chatViewIW!.showPopUp,
-                    builder: (_, showPopupValue, child) {
-                      return ReactionPopup(
-                        key: context.chatViewIW!.reactionPopupKey,
-                        onTap: () => _onChatListTap(context),
-                        showPopUp: showPopupValue,
-                      );
-                    },
-                  ),
               ],
             ),
           );

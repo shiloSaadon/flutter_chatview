@@ -34,6 +34,7 @@ export 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 export 'src/controller/chat_controller.dart';
 export 'src/controller/send_message_controller.dart';
 export 'src/extensions/extensions.dart' show MessageTypes;
+export 'src/inherited_widgets/configurations_inherited_widgets.dart';
 export 'src/models/config_models/receipts_widget_config.dart';
 export 'src/models/models.dart';
 export 'src/values/enumeration.dart';
