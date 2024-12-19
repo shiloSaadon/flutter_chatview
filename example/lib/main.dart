@@ -31,15 +31,14 @@ class Example extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Chat UI Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: const Color(0xffEE5366),
-        colorScheme:
-            ColorScheme.fromSwatch(accentColor: const Color(0xffEE5366)),
-      ),
-      home: const ChatScreen(), //const Pusher()
-    );
+        title: 'Flutter Chat UI Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: const Color(0xffEE5366),
+          colorScheme:
+              ColorScheme.fromSwatch(accentColor: const Color(0xffEE5366)),
+        ),
+        home: const Pusher());
   }
 }
 

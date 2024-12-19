@@ -35,6 +35,7 @@ import '../utils/package_strings.dart';
 class ChatUITextField extends StatefulWidget {
   const ChatUITextField({
     Key? key,
+    required this.textFieldKey,
     this.sendMessageConfig,
     required this.focusNode,
     required this.textEditingController,
@@ -60,6 +61,9 @@ class ChatUITextField extends StatefulWidget {
 
   /// Provides callback when user select images from camera/gallery.
   final StringsCallBack onImageSelected;
+
+  ///
+  final GlobalKey textFieldKey;
 
   @override
   State<ChatUITextField> createState() => _ChatUITextFieldState();
@@ -132,6 +136,7 @@ class _ChatUITextFieldState extends State<ChatUITextField> {
   Widget build(BuildContext context) {
     final outlineBorder = _outLineBorder;
     return Container(
+      key: widget.textFieldKey,
       padding:
           textFieldConfig?.padding ?? const EdgeInsets.symmetric(horizontal: 6),
       margin: textFieldConfig?.margin,

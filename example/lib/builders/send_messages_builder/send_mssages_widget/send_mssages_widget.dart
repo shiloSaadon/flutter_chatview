@@ -40,6 +40,8 @@ class MySendMessageWidget extends StatefulWidget {
 }
 
 class MySendMessageWidgetState extends State<MySendMessageWidget> {
+  final GlobalKey textFieldKey = GlobalKey();
+  double height = 0.0;
   Widget scrollToButton() {
     if (chatViewIW?.featureActiveConfig.enableScrollToBottomButton ?? true)
       return const Align(
@@ -53,7 +55,43 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    widget.sendMessageController.textEditingController.addListener(updateUi);
+  }
+
+  void updateUi() {
+    _updateLineCount();
+    // setState(() {});
+  }
+
+  void _updateLineCount() {
+    final renderObj =
+        (textFieldKey.currentContext?.findRenderObject() as RenderBox?);
+    if (renderObj == null) {
+      print("Null ignore");
+      return;
+    }
+
+    // final heightPerLine = textPainter.preferredLineHeight;
+    // final totalHeight = textPainter.size.height;
+    // final lineCount = (totalHeight / heightPerLine).ceil();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("amount -> ${renderObj.size.height}");
+      //
+      final newHight = renderObj.size.height;
+      if (height == newHight) return;
+      height = newHight;
+      widget.sendMessageController.updateMessagesListSize();
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // final lines = widget.sendMessageController.textEditingController.text;
+    // final _newlineCount = '\n'.allMatches(lines).length;
+    // print("amount -> $_newlineCount");
     print(":Cange");
     return Align(
       alignment: Alignment.bottomCenter,
@@ -88,10 +126,11 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
                           color: Colors.white,
                           borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(14),
+                            bottom: Radius.circular(14),
                           ),
                         ),
-                        margin: const EdgeInsets.only(
-                          bottom: 17,
+                        margin: EdgeInsets.only(
+                          bottom: height + 5,
                           right: 0.4,
                           left: 0.4,
                         ),
@@ -163,6 +202,7 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
                       widget.sendMessageController.replyMessageListener,
                 ),
                 ChatUITextField(
+                  textFieldKey: textFieldKey,
                   focusNode: widget.sendMessageController.focusNode,
                   textEditingController:
                       widget.sendMessageController.textEditingController,

@@ -22,7 +22,6 @@
 import 'dart:io' if (kIsWeb) 'dart:html';
 
 import 'package:chatview/chatview.dart';
-import 'package:chatview/src/controller/send_message_controller.dart';
 import 'package:chatview/src/extensions/extensions.dart';
 import 'package:chatview/src/utils/package_strings.dart';
 import 'package:chatview/src/widgets/chatui_textfield.dart';
@@ -268,6 +267,7 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
                                   .sendMessageController.replyMessageListener,
                             ),
                             ChatUITextField(
+                              textFieldKey: GlobalKey(),
                               focusNode: widget.sendMessageController.focusNode,
                               textEditingController: widget
                                   .sendMessageController.textEditingController,

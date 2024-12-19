@@ -23,7 +23,6 @@ import 'dart:io';
 
 import 'package:chatview/chatview.dart';
 import 'package:chatview/src/extensions/extensions.dart';
-import 'package:chatview/src/inherited_widgets/configurations_inherited_widgets.dart';
 import 'package:chatview/src/widgets/chat_list_widget.dart';
 import 'package:chatview/src/widgets/chat_view_inherited_widget.dart';
 import 'package:chatview/src/widgets/chatview_state_widget.dart';
@@ -204,22 +203,22 @@ class _ChatViewState extends State<ChatView>
   @override
   Widget build(BuildContext context) {
     // Scroll to last message on in hasMessages state.
-    if (widget.chatController.showTypingIndicator &&
-        chatViewState.hasMessages) {
-      chatController.scrollToLastMessage();
-    }
-    final sendMessageController = SendMessageController(
-      onSendTap: (message, replyMessage, messageType) {
-        if (context.suggestionsConfig?.autoDismissOnSelection ?? true) {
-          chatController.removeReplySuggestions();
-        }
-        _onSendTap(message, replyMessage, messageType);
-      },
-      onReplyCallback: (reply) => replyMessage.value = reply,
-      onReplyCloseCallback: () => replyMessage.value = const ReplyMessage(),
-      currentUser: null,
-      repliedUser: null,
-    );
+    // if (widget.chatController.showTypingIndicator &&
+    //     chatViewState.hasMessages) {
+    //   chatController.scrollToLastMessage();
+    // }
+    // final sendMessageController = SendMessageController(
+    //   onSendTap: (message, replyMessage, messageType) {
+    //     if (context.suggestionsConfig?.autoDismissOnSelection ?? true) {
+    //       chatController.removeReplySuggestions();
+    //     }
+    //     _onSendTap(message, replyMessage, messageType);
+    //   },
+    //   onReplyCallback: (reply) => replyMessage.value = reply,
+    //   onReplyCloseCallback: () => replyMessage.value = const ReplyMessage(),
+    //   currentUser: null,
+    //   repliedUser: null,
+    // );
 
     return ChatViewInheritedWidget(
       chatController: chatController,
@@ -304,17 +303,27 @@ class _ChatViewState extends State<ChatView>
                                     ValueListenableBuilder<ReplyMessage>(
                                       valueListenable: replyMessage,
                                       builder: (_, state, child) {
-                                        return ChatListWidget(
-                                          replyMessage: state,
-                                          chatController: widget.chatController,
-                                          loadMoreData: widget.loadMoreData,
-                                          isLastPage: widget.isLastPage,
-                                          loadingWidget: widget.loadingWidget,
-                                          onChatListTap: widget.onChatListTap,
-                                          assignReplyMessage:
-                                              sendMessageController
-                                                  .assignReplyMessage,
-                                        );
+                                        return ValueListenableBuilder<bool>(
+                                            valueListenable:
+                                                sendMessageController
+                                                    .messagesListSizeUpdated,
+                                            builder: (_, __, child) {
+                                              return ChatListWidget(
+                                                replyMessage: state,
+                                                chatController:
+                                                    widget.chatController,
+                                                loadMoreData:
+                                                    widget.loadMoreData,
+                                                isLastPage: widget.isLastPage,
+                                                loadingWidget:
+                                                    widget.loadingWidget,
+                                                onChatListTap:
+                                                    widget.onChatListTap,
+                                                assignReplyMessage:
+                                                    sendMessageController
+                                                        .assignReplyMessage,
+                                              );
+                                            });
                                       },
                                     ),
                                   if (featureActiveConfig.enableTextField)

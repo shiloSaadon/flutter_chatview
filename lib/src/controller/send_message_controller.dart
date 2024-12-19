@@ -2,7 +2,7 @@ import 'package:chatview/chatview.dart';
 import 'package:chatview/src/utils/package_strings.dart';
 import 'package:flutter/material.dart';
 
-class SendMessageController {
+class SendMessageController extends ChangeNotifier {
   /// Provides call back when user tap on send button on text field.
   final StringMessageCallBack onSendTap;
 
@@ -21,6 +21,8 @@ class SendMessageController {
   /// The crrent message that been replyed as ValueListener
   final ValueNotifier<ReplyMessage> replyMessageListener =
       ValueNotifier(const ReplyMessage());
+
+  final ValueNotifier<bool> messagesListSizeUpdated = ValueNotifier(false);
 
   /// The user that we replayed to
   ChatUser? repliedUser;
@@ -97,9 +99,15 @@ class SendMessageController {
     if (onReplyCloseCallback != null) onReplyCloseCallback!();
   }
 
+  @override
   void dispose() {
     textEditingController.dispose();
     focusNode.dispose();
     replyMessageListener.dispose();
+    super.dispose();
+  }
+
+  void updateMessagesListSize() {
+    messagesListSizeUpdated.notifyListeners();
   }
 }
