@@ -9,6 +9,22 @@ void main() {
   runApp(const Example());
 }
 
+class Pusher extends StatelessWidget {
+  const Pusher({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+            onPressed: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => const ChatScreen())),
+            child: Text('Push')),
+      ),
+    );
+  }
+}
+
 class Example extends StatelessWidget {
   const Example({Key? key}) : super(key: key);
 
@@ -22,7 +38,7 @@ class Example extends StatelessWidget {
         colorScheme:
             ColorScheme.fromSwatch(accentColor: const Color(0xffEE5366)),
       ),
-      home: const ChatScreen(),
+      home: const ChatScreen(), //const Pusher()
     );
   }
 }
@@ -35,6 +51,12 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  @override
+  void dispose() {
+    _chatController.dispose();
+    super.dispose();
+  }
+
   AppTheme theme = LightTheme();
   bool isDarkTheme = false;
   final _chatController = ChatController(

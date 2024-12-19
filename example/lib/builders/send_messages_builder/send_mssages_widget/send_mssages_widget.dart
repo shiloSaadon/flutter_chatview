@@ -199,7 +199,7 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
 
   @override
   void dispose() {
-    widget.sendMessageController.dispose();
+    // widget.sendMessageController.dispose();
     super.dispose();
   }
 }

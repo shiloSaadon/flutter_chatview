@@ -241,8 +241,9 @@ class _ChatListWidgetState extends State<ChatListWidget>
 
   @override
   void dispose() {
+    scrollController.removeListener(_pagination);
     chatController.messageStreamController.close();
-    scrollController.dispose();
+    // scrollController.dispose(); --> Already include in the chatController.dispose()
     _isNextPageLoading.dispose();
     super.dispose();
   }
