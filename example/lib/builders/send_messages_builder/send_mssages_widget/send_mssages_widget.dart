@@ -113,8 +113,8 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
               bottomPadding4,
               _bottomPadding,
             ),
-            child: Stack(
-              alignment: Alignment.bottomCenter,
+            child: Column(
+              // alignment: Alignment.bottomCenter,
               children: [
                 ValueListenableBuilder<ReplyMessage>(
                   builder: (_, state, child) {
@@ -122,7 +122,7 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
                         '${PackageStrings.replyTo} ${widget.sendMessageController.replyTo}';
                     if (state.message.isNotEmpty) {
                       return Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: const BorderRadius.vertical(
                             top: Radius.circular(14),
@@ -130,9 +130,9 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
                           ),
                         ),
                         margin: EdgeInsets.only(
-                          bottom: height + 5,
-                          right: 0.4,
-                          left: 0.4,
+                          bottom: 10,
+                          // right: 0.4,
+                          // left: 0.4,
                         ),
                         padding: const EdgeInsets.fromLTRB(
                           leftPadding,
