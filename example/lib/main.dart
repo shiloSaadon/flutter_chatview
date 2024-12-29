@@ -1,7 +1,6 @@
 import 'package:chatview/chatview.dart';
 import 'package:example/builders/send_messages_builder/send_messages_builder.dart';
 import 'package:example/data.dart';
-import 'package:example/message_wrpper_builder/message_wrpper_builder.dart';
 import 'package:example/models/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -302,7 +301,7 @@ class _ChatScreenState extends State<ChatScreen> {
         backgroundColor: theme.reactionPopupColor,
       ),
       messageConfig: MessageConfiguration(
-        customMessageWrapperBuilder: messageWrapperBuilder,
+        // customMessageWrapperBuilder: messageWrapperBuilder,    /// TO uncomment
         messageReactionConfig: MessageReactionConfiguration(
           backgroundColor: theme.messageReactionBackGroundColor,
           borderColor: theme.messageReactionBackGroundColor,

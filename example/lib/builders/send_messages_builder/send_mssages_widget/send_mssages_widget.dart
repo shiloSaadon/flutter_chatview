@@ -239,7 +239,7 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
 
   @override
   void dispose() {
-    // widget.sendMessageController.dispose();
+    widget.sendMessageController.textEditingController.removeListener(updateUi);
     super.dispose();
   }
 }

@@ -267,6 +267,24 @@ class _MessageViewState extends State<MessageView>
       );
     }
 
+    /// ----------------- TO REMOVE ----------------
+    if (!widget.message.messageType.isText) {
+      return SizedBox();
+    }
+    return TextMessageView(
+      inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
+      outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
+      isMessageBySender: widget.isMessageBySender,
+      message: widget.message,
+      chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
+      messageReactionConfig: messageConfig?.messageReactionConfig,
+      highlightColor: widget.highlightColor,
+      highlightMessage: widget.shouldHighlight,
+      useIndernalMessageWrpper: useIndernalMessageWrpper,
+    );
+
+    /// -----------------  ----------------
+
     return messageData;
   }
 

@@ -62,7 +62,7 @@ class ChatUITextField extends StatefulWidget {
   /// Provides callback when user select images from camera/gallery.
   final StringsCallBack onImageSelected;
 
-  ///
+  /// Used to calculate the size of thes widget
   final GlobalKey textFieldKey;
 
   @override
