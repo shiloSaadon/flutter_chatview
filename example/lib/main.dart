@@ -301,7 +301,7 @@ class _ChatScreenState extends State<ChatScreen> {
         backgroundColor: theme.reactionPopupColor,
       ),
       messageConfig: MessageConfiguration(
-        // customMessageWrapperBuilder: messageWrapperBuilder,    /// TO uncomment
+        // customMessageWrapperBuilder: messageWrapperBuilder,    /// TO remove uncomment
         messageReactionConfig: MessageReactionConfiguration(
           backgroundColor: theme.messageReactionBackGroundColor,
           borderColor: theme.messageReactionBackGroundColor,

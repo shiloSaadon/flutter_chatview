@@ -105,7 +105,7 @@ class SendMessageWidgetState extends State<SendMessageWidget> {
   Widget build(BuildContext context) {
     final scrollToBottomButtonConfig =
         chatListConfig.scrollToBottomButtonConfig;
-    return widget.sendMessageBuilder != null
+    return widget.sendMessageBuilder != null && false // TO remove
         ? widget.sendMessageBuilder!(widget.sendMessageController)
         : SizedBox(
             width: MediaQuery.of(context).size.width,
