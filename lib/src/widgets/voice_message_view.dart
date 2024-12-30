@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:chatview/chatview.dart';
+import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class VoiceMessageView extends StatefulWidget {
     this.outgoingChatBubbleConfig,
     this.onMaxDuration,
     this.messageReactionConfig,
-    this.useIndernalMessageWrpper = false,
+    this.useInternalMessageWrapper = false,
     this.config,
   }) : super(key: key);
 
@@ -26,7 +27,7 @@ class VoiceMessageView extends StatefulWidget {
   final double screenWidth;
 
   /// Provides message instance of chat.
-  final Message message;
+  final Message<VoiceMessage> message;
   final Function(int)? onMaxDuration;
 
   /// Represents current message is sent by current user.
@@ -42,7 +43,7 @@ class VoiceMessageView extends StatefulWidget {
   final ChatBubble? outgoingChatBubbleConfig;
 
   /// Allow the user to disable the message wrapper container
-  final bool useIndernalMessageWrpper;
+  final bool useInternalMessageWrapper;
 
   @override
   State<VoiceMessageView> createState() => _VoiceMessageViewState();
@@ -52,8 +53,7 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
   late PlayerController controller;
   late StreamSubscription<PlayerState> playerStateSubscription;
 
-  final ValueNotifier<PlayerState> _playerState =
-      ValueNotifier(PlayerState.stopped);
+  final ValueNotifier<PlayerState> _playerState = ValueNotifier(PlayerState.stopped);
 
   PlayerState get playerState => _playerState.value;
 
@@ -64,13 +64,11 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
     super.initState();
     controller = PlayerController()
       ..preparePlayer(
-        path: widget.message.message,
-        noOfSamples: widget.config?.playerWaveStyle
-                ?.getSamplesForWidth(widget.screenWidth * 0.5) ??
+        path: widget.message.content.url,
+        noOfSamples: widget.config?.playerWaveStyle?.getSamplesForWidth(widget.screenWidth * 0.5) ??
             playerWaveStyle.getSamplesForWidth(widget.screenWidth * 0.5),
       ).whenComplete(() => widget.onMaxDuration?.call(controller.maxDuration));
-    playerStateSubscription = controller.onPlayerStateChanged
-        .listen((state) => _playerState.value = state);
+    playerStateSubscription = controller.onPlayerStateChanged.listen((state) => _playerState.value = state);
   }
 
   @override
@@ -87,7 +85,7 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
       clipBehavior: Clip.none,
       children: [
         Container(
-          decoration: !widget.useIndernalMessageWrpper
+          decoration: !widget.useInternalMessageWrapper
               ? null
               : widget.config?.decoration ??
                   BoxDecoration(
@@ -96,17 +94,15 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
                         ? widget.outgoingChatBubbleConfig?.color
                         : widget.inComingChatBubbleConfig?.color,
                   ),
-          padding: !widget.useIndernalMessageWrpper
+          padding: !widget.useInternalMessageWrapper
               ? null
-              : widget.config?.padding ??
-                  const EdgeInsets.symmetric(horizontal: 8),
-          margin: !widget.useIndernalMessageWrpper
+              : widget.config?.padding ?? const EdgeInsets.symmetric(horizontal: 8),
+          margin: !widget.useInternalMessageWrapper
               ? null
               : widget.config?.margin ??
                   EdgeInsets.symmetric(
                     horizontal: 8,
-                    vertical:
-                        widget.message.reaction.reactions.isNotEmpty ? 15 : 0,
+                    vertical: widget.message.reactions.isNotEmpty ? 15 : 0,
                   ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -115,18 +111,17 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
                 builder: (context, state, child) {
                   return IconButton(
                     onPressed: _playOrPause,
-                    icon:
-                        state.isStopped || state.isPaused || state.isInitialised
-                            ? widget.config?.playIcon ??
-                                const Icon(
-                                  Icons.play_arrow,
-                                  color: Colors.white,
-                                )
-                            : widget.config?.pauseIcon ??
-                                const Icon(
-                                  Icons.stop,
-                                  color: Colors.white,
-                                ),
+                    icon: state.isStopped || state.isPaused || state.isInitialised
+                        ? widget.config?.playIcon ??
+                            const Icon(
+                              Icons.play_arrow,
+                              color: Colors.white,
+                            )
+                        : widget.config?.pauseIcon ??
+                            const Icon(
+                              Icons.stop,
+                              color: Colors.white,
+                            ),
                   );
                 },
                 valueListenable: _playerState,
@@ -135,14 +130,11 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
                 size: Size(widget.screenWidth * 0.50, 60),
                 playerController: controller,
                 waveformType: WaveformType.fitWidth,
-                playerWaveStyle:
-                    widget.config?.playerWaveStyle ?? playerWaveStyle,
-                padding: widget.config?.waveformPadding ??
-                    const EdgeInsets.only(right: 10),
+                playerWaveStyle: widget.config?.playerWaveStyle ?? playerWaveStyle,
+                padding: widget.config?.waveformPadding ?? const EdgeInsets.only(right: 10),
                 margin: widget.config?.waveformMargin,
                 animationCurve: widget.config?.animationCurve ?? Curves.easeIn,
-                animationDuration: widget.config?.animationDuration ??
-                    const Duration(milliseconds: 500),
+                animationDuration: widget.config?.animationDuration ?? const Duration(milliseconds: 500),
                 enableSeekGesture: widget.config?.enableSeekGesture ?? true,
               ),
             ],
@@ -160,13 +152,10 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
 
   void _playOrPause() {
     assert(
-      defaultTargetPlatform == TargetPlatform.iOS ||
-          defaultTargetPlatform == TargetPlatform.android,
+      defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android,
       "Voice messages are only supported with android and ios platform",
     );
-    if (playerState.isInitialised ||
-        playerState.isPaused ||
-        playerState.isStopped) {
+    if (playerState.isInitialised || playerState.isPaused || playerState.isStopped) {
       controller.startPlayer();
     } else {
       controller.pausePlayer();

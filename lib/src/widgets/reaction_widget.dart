@@ -29,13 +29,13 @@ import '../../chatview.dart';
 class ReactionWidget extends StatefulWidget {
   const ReactionWidget({
     Key? key,
-    required this.reaction,
+    required this.reactions,
     this.messageReactionConfig,
     required this.isMessageBySender,
   }) : super(key: key);
 
   /// Provides reaction instance of message.
-  final Reaction reaction;
+  final Set<Reaction> reactions;
 
   /// Provides configuration of reaction appearance in chat bubble.
   final MessageReactionConfiguration? messageReactionConfig;
@@ -50,8 +50,7 @@ class ReactionWidget extends StatefulWidget {
 class _ReactionWidgetState extends State<ReactionWidget> {
   bool needToExtend = false;
 
-  MessageReactionConfiguration? get messageReactionConfig =>
-      widget.messageReactionConfig;
+  MessageReactionConfiguration? get messageReactionConfig => widget.messageReactionConfig;
   final _reactionTextStyle = const TextStyle(fontSize: 13);
   ChatController? chatController;
 
@@ -65,8 +64,6 @@ class _ReactionWidgetState extends State<ReactionWidget> {
 
   @override
   Widget build(BuildContext context) {
-    //// Convert into set to remove reduntant values
-    final reactionsSet = widget.reaction.reactions.toSet();
     return Positioned(
       bottom: 0,
       right: widget.isMessageBySender && needToExtend ? 0 : null,
@@ -74,27 +71,23 @@ class _ReactionWidgetState extends State<ReactionWidget> {
         onTap: () => chatController != null
             ? ReactionsBottomSheet().show(
                 context: context,
-                reaction: widget.reaction,
+                reactions: widget.reactions,
                 chatController: chatController!,
-                reactionsBottomSheetConfig:
-                    messageReactionConfig?.reactionsBottomSheetConfig,
+                reactionsBottomSheetConfig: messageReactionConfig?.reactionsBottomSheetConfig,
               )
             : null,
         child: MeasureSize(
           onSizeChange: (extend) => setState(() => needToExtend = extend),
           child: Container(
-            padding: messageReactionConfig?.padding ??
-                const EdgeInsets.symmetric(vertical: 1.7, horizontal: 6),
+            padding: messageReactionConfig?.padding ?? const EdgeInsets.symmetric(vertical: 1.7, horizontal: 6),
             margin: messageReactionConfig?.margin ??
                 EdgeInsets.only(
                   left: widget.isMessageBySender ? 10 : 16,
                   right: 10,
                 ),
             decoration: BoxDecoration(
-              color: messageReactionConfig?.backgroundColor ??
-                  Colors.grey.shade200,
-              borderRadius: messageReactionConfig?.borderRadius ??
-                  BorderRadius.circular(16),
+              color: messageReactionConfig?.backgroundColor ?? Colors.grey.shade200,
+              borderRadius: messageReactionConfig?.borderRadius ?? BorderRadius.circular(16),
               border: Border.all(
                 color: messageReactionConfig?.borderColor ?? Colors.white,
                 width: messageReactionConfig?.borderWidth ?? 1,
@@ -103,45 +96,35 @@ class _ReactionWidgetState extends State<ReactionWidget> {
             child: Row(
               children: [
                 Text(
-                  reactionsSet.join(' '),
+                  widget.reactions.join(' '),
                   style: TextStyle(
                     fontSize: messageReactionConfig?.reactionSize ?? 13,
                   ),
                 ),
                 if (chatController?.otherUsers.isNotEmpty ?? false) ...[
-                  if (!(widget.reaction.reactedUserIds.length > 2) &&
-                      !(reactionsSet.length > 1))
+                  if (!(widget.reactions.length > 2) && !(widget.reactions.length > 1))
                     ...List.generate(
-                      widget.reaction.reactedUserIds.length,
-                      (reactedUserIndex) => widget
-                          .reaction.reactedUserIds[reactedUserIndex]
-                          .getUserProfilePicture(
-                        getChatUser: (userId) =>
-                            chatController?.getUserFromId(userId),
-                        profileCirclePadding:
-                            messageReactionConfig?.profileCirclePadding,
-                        profileCircleRadius:
-                            messageReactionConfig?.profileCircleRadius,
-                      ),
+                      widget.reactions.length,
+                      (reactedUserIndex) => widget.reactions.elementAt(reactedUserIndex).user.getUserProfilePicture(
+                            getChatUser: (userId) => chatController?.getUserFromId(userId),
+                            profileCirclePadding: messageReactionConfig?.profileCirclePadding,
+                            profileCircleRadius: messageReactionConfig?.profileCircleRadius,
+                          ),
                     ),
-                  if (widget.reaction.reactedUserIds.length > 2 &&
-                      !(reactionsSet.length > 1))
+                  if (widget.reactions.length > 2 && !(widget.reactions.length > 1))
                     Padding(
                       padding: const EdgeInsets.only(left: 2),
                       child: Text(
-                        ' ${widget.reaction.reactedUserIds.length}',
-                        style:
-                            messageReactionConfig?.reactedUserCountTextStyle ??
-                                _reactionTextStyle,
+                        ' ${widget.reactions.length}',
+                        style: messageReactionConfig?.reactedUserCountTextStyle ?? _reactionTextStyle,
                       ),
                     ),
-                  if (reactionsSet.length > 1)
+                  if (widget.reactions.length > 1)
                     Padding(
                       padding: const EdgeInsets.only(left: 2),
                       child: Text(
-                        widget.reaction.reactedUserIds.length.toString(),
-                        style: messageReactionConfig?.reactionCountTextStyle ??
-                            _reactionTextStyle,
+                        widget.reactions.length.toString(),
+                        style: messageReactionConfig?.reactionCountTextStyle ?? _reactionTextStyle,
                       ),
                     ),
                 ],

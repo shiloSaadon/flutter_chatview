@@ -20,12 +20,11 @@
  * SOFTWARE.
  */
 
-import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 import '../utils/package_strings.dart';
-import '../values/enumeration.dart';
 import '../values/typedefs.dart';
 
 class ReplyMessageView extends StatelessWidget {
@@ -43,31 +42,31 @@ class ReplyMessageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return switch (message.messageType) {
-      MessageType.voice => Row(
-          children: [
-            Icon(
-              Icons.mic,
-              color: sendMessageConfig?.micIconColor,
-            ),
-            const SizedBox(width: 4),
-            if (message.voiceMessageDuration != null)
-              Text(
-                message.voiceMessageDuration!.toHHMMSS(),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: sendMessageConfig?.replyMessageColor ?? Colors.black,
-                ),
-              ),
-          ],
-        ),
-      MessageType.image => Row(
+    return switch (message.content) {
+      //! Temporarily removed
+      // MessageType.voice => Row(
+      //     children: [
+      //       Icon(
+      //         Icons.mic,
+      //         color: sendMessageConfig?.micIconColor,
+      //       ),
+      //       const SizedBox(width: 4),
+      //       if (message.voiceMessageDuration != null)
+      //         Text(
+      //           message.voiceMessageDuration!.toHHMMSS(),
+      //           style: TextStyle(
+      //             fontSize: 12,
+      //             color: sendMessageConfig?.replyMessageColor ?? Colors.black,
+      //           ),
+      //         ),
+      //     ],
+      //   ),
+      ImagesMessage _ => Row(
           children: [
             Icon(
               Icons.photo,
               size: 20,
-              color:
-                  sendMessageConfig?.replyMessageColor ?? Colors.grey.shade700,
+              color: sendMessageConfig?.replyMessageColor ?? Colors.grey.shade700,
             ),
             Text(
               PackageStrings.photo,
@@ -77,17 +76,19 @@ class ReplyMessageView extends StatelessWidget {
             ),
           ],
         ),
-      MessageType.custom when customMessageReplyViewBuilder != null =>
-        customMessageReplyViewBuilder!(message),
-      MessageType.custom || MessageType.text => Text(
-          message.message,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 12,
-            color: sendMessageConfig?.replyMessageColor ?? Colors.black,
-          ),
-        ),
+      //! Temporarily removed
+      // MessageType.custom when customMessageReplyViewBuilder != null =>
+      //   customMessageReplyViewBuilder!(message),
+      // MessageType.custom || MessageType.text => Text(
+      //     message.message,
+      //     maxLines: 1,
+      //     overflow: TextOverflow.ellipsis,
+      //     style: TextStyle(
+      //       fontSize: 12,
+      //       color: sendMessageConfig?.replyMessageColor ?? Colors.black,
+      //     ),
+      //   ),
+      _ => const SizedBox(),
     };
   }
 }

@@ -21,16 +21,12 @@
  */
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatview/chatview.dart';
-import 'package:chatview/src/controller/send_message_controller.dart';
+import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/widgets/profile_circle.dart';
 import 'package:flutter/material.dart';
 
 typedef StringCallback = void Function(String);
-typedef StringMessageCallBack = void Function(
-  String message,
-  ReplyMessage replyMessage,
-  MessageType messageType,
-);
+typedef MessageContentCallBack = void Function(MessageContent content, ReplyMessage? replyMessage);
 typedef ReplyMessageWithReturnWidget = Widget Function(
   ReplyMessage? replyMessage,
 );
@@ -39,14 +35,14 @@ typedef SendMessageWithReturnWidget = Widget Function(
   SendMessageController replyMessage,
 );
 
-typedef ReplyMessageCallBack = void Function(ReplyMessage replyMessage);
+typedef ReplyMessageCallBack = void Function(ReplyMessage? replyMessage);
 typedef VoidCallBack = void Function();
 typedef DoubleCallBack = void Function(double, double);
 typedef MessageCallBack = void Function(Message message);
-typedef AssignReplayCallBack = void Function(
-    Message message, BuildContext context);
+typedef AssignReplayCallBack = void Function(Message message, BuildContext context);
 typedef VoidCallBackWithFuture = Future<void> Function();
 typedef StringsCallBack = void Function(String emoji, String messageId);
+typedef ImagesCallBack = void Function(List<String> paths);
 typedef StringWithReturnWidget = Widget Function(String separator);
 typedef DragUpdateDetailsCallback = void Function(DragUpdateDetails);
 typedef MoreTapCallBack = void Function(

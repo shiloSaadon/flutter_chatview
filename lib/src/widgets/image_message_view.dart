@@ -23,6 +23,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:chatview/src/extensions/extensions.dart';
+import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/models/models.dart';
 import 'package:flutter/material.dart';
 
@@ -39,14 +40,14 @@ class ImageMessageView extends StatelessWidget {
     this.highlightScale = 1.2,
   }) : super(key: key);
 
-  final Message message;
+  final Message<ImagesMessage> message;
   final bool isMessageBySender;
   final ImageMessageConfiguration? imageMessageConfig;
   final MessageReactionConfiguration? messageReactionConfig;
   final bool highlightImage;
   final double highlightScale;
 
-  String get imageUrl => message.message;
+  String get imageUrl => message.content.images.first;
 
   Widget get iconButton => ShareIcon(
         shareIconConfig: imageMessageConfig?.shareIconConfig,
@@ -75,11 +76,9 @@ class ImageMessageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment:
-          isMessageBySender ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment: isMessageBySender ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
-        if (isMessageBySender && !(imageMessageConfig?.hideShareIcon ?? false))
-          iconButton,
+        if (isMessageBySender && !(imageMessageConfig?.hideShareIcon ?? false)) iconButton,
         Stack(
           children: [
             GestureDetector(
@@ -88,9 +87,7 @@ class ImageMessageView extends StatelessWidget {
                 tag: imageUrl,
                 child: Transform.scale(
                   scale: highlightImage ? highlightScale : 1.0,
-                  alignment: isMessageBySender
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
+                  alignment: isMessageBySender ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     padding: imageMessageConfig?.padding ?? EdgeInsets.zero,
                     margin: imageMessageConfig?.margin ??
@@ -98,14 +95,12 @@ class ImageMessageView extends StatelessWidget {
                           top: 6,
                           right: isMessageBySender ? 6 : 0,
                           left: isMessageBySender ? 0 : 6,
-                          bottom:
-                              message.reaction.reactions.isNotEmpty ? 15 : 0,
+                          bottom: message.reactions.isNotEmpty ? 15 : 0,
                         ),
                     height: imageMessageConfig?.height ?? 200,
                     width: imageMessageConfig?.width ?? 150,
                     child: ClipRRect(
-                      borderRadius: imageMessageConfig?.borderRadius ??
-                          BorderRadius.circular(14),
+                      borderRadius: imageMessageConfig?.borderRadius ?? BorderRadius.circular(14),
                       child: (() {
                         if (imageUrl.isUrl) {
                           return Image.network(
@@ -115,10 +110,8 @@ class ImageMessageView extends StatelessWidget {
                               if (loadingProgress == null) return child;
                               return Center(
                                 child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
+                                  value: loadingProgress.expectedTotalBytes != null
+                                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                                       : null,
                                 ),
                               );
@@ -126,8 +119,7 @@ class ImageMessageView extends StatelessWidget {
                           );
                         } else if (imageUrl.fromMemory) {
                           return Image.memory(
-                            base64Decode(imageUrl
-                                .substring(imageUrl.indexOf('base64') + 7)),
+                            base64Decode(imageUrl.substring(imageUrl.indexOf('base64') + 7)),
                             fit: BoxFit.cover,
                           );
                         } else {
@@ -150,8 +142,7 @@ class ImageMessageView extends StatelessWidget {
             //   ),
           ],
         ),
-        if (!isMessageBySender && !(imageMessageConfig?.hideShareIcon ?? false))
-          iconButton,
+        if (!isMessageBySender && !(imageMessageConfig?.hideShareIcon ?? false)) iconButton,
       ],
     );
   }
@@ -160,8 +151,7 @@ class ImageMessageView extends StatelessWidget {
 class FullScreenImageView extends StatelessWidget {
   final String imageUrl;
 
-  const FullScreenImageView({Key? key, required this.imageUrl})
-      : super(key: key);
+  const FullScreenImageView({Key? key, required this.imageUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -180,8 +170,7 @@ class FullScreenImageView extends StatelessWidget {
                 );
               } else if (imageUrl.fromMemory) {
                 return Image.memory(
-                  base64Decode(
-                      imageUrl.substring(imageUrl.indexOf('base64') + 7)),
+                  base64Decode(imageUrl.substring(imageUrl.indexOf('base64') + 7)),
                   fit: BoxFit.contain,
                 );
               } else {

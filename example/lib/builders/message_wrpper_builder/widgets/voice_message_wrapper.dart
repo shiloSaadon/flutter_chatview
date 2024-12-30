@@ -51,7 +51,7 @@ class VoiceMessageWrapper extends StatelessWidget {
       voiceMessageConfiguration?.margin ??
       EdgeInsets.symmetric(
         horizontal: 8,
-        vertical: message.reaction.reactions.isNotEmpty ? 15 : 0,
+        vertical: message.reactions.isNotEmpty ? 15 : 0,
       );
 
   BoxDecoration? get _decoration =>

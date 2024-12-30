@@ -15,8 +15,8 @@ Widget messageWrapperBuilder(
   SenderDataWidgets senderDataWidgets,
   Widget messageDataWidget,
 ) {
-  switch (message.messageType) {
-    case MessageType.text:
+  switch (message.content) {
+    case TextMessage _:
       return TextMessageWrapper(
         isMessageBySender: isMessageBySender,
         highlightMessage: highlightMessage,
@@ -27,7 +27,7 @@ Widget messageWrapperBuilder(
         senderDataWidgets: senderDataWidgets,
         messageDataWidget: messageDataWidget,
       );
-    case MessageType.voice:
+    case VoiceMessage _:
       return VoiceMessageWrapper(
         isMessageBySender: isMessageBySender,
         highlightMessage: highlightMessage,
@@ -39,7 +39,7 @@ Widget messageWrapperBuilder(
         senderDataWidgets: senderDataWidgets,
         messageDataWidget: messageDataWidget,
       );
-    case MessageType.image:
+    case ImagesMessage _:
       return ImageMessageWrapper(
           isMessageBySender: isMessageBySender,
           highlightMessage: highlightMessage,

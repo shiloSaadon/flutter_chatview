@@ -52,11 +52,12 @@ class TextMessageWrapper extends StatelessWidget {
 
   EdgeInsetsGeometry? get _margin =>
       (isMessageBySender ? outgoingChatBubbleConfig?.margin : inComingChatBubbleConfig?.margin) ??
-      EdgeInsets.fromLTRB(5, 0, 6, message.reaction.reactions.isNotEmpty ? 15 : 2);
+      EdgeInsets.fromLTRB(5, 0, 6, message.reactions.isNotEmpty ? 15 : 2);
 
   BoxDecoration? get _decoration => BoxDecoration(
         color: highlightMessage ? highlightColor : _color,
-        borderRadius: _borderRadius(message.message),
+        //! Temporarily removed
+        // borderRadius: _borderRadius(message.message),
       );
 
   BorderRadiusGeometry _borderRadius(String message) => isMessageBySender

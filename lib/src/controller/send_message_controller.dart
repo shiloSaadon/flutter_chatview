@@ -1,10 +1,11 @@
 import 'package:chatview/chatview.dart';
+import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/utils/package_strings.dart';
 import 'package:flutter/material.dart';
 
 class SendMessageController extends ChangeNotifier {
-  /// Provides call back when user tap on send button on text field.
-  final StringMessageCallBack onSendTap;
+  /// Provides call back when user tap on send button
+  final MessageContentCallBack onSendTap;
 
   /// Provides callback when user swipes chat bubble for reply.
   final ReplyMessageCallBack? onReplyCallback;
@@ -19,8 +20,7 @@ class SendMessageController extends ChangeNotifier {
   final focusNode = FocusNode();
 
   /// The crrent message that been replyed as ValueListener
-  final ValueNotifier<ReplyMessage> replyMessageListener =
-      ValueNotifier(const ReplyMessage());
+  final ValueNotifier<ReplyMessage?> replyMessageListener = ValueNotifier(null);
 
   final ValueNotifier<bool> messagesListSizeUpdated = ValueNotifier(false);
 
@@ -38,32 +38,25 @@ class SendMessageController extends ChangeNotifier {
     required this.onReplyCloseCallback,
   });
 
-  /// The crrent message that been replyed
-  ReplyMessage get replyMessage => replyMessageListener.value;
+  /// The current message that been replyed
+  ReplyMessage? get replyMessage => replyMessageListener.value;
 
-  String get replyTo => replyMessage.replyTo == currentUser?.id
-      ? PackageStrings.you
-      : repliedUser?.name ?? '';
+  String get replyTo => replyMessage?.sentBy == currentUser?.id ? PackageStrings.you : repliedUser?.name ?? '';
 
-  void onRecordingComplete(String? path) {
-    if (path != null) {
-      onSendTap.call(path, replyMessage, MessageType.voice);
-      assignRepliedMessage();
-    }
+  void onRecordingComplete(VoiceMessage voiceMsg) {
+    onSendTap.call(voiceMsg, replyMessage);
+    resetReply();
   }
 
-  void onImageSelected(String imagePath, String error) {
+  void onImageSelected(List<String> paths) {
     debugPrint('Call in Send Message Widget');
-    if (imagePath.isNotEmpty) {
-      onSendTap.call(imagePath, replyMessage, MessageType.image);
-      assignRepliedMessage();
-    }
+    //! Temporarily removed
+    // onSendTap.call(imagesMsg, replyMessage);
+    resetReply();
   }
 
-  void assignRepliedMessage() {
-    if (replyMessage.message.isNotEmpty) {
-      replyMessageListener.value = const ReplyMessage();
-    }
+  void resetReply() {
+    replyMessageListener.value = null;
   }
 
   void onPressed() {
@@ -71,32 +64,21 @@ class SendMessageController extends ChangeNotifier {
     textEditingController.clear();
     if (messageText.isEmpty) return;
 
-    onSendTap.call(
-      messageText.trim(),
-      replyMessage,
-      MessageType.text,
-    );
-    assignRepliedMessage();
+    onSendTap.call(TextMessage(text: messageText.trim()), replyMessage);
+    resetReply();
   }
 
   void assignReplyMessage(Message message, BuildContext context) {
     if (currentUser != null) {
-      replyMessageListener.value = ReplyMessage(
-        message: message.message,
-        replyBy: currentUser!.id,
-        replyTo: message.sentBy,
-        messageType: message.messageType,
-        messageId: message.id,
-        voiceMessageDuration: message.voiceMessageDuration,
-      );
+      replyMessageListener.value = message.asReply;
     }
     FocusScope.of(context).requestFocus(focusNode);
     if (onReplyCallback != null) onReplyCallback!(replyMessage);
   }
 
   void onCloseTap() {
-    replyMessageListener.value = const ReplyMessage();
-    if (onReplyCloseCallback != null) onReplyCloseCallback!();
+    replyMessageListener.value = null;
+    onReplyCloseCallback?.call();
   }
 
   @override

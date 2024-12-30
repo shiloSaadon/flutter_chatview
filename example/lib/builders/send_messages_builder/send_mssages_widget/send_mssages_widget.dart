@@ -31,7 +31,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 class MySendMessageWidget extends StatefulWidget {
-  const MySendMessageWidget({required this.sendMessageController});
+  const MySendMessageWidget({super.key, required this.sendMessageController});
 
   final SendMessageController sendMessageController;
 
@@ -66,8 +66,7 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
   }
 
   void _updateLineCount() {
-    final renderObj =
-        (textFieldKey.currentContext?.findRenderObject() as RenderBox?);
+    final renderObj = (textFieldKey.currentContext?.findRenderObject() as RenderBox?);
     if (renderObj == null) {
       print("Null ignore");
       return;
@@ -116,20 +115,19 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
             child: Column(
               // alignment: Alignment.bottomCenter,
               children: [
-                ValueListenableBuilder<ReplyMessage>(
+                ValueListenableBuilder<ReplyMessage?>(
                   builder: (_, state, child) {
-                    final replyTitle =
-                        '${PackageStrings.replyTo} ${widget.sendMessageController.replyTo}';
-                    if (state.message.isNotEmpty) {
+                    final replyTitle = '${PackageStrings.replyTo} ${widget.sendMessageController.replyTo}';
+                    if (state != null) {
                       return Container(
                         decoration: const BoxDecoration(
                           color: Colors.white,
-                          borderRadius: const BorderRadius.vertical(
+                          borderRadius: BorderRadius.vertical(
                             top: Radius.circular(14),
                             bottom: Radius.circular(14),
                           ),
                         ),
-                        margin: EdgeInsets.only(
+                        margin: const EdgeInsets.only(
                           bottom: 10,
                           // right: 0.4,
                           // left: 0.4,
@@ -155,15 +153,14 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
                                     child: Text(
                                       replyTitle,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.deepPurple,
                                         fontWeight: FontWeight.bold,
                                         letterSpacing: 0.25,
@@ -173,13 +170,12 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
                                   IconButton(
                                     constraints: const BoxConstraints(),
                                     padding: EdgeInsets.zero,
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.close,
                                       color: Colors.black,
                                       size: 16,
                                     ),
-                                    onPressed:
-                                        widget.sendMessageController.onCloseTap,
+                                    onPressed: widget.sendMessageController.onCloseTap,
                                   ),
                                 ],
                               ),
@@ -198,14 +194,12 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
                       return const SizedBox.shrink();
                     }
                   },
-                  valueListenable:
-                      widget.sendMessageController.replyMessageListener,
+                  valueListenable: widget.sendMessageController.replyMessageListener,
                 ),
                 ChatUITextField(
                   textFieldKey: textFieldKey,
                   focusNode: widget.sendMessageController.focusNode,
-                  textEditingController:
-                      widget.sendMessageController.textEditingController,
+                  textEditingController: widget.sendMessageController.textEditingController,
                   onPressed: widget.sendMessageController.onPressed,
                   sendMessageConfig: SendMessageConfiguration(
                       textFieldConfig: TextFieldConfiguration(
@@ -214,11 +208,10 @@ class MySendMessageWidgetState extends State<MySendMessageWidget> {
                       debugPrint(status.toString());
                     },
                     compositionThresholdTime: const Duration(seconds: 1),
-                    textStyle: TextStyle(color: Colors.black),
+                    textStyle: const TextStyle(color: Colors.black),
                   )),
                   //widget.sendMessageConfig,
-                  onRecordingComplete:
-                      widget.sendMessageController.onRecordingComplete,
+                  onRecordingComplete: widget.sendMessageController.onRecordingComplete,
                   onImageSelected: widget.sendMessageController.onImageSelected,
                 )
               ],

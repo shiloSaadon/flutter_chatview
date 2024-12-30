@@ -92,14 +92,14 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void receiveMessage() async {
-    _chatController.addMessage(
-      Message(
-        id: DateTime.now().toString(),
-        message: 'I will schedule the meeting.',
-        createdAt: DateTime.now(),
-        sentBy: '2',
-      ),
-    );
+    // _chatController.addMessage(
+    //   Message(
+    //     id: DateTime.now().toString(),
+    //     message: 'I will schedule the meeting.',
+    //     createdAt: DateTime.now(),
+    //     sentBy: '2',
+    //   ),
+    // );
     await Future.delayed(const Duration(milliseconds: 500));
     _chatController.addReplySuggestions([
       const SuggestionItemData(text: 'Thanks.'),
@@ -357,26 +357,25 @@ class _ChatScreenState extends State<ChatScreen> {
             color: isDarkTheme ? Colors.white : Colors.black,
           ),
         ),
-        onTap: (item) => _onSendTap(item.text, const ReplyMessage(), MessageType.text),
+        onTap: (item) => _onSendTap(TextMessage(text: item.text), null),
       ),
     );
   }
 
   void _onSendTap(
-    String message,
-    ReplyMessage replyMessage,
-    MessageType messageType,
+    MessageContent content,
+    ReplyMessage? replyMessage,
   ) {
-    _chatController.addMessage(
-      Message(
-        id: DateTime.now().toString(),
-        createdAt: DateTime.now(),
-        message: message,
-        sentBy: _chatController.currentUser.id,
-        replyMessage: replyMessage,
-        messageType: messageType,
-      ),
-    );
+    // _chatController.addMessage(
+    //   Message(
+    //     id: DateTime.now().toString(),
+    //     sentAt: DateTime.now(),
+    //     message: message,
+    //     sentBy: _chatController.currentUser.id,
+    //     replyMessage: replyMessage,
+    //     messageType: messageType,
+    //   ),
+    // );
     Future.delayed(const Duration(milliseconds: 300), () {
       _chatController.setMessageStatus(_chatController.initialMessageList.last, MessageStatus.undelivered);
     });

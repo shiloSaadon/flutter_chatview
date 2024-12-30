@@ -45,7 +45,7 @@ class ChatGroupedListWidget extends StatefulWidget {
   final ScrollController scrollController;
 
   /// Provides reply message if actual message is sent by replying any message.
-  final ReplyMessage replyMessage;
+  final ReplyMessage? replyMessage;
 
   /// Provides callback for assigning reply message when user swipe on chat bubble.
   final AssignReplayCallBack assignReplyMessage;
@@ -233,10 +233,10 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
             for (int i = 0; i < messages.length; i++) {
               // Add separator if it's the first message or date changes
               if (combinedList.isEmpty ||
-                  lastMatchedDate.getDateFromDateTime != messages.elementAt(i).createdAt.getDateFromDateTime) {
+                  lastMatchedDate.getDateFromDateTime != messages.elementAt(i).sentAt.getDateFromDateTime) {
                 // Add date separator
-                combinedList.add(messages.elementAt(i).createdAt);
-                lastMatchedDate = messages.elementAt(i).createdAt;
+                combinedList.add(messages.elementAt(i).sentAt);
+                lastMatchedDate = messages.elementAt(i).sentAt;
               }
 
               // Add message
@@ -296,7 +296,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
   Set<Message> sortMessage(Set<Message> messages) {
     final elements = [...messages];
     elements.sort(
-      chatBackgroundConfig.messageSorter ?? (a, b) => a.createdAt.compareTo(b.createdAt),
+      chatBackgroundConfig.messageSorter ?? (a, b) => a.sentAt.compareTo(b.sentAt),
     );
     if (chatBackgroundConfig.groupedListOrder.isAsc) {
       return elements.toSet();
@@ -314,10 +314,8 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
     /// return the same date [lastMatchedDate].
 
     /// When the conversation starts on a new date,
-    /// we are returning new date [message.createdAt].
-    return lastMatchedDate.getDateFromDateTime == message.createdAt.getDateFromDateTime
-        ? lastMatchedDate
-        : message.createdAt;
+    /// we are returning new date [message.sentAt].
+    return lastMatchedDate.getDateFromDateTime == message.sentAt.getDateFromDateTime ? lastMatchedDate : message.sentAt;
   }
 
   Widget _groupSeparator(DateTime createdAt) {

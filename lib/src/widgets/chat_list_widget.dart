@@ -49,7 +49,7 @@ class ChatListWidget extends StatefulWidget {
   final Widget? loadingWidget;
 
   /// Provides reply message when user swipe to chat bubble.
-  final ReplyMessage replyMessage;
+  final ReplyMessage? replyMessage;
 
   /// Provides callback when user actions reaches to top and needs to load more
   /// chat

@@ -45,23 +45,19 @@ class VoiceMessageWrapper extends StatelessWidget {
     );
   }
 
-  EdgeInsetsGeometry? get _padding =>
-      voiceMessageConfiguration?.padding ??
-      const EdgeInsets.symmetric(horizontal: 8);
+  EdgeInsetsGeometry? get _padding => voiceMessageConfiguration?.padding ?? const EdgeInsets.symmetric(horizontal: 8);
 
   EdgeInsetsGeometry? get _margin =>
       voiceMessageConfiguration?.margin ??
       EdgeInsets.symmetric(
         horizontal: 8,
-        vertical: message.reaction.reactions.isNotEmpty ? 15 : 0,
+        vertical: message.reactions.isNotEmpty ? 15 : 0,
       );
 
   BoxDecoration? get _decoration =>
       voiceMessageConfiguration?.decoration ??
       BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: isMessageBySender
-            ? outgoingChatBubbleConfig?.color
-            : inComingChatBubbleConfig?.color,
+        color: isMessageBySender ? outgoingChatBubbleConfig?.color : inComingChatBubbleConfig?.color,
       );
 }

@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import 'package:chatview/src/extensions/extensions.dart';
+import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,6 @@ import '../../chatview.dart';
 import 'message_time_widget.dart';
 import 'message_view.dart';
 import 'profile_circle.dart';
-import 'reply_message_widget.dart';
 import 'swipe_to_reply.dart';
 
 class ChatBubbleWidget extends StatefulWidget {
@@ -64,7 +64,7 @@ class ChatBubbleWidget extends StatefulWidget {
 }
 
 class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
-  String get replyMessage => widget.message.replyMessage.message;
+  MessageContent? get replyMessage => widget.message.replyOfMsg?.content;
 
   bool get isMessageBySender => widget.message.sentBy == currentUser?.id;
 
@@ -98,7 +98,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: MessageTimeWidget(
-                  messageTime: widget.message.createdAt,
+                  messageTime: widget.message.sentAt,
                   isCurrentUser: isMessageBySender,
                 ),
               ),
@@ -140,7 +140,7 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
   ProfileCircle profileCircle(ChatUser? messagedUser) {
     final profileCircleConfig = chatListConfig.profileCircleConfig;
     return ProfileCircle(
-      bottomPadding: widget.message.reaction.reactions.isNotEmpty
+      bottomPadding: widget.message.reactions.isNotEmpty
           ? profileCircleConfig?.bottomPadding ?? 15
           : profileCircleConfig?.bottomPadding ?? 2,
       profileCirclePadding: profileCircleConfig?.padding,
@@ -157,23 +157,25 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
   }
 
   void onRightSwipe() {
-    if (maxDuration != null) {
-      widget.message.voiceMessageDuration = Duration(milliseconds: maxDuration!);
-    }
-    if (chatListConfig.swipeToReplyConfig?.onRightSwipe != null) {
-      chatListConfig.swipeToReplyConfig?.onRightSwipe!(widget.message.message, widget.message.sentBy);
-    }
-    widget.onSwipe(widget.message, context);
+    //! Temporarily removed
+    // if (maxDuration != null) {
+    //   widget.message.voiceMessageDuration = Duration(milliseconds: maxDuration!);
+    // }
+    // if (chatListConfig.swipeToReplyConfig?.onRightSwipe != null) {
+    //   chatListConfig.swipeToReplyConfig?.onRightSwipe!(widget.message.message, widget.message.sentBy);
+    // }
+    // widget.onSwipe(widget.message, context);
   }
 
   void onLeftSwipe() {
-    if (maxDuration != null) {
-      widget.message.voiceMessageDuration = Duration(milliseconds: maxDuration!);
-    }
-    if (chatListConfig.swipeToReplyConfig?.onLeftSwipe != null) {
-      chatListConfig.swipeToReplyConfig?.onLeftSwipe!(widget.message.message, widget.message.sentBy);
-    }
-    widget.onSwipe(widget.message, context);
+    //! Temporarily removed
+    // if (maxDuration != null) {
+    //   widget.message.voiceMessageDuration = Duration(milliseconds: maxDuration!);
+    // }
+    // if (chatListConfig.swipeToReplyConfig?.onLeftSwipe != null) {
+    //   chatListConfig.swipeToReplyConfig?.onLeftSwipe!(widget.message.message, widget.message.sentBy);
+    // }
+    // widget.onSwipe(widget.message, context);
   }
 
   void _onAvatarTap(ChatUser? user) {
@@ -251,14 +253,15 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
             return chatListConfig.chatBubbleConfig?.inComingChatBubbleConfig?.padding ??
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 4);
           }),
-        if (replyMessage.isNotEmpty)
-          chatListConfig.repliedMessageConfig?.repliedMessageWidgetBuilder != null
-              ? chatListConfig.repliedMessageConfig!.repliedMessageWidgetBuilder!(widget.message.replyMessage)
-              : ReplyMessageWidget(
-                  message: widget.message,
-                  repliedMessageConfig: chatListConfig.repliedMessageConfig,
-                  onTap: () => widget.onReplyTap?.call(widget.message.replyMessage.messageId),
-                ),
+        //! Temporarily removed
+        // if (replyMessage.isNotEmpty)
+        //   chatListConfig.repliedMessageConfig?.repliedMessageWidgetBuilder != null
+        //       ? chatListConfig.repliedMessageConfig!.repliedMessageWidgetBuilder!(widget.message.replyMessage)
+        //       : ReplyMessageWidget(
+        //           message: widget.message,
+        //           repliedMessageConfig: chatListConfig.repliedMessageConfig,
+        //           onTap: () => widget.onReplyTap?.call(widget.message.replyMessage.messageId),
+        //         ),
         SwipeToReply(
           isMessageByCurrentUser: isMessageBySender,
           onSwipe: isMessageBySender ? onLeftSwipe : onRightSwipe,

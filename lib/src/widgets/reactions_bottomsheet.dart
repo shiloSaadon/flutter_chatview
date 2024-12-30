@@ -9,7 +9,7 @@ class ReactionsBottomSheet {
     required BuildContext context,
 
     /// Provides reaction instance of message.
-    required Reaction reaction,
+    required Set<Reaction> reactions,
 
     /// Provides controller for accessing few function for running chat.
     required ChatController chatController,
@@ -23,12 +23,12 @@ class ReactionsBottomSheet {
         return Container(
           decoration: BoxDecoration(
               color: reactionsBottomSheetConfig?.backgroundColor,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(20))),
           height: MediaQuery.of(context).size.height * 0.5,
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.only(top: 8),
+                margin: const EdgeInsets.only(top: 8),
                 width: 50,
                 height: 6,
                 decoration: BoxDecoration(
@@ -44,26 +44,20 @@ class ReactionsBottomSheet {
                         left: 12,
                         top: 18,
                       ),
-                  itemCount: reaction.reactedUserIds.length,
+                  itemCount: reactions.length,
                   itemBuilder: (_, index) {
-                    final reactedUser = chatController
-                        .getUserFromId(reaction.reactedUserIds[index]);
+                    final reactedUser = chatController.getUserFromId(reactions.elementAt(index).user);
                     return GestureDetector(
                       onTap: () {
                         reactionsBottomSheetConfig?.reactedUserCallback?.call(
                           reactedUser,
-                          reaction.reactions[index],
+                          reactions.elementAt(index).reaction,
                         );
                       },
                       child: Container(
-                        margin:
-                            reactionsBottomSheetConfig?.reactionWidgetMargin ??
-                                const EdgeInsets.only(bottom: 8),
-                        padding:
-                            reactionsBottomSheetConfig?.reactionWidgetPadding ??
-                                const EdgeInsets.all(8),
-                        decoration: reactionsBottomSheetConfig
-                                ?.reactionWidgetDecoration ??
+                        margin: reactionsBottomSheetConfig?.reactionWidgetMargin ?? const EdgeInsets.only(bottom: 8),
+                        padding: reactionsBottomSheetConfig?.reactionWidgetPadding ?? const EdgeInsets.all(8),
+                        decoration: reactionsBottomSheetConfig?.reactionWidgetDecoration ??
                             BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
@@ -82,19 +76,13 @@ class ReactionsBottomSheet {
                         child: Row(
                           children: [
                             ProfileImageWidget(
-                              circleRadius: reactionsBottomSheetConfig
-                                      ?.profileCircleRadius ??
-                                  16,
+                              circleRadius: reactionsBottomSheetConfig?.profileCircleRadius ?? 16,
                               imageUrl: reactedUser.profilePhoto,
                               imageType: reactedUser.imageType,
-                              defaultAvatarImage:
-                                  reactedUser.defaultAvatarImage,
-                              assetImageErrorBuilder:
-                                  reactedUser.assetImageErrorBuilder,
-                              networkImageErrorBuilder:
-                                  reactedUser.networkImageErrorBuilder,
-                              networkImageProgressIndicatorBuilder: reactedUser
-                                  .networkImageProgressIndicatorBuilder,
+                              defaultAvatarImage: reactedUser.defaultAvatarImage,
+                              assetImageErrorBuilder: reactedUser.assetImageErrorBuilder,
+                              networkImageErrorBuilder: reactedUser.networkImageErrorBuilder,
+                              networkImageProgressIndicatorBuilder: reactedUser.networkImageProgressIndicatorBuilder,
                             ),
                             const SizedBox(width: 12),
                             Expanded(
@@ -102,16 +90,13 @@ class ReactionsBottomSheet {
                                 reactedUser.name,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: reactionsBottomSheetConfig
-                                    ?.reactedUserTextStyle,
+                                style: reactionsBottomSheetConfig?.reactedUserTextStyle,
                               ),
                             ),
                             Text(
-                              reaction.reactions[index],
+                              reactions.elementAt(index).reaction,
                               style: TextStyle(
-                                fontSize:
-                                    reactionsBottomSheetConfig?.reactionSize ??
-                                        14,
+                                fontSize: reactionsBottomSheetConfig?.reactionSize ?? 14,
                               ),
                             )
                           ],
