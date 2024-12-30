@@ -20,17 +20,26 @@
  * SOFTWARE.
  */
 
-// Different types Message of ChatView
-
 import 'package:flutter/material.dart';
 
+/// Different types Message of ChatView
+/// This is only used to identify and parse each [MessageContent] from json
+/// To check the type of message use pattern matching
 enum MessageType {
-  image,
-  text,
+  text('text'),
+  image('image'),
+  // to be implemented
+  voiceNote('voice_note'),
+  gif('gif'),
+  link('link'),
+  document('document'),
+  video('video'),
+  sticker('sticker'),
+  voiceSticker('voice_sticker');
 
-  /// Only supported on android and ios
-  voice,
-  custom;
+  final String name;
+
+  const MessageType(this.name);
 
   static MessageType? tryParse(String? value) {
     final type = value?.trim().toLowerCase();
@@ -39,10 +48,8 @@ enum MessageType {
       return image;
     } else if (type == text.name) {
       return text;
-    } else if (type == voice.name) {
-      return voice;
-    } else if (type == custom.name) {
-      return custom;
+    } else if (type == voiceNote.name) {
+      return voiceNote;
     }
     return null;
   }

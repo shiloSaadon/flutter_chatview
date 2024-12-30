@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 import 'package:chatview/chatview.dart';
-import 'package:chatview/src/inherited_widgets/configurations_inherited_widgets.dart';
 import 'package:chatview/src/widgets/chat_view_inherited_widget.dart';
 import 'package:chatview/src/widgets/profile_image_widget.dart';
 import 'package:chatview/src/widgets/suggestions/suggestions_config_inherited_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../utils/constants/constants.dart';
 import '../utils/emoji_parser.dart';
 import '../utils/package_strings.dart';
@@ -87,22 +87,10 @@ extension ValidateString on String {
         circleRadius: profileCircleRadius ?? 8,
         assetImageErrorBuilder: user?.assetImageErrorBuilder,
         networkImageErrorBuilder: user?.networkImageErrorBuilder,
-        networkImageProgressIndicatorBuilder:
-            user?.networkImageProgressIndicatorBuilder,
+        networkImageProgressIndicatorBuilder: user?.networkImageProgressIndicatorBuilder,
       ),
     );
   }
-}
-
-/// Extension on MessageType for checking specific message type
-extension MessageTypes on MessageType {
-  bool get isImage => this == MessageType.image;
-
-  bool get isText => this == MessageType.text;
-
-  bool get isVoice => this == MessageType.voice;
-
-  bool get isCustom => this == MessageType.custom;
 }
 
 /// Extension on ConnectionState for checking specific connection.
@@ -130,12 +118,10 @@ extension ChatViewStateTitleExtension on String? {
 
 /// Extension on State for accessing inherited widget.
 extension StatefulWidgetExtension on State {
-  ChatViewInheritedWidget? get chatViewIW =>
-      context.mounted ? ChatViewInheritedWidget.of(context) : null;
+  ChatViewInheritedWidget? get chatViewIW => context.mounted ? ChatViewInheritedWidget.of(context) : null;
 
-  ReplySuggestionsConfig? get suggestionsConfig => context.mounted
-      ? SuggestionsConfigIW.of(context)?.suggestionsConfig
-      : null;
+  ReplySuggestionsConfig? get suggestionsConfig =>
+      context.mounted ? SuggestionsConfigIW.of(context)?.suggestionsConfig : null;
 
   ConfigurationsInheritedWidget get chatListConfig =>
       context.mounted && ConfigurationsInheritedWidget.of(context) != null
@@ -148,17 +134,14 @@ extension StatefulWidgetExtension on State {
 
 /// Extension on State for accessing inherited widget.
 extension BuildContextExtension on BuildContext {
-  ChatViewInheritedWidget? get chatViewIW =>
-      mounted ? ChatViewInheritedWidget.of(this) : null;
+  ChatViewInheritedWidget? get chatViewIW => mounted ? ChatViewInheritedWidget.of(this) : null;
 
-  ReplySuggestionsConfig? get suggestionsConfig =>
-      mounted ? SuggestionsConfigIW.of(this)?.suggestionsConfig : null;
+  ReplySuggestionsConfig? get suggestionsConfig => mounted ? SuggestionsConfigIW.of(this)?.suggestionsConfig : null;
 
-  ConfigurationsInheritedWidget get chatListConfig =>
-      mounted && ConfigurationsInheritedWidget.of(this) != null
-          ? ConfigurationsInheritedWidget.of(this)!
-          : const ConfigurationsInheritedWidget(
-              chatBackgroundConfig: ChatBackgroundConfiguration(),
-              child: SizedBox.shrink(),
-            );
+  ConfigurationsInheritedWidget get chatListConfig => mounted && ConfigurationsInheritedWidget.of(this) != null
+      ? ConfigurationsInheritedWidget.of(this)!
+      : const ConfigurationsInheritedWidget(
+          chatBackgroundConfig: ChatBackgroundConfiguration(),
+          child: SizedBox.shrink(),
+        );
 }

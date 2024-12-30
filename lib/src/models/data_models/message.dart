@@ -201,4 +201,41 @@ class Message<Content extends MessageContent> {
       status: status ?? this.status,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'id': id,
+      'sent_by': sentBy,
+      'sent_at': sentAt..toIso8601String(),
+      'reactions': reactions.map((x) => x.toJson()).toList(),
+      'is_starred': isStarred,
+      'is_read': isRead,
+      'content': content.toJson(),
+      'reply_of_msg': _replyOfMsg?.toJson(),
+      'status': status.name,
+    };
+  }
+
+  factory Message.fromJson(Map<String, dynamic> map) {
+    final type = MessageType.tryParse(map['type'] as String);
+    assert(type != null, "Message type must be provided");
+    return Message<Content>(
+      id: map['id'] as String,
+      sentBy: map['sent_by'] as String,
+      sentAt: DateTime.fromMillisecondsSinceEpoch(map['sent_at'] as int),
+      reactions: map['reactions'] == null
+          ? {}
+          : Set<Reaction>.from(
+              (map['reactions'] as List<int>).map<Reaction>(
+                (x) => Reaction.fromJson(x as Map<String, dynamic>),
+              ),
+            ),
+      isStarred: map['is_starred'] as bool,
+      isRead: map['is_read'] as bool,
+      content: MessageContent.fromJson(map['content'] as Map<String, dynamic>, type!) as Content,
+      replyOfMsg:
+          map['reply_of_msg'] != null ? ReplyMessage.fromJson(map['reply_of_msg'] as Map<String, dynamic>) : null,
+      status: MessageStatus.delivered,
+    );
+  }
 }

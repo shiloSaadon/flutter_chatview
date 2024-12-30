@@ -1,3 +1,5 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+
 // class Reaction {
 //   Reaction({
 //     required this.reactions,
@@ -60,4 +62,31 @@ class Reaction {
     required this.user,
     required this.reaction,
   });
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'user': user,
+      'reaction': reaction,
+    };
+  }
+
+  factory Reaction.fromJson(Map<String, dynamic> map) {
+    return Reaction(
+      user: map['user'] as String,
+      reaction: map['reaction'] as String,
+    );
+  }
+
+  @override
+  String toString() => 'Reaction(user: $user, reaction: $reaction)';
+
+  @override
+  bool operator ==(covariant Reaction other) {
+    if (identical(this, other)) return true;
+
+    return other.user == user && other.reaction == reaction;
+  }
+
+  @override
+  int get hashCode => user.hashCode ^ reaction.hashCode;
 }

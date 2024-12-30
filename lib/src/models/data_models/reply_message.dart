@@ -104,4 +104,17 @@ class ReplyMessage extends Message {
 
   @override
   ReplyMessage? get replyOfMsg => throw UnimplementedError('ChatReplyMessage cannot have replyTo');
+
+  factory ReplyMessage.fromJson(Map<String, dynamic> map) {
+    final message = Message.fromJson(map);
+    return ReplyMessage(
+      id: message.id,
+      sentBy: message.sentBy,
+      sentAt: message.sentAt,
+      reactions: message.reactions,
+      isStarred: message.isStarred,
+      isRead: message.isRead,
+      content: message.content,
+    );
+  }
 }
