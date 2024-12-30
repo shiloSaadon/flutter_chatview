@@ -21,11 +21,10 @@
  */
 import 'dart:async';
 
+import 'package:chatview/chatview.dart';
 import 'package:chatview/src/widgets/suggestions/suggestion_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../models/models.dart';
 
 class ChatController {
   /// Represents initial message list in chat which can be add by user.
@@ -93,6 +92,15 @@ class ChatController {
   /// Used to add message in message list.
   void addMessage(Message message) {
     initialMessageList.add(message);
+    if (!messageStreamController.isClosed) {
+      messageStreamController.sink.add(initialMessageList);
+    }
+  }
+
+  /// Set status of a message in message list.
+  void setMessageStatus(Message message, MessageStatus status) {
+    initialMessageList.remove(message);
+    initialMessageList.add(message.copyWith(status: status));
     if (!messageStreamController.isClosed) {
       messageStreamController.sink.add(initialMessageList);
     }

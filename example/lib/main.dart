@@ -378,10 +378,10 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
     Future.delayed(const Duration(milliseconds: 300), () {
-      _chatController.initialMessageList.last.setStatus = MessageStatus.undelivered;
+      _chatController.setMessageStatus(_chatController.initialMessageList.last, MessageStatus.undelivered);
     });
     Future.delayed(const Duration(seconds: 1), () {
-      _chatController.initialMessageList.last.setStatus = MessageStatus.read;
+      _chatController.setMessageStatus(_chatController.initialMessageList.last, MessageStatus.read);
     });
   }
 

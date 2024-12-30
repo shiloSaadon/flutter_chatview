@@ -87,9 +87,9 @@ class Message {
 
   /// This setter can be used to update message receipts, after which the configured
   /// builders will be updated.
-  set setStatus(MessageStatus messageStatus) {
-    _status = messageStatus;
-  }
+  // set setStatus(MessageStatus messageStatus) {
+  //   _status = messageStatus;
+  // }
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
         id: json['id']?.toString() ?? '',
