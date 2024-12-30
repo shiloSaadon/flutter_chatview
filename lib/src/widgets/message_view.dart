@@ -102,8 +102,7 @@ class MessageView extends StatefulWidget {
   State<MessageView> createState() => _MessageViewState();
 }
 
-class _MessageViewState extends State<MessageView>
-    with SingleTickerProviderStateMixin {
+class _MessageViewState extends State<MessageView> with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
 
   MessageConfiguration? get messageConfig => widget.messageConfig;
@@ -116,13 +115,11 @@ class _MessageViewState extends State<MessageView>
     if (isLongPressEnable) {
       _animationController = AnimationController(
         vsync: this,
-        duration: widget.longPressAnimationDuration ??
-            const Duration(milliseconds: 250),
+        duration: widget.longPressAnimationDuration ?? const Duration(milliseconds: 250),
         upperBound: 0.1,
         lowerBound: 0.0,
       );
-      if (widget.message.status != MessageStatus.read &&
-          !widget.isMessageBySender) {
+      if (widget.message.status != MessageStatus.read && !widget.isMessageBySender) {
         widget.inComingChatBubbleConfig?.onMessageRead?.call(widget.message);
       }
       _animationController?.addStatusListener((status) {
@@ -189,8 +186,7 @@ class _MessageViewState extends State<MessageView>
   Widget get singleMessageBubble {
     final message = widget.message.message;
     final emojiMessageConfiguration = messageConfig?.emojiMessageConfig;
-    final useIndernalMessageWrpper =
-        messageConfig?.customMessageWrapperBuilder == null;
+    final useIndernalMessageWrpper = messageConfig?.customMessageWrapperBuilder == null;
     Widget? messageData;
     if (message.isAllEmoji) {
       messageData = Padding(
@@ -205,8 +201,7 @@ class _MessageViewState extends State<MessageView>
           scale: widget.shouldHighlight ? widget.highlightScale : 1.0,
           child: Text(
             message,
-            style: emojiMessageConfiguration?.textStyle ??
-                const TextStyle(fontSize: 30),
+            style: emojiMessageConfiguration?.textStyle ?? const TextStyle(fontSize: 30),
           ),
         ),
       );
@@ -243,8 +238,7 @@ class _MessageViewState extends State<MessageView>
         outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
         useIndernalMessageWrpper: useIndernalMessageWrpper,
       );
-    } else if (widget.message.messageType.isCustom &&
-        messageConfig?.customMessageBuilder != null) {
+    } else if (widget.message.messageType.isCustom && messageConfig?.customMessageBuilder != null) {
       messageData = messageConfig?.customMessageBuilder!(widget.message);
     }
 
@@ -269,7 +263,7 @@ class _MessageViewState extends State<MessageView>
 
     /// ----------------- TO REMOVE ----------------
     if (!widget.message.messageType.isText) {
-      return SizedBox();
+      return const SizedBox();
     }
     return TextMessageView(
       inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
@@ -288,29 +282,19 @@ class _MessageViewState extends State<MessageView>
     return messageData;
   }
 
-  Widget get lastSeenIndicator => ValueListenableBuilder(
-        valueListenable: widget.message.statusNotifier,
-        builder: (context, value, child) {
-          if (widget.isMessageBySender &&
-              widget.controller?.initialMessageList.last.id ==
-                  widget.message.id &&
-              widget.message.status == MessageStatus.read) {
-            if (ChatViewInheritedWidget.of(context)
-                    ?.featureActiveConfig
-                    .lastSeenAgoBuilderVisibility ??
-                true) {
-              return widget.outgoingChatBubbleConfig?.receiptsWidgetConfig
-                      ?.lastSeenAgoBuilder
-                      ?.call(widget.message,
-                          applicationDateFormatter(widget.message.createdAt)) ??
-                  lastSeenAgoBuilder(widget.message,
-                      applicationDateFormatter(widget.message.createdAt));
-            }
-            return const SizedBox();
-          }
-          return const SizedBox();
-        },
-      );
+  Widget get lastSeenIndicator {
+    if (widget.isMessageBySender &&
+        widget.controller?.initialMessageList.last.id == widget.message.id &&
+        widget.message.status == MessageStatus.read) {
+      if (ChatViewInheritedWidget.of(context)?.featureActiveConfig.lastSeenAgoBuilderVisibility ?? true) {
+        return widget.outgoingChatBubbleConfig?.receiptsWidgetConfig?.lastSeenAgoBuilder
+                ?.call(widget.message, applicationDateFormatter(widget.message.createdAt)) ??
+            lastSeenAgoBuilder(widget.message, applicationDateFormatter(widget.message.createdAt));
+      }
+      return const SizedBox();
+    }
+    return const SizedBox();
+  }
 
   void _onLongPressStart(LongPressStartDetails details) async {
     await _animationController?.forward();

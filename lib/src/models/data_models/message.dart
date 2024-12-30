@@ -50,7 +50,8 @@ class Message {
   final MessageType messageType;
 
   /// Status of the message.
-  final ValueNotifier<MessageStatus> _status;
+  // final ValueNotifier<MessageStatus> _status;
+  MessageStatus _status;
 
   /// Provides max duration for recorded voice message.
   Duration? voiceMessageDuration;
@@ -67,7 +68,7 @@ class Message {
     MessageStatus status = MessageStatus.pending,
   })  : reaction = reaction ?? Reaction(reactions: [], reactedUserIds: []),
         key = GlobalKey(),
-        _status = ValueNotifier(status),
+        _status = status,
         assert(
           (messageType.isVoice
               ? ((defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android))
@@ -76,18 +77,18 @@ class Message {
         );
 
   /// curret messageStatus
-  MessageStatus get status => _status.value;
+  MessageStatus get status => _status;
 
   /// For [MessageStatus] ValueNotfier which is used to for rebuilds
   /// when state changes.
   /// Using ValueNotfier to avoid usage of setState((){}) in order
   /// rerender messages with new receipts.
-  ValueNotifier<MessageStatus> get statusNotifier => _status;
+  // ValueNotifier<MessageStatus> get statusNotifier => _status;
 
   /// This setter can be used to update message receipts, after which the configured
   /// builders will be updated.
   set setStatus(MessageStatus messageStatus) {
-    _status.value = messageStatus;
+    _status = messageStatus;
   }
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(

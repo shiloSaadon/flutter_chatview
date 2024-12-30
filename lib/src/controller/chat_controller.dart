@@ -67,7 +67,7 @@ class ChatController {
   set setTypingIndicator(bool value) => _showTypingIndicator.value = value;
 
   /// Represents list of chat users
-  List<ChatUser> otherUsers;
+  Set<ChatUser> otherUsers;
 
   /// Provides current user which is sending messages.
   final ChatUser currentUser;

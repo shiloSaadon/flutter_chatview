@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 /*
  * Copyright (c) 2022 Simform Solutions
  *
@@ -49,8 +50,7 @@ class ChatUser {
   final NetworkImageErrorBuilder? networkImageErrorBuilder;
 
   /// Progress indicator builder for network image
-  final NetworkImageProgressIndicatorBuilder?
-      networkImageProgressIndicatorBuilder;
+  final NetworkImageProgressIndicatorBuilder? networkImageProgressIndicatorBuilder;
 
   ChatUser({
     required this.id,
@@ -67,8 +67,7 @@ class ChatUser {
         id: json["id"],
         name: json["name"],
         profilePhoto: json["profilePhoto"],
-        imageType: ImageType.tryParse(json['imageType']?.toString()) ??
-            ImageType.network,
+        imageType: ImageType.tryParse(json['imageType']?.toString()) ?? ImageType.network,
         defaultAvatarImage: json["defaultAvatarImage"],
       );
 
@@ -92,9 +91,20 @@ class ChatUser {
       id: id ?? this.id,
       name: name ?? this.name,
       imageType: imageType ?? this.imageType,
-      profilePhoto:
-          forceNullValue ? profilePhoto : profilePhoto ?? this.profilePhoto,
+      profilePhoto: forceNullValue ? profilePhoto : profilePhoto ?? this.profilePhoto,
       defaultAvatarImage: defaultAvatarImage ?? this.defaultAvatarImage,
     );
+  }
+
+  @override
+  bool operator ==(covariant ChatUser other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode;
   }
 }
