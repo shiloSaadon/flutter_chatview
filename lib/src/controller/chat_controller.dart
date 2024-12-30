@@ -29,7 +29,7 @@ import '../models/models.dart';
 
 class ChatController {
   /// Represents initial message list in chat which can be add by user.
-  List<Message> initialMessageList;
+  Set<Message> initialMessageList;
 
   ScrollController scrollController;
 
@@ -45,8 +45,7 @@ class ChatController {
   ValueListenable<bool> get typingIndicatorNotifier => _showTypingIndicator;
 
   /// Allow user to add reply suggestions defaults to empty.
-  final ValueNotifier<List<SuggestionItemData>> _replySuggestion =
-      ValueNotifier([]);
+  final ValueNotifier<List<SuggestionItemData>> _replySuggestion = ValueNotifier([]);
 
   /// newSuggestions as [ValueNotifier] for [SuggestionList] widget's [ValueListenableBuilder].
   ///  Use this to listen when suggestion gets added
@@ -54,8 +53,7 @@ class ChatController {
   ///    chatcontroller.newSuggestions.addListener((){});
   ///  ```
   /// For more functionalities see [ValueNotifier].
-  ValueListenable<List<SuggestionItemData>> get newSuggestions =>
-      _replySuggestion;
+  ValueListenable<List<SuggestionItemData>> get newSuggestions => _replySuggestion;
 
   /// Getter for typingIndicator value instead of accessing [_showTypingIndicator.value]
   /// for better accessibility.
@@ -82,7 +80,7 @@ class ChatController {
   });
 
   /// Represents message stream of chat
-  StreamController<List<Message>> messageStreamController = StreamController();
+  StreamController<Set<Message>> messageStreamController = StreamController();
 
   /// Used to dispose ValueNotifiers and Streams.
   void dispose() {
@@ -116,35 +114,36 @@ class ChatController {
     required String messageId,
     required String userId,
   }) {
-    final message =
-        initialMessageList.firstWhere((element) => element.id == messageId);
-    final reactedUserIds = message.reaction.reactedUserIds;
-    final indexOfMessage = initialMessageList.indexOf(message);
-    final userIndex = reactedUserIds.indexOf(userId);
-    if (userIndex != -1) {
-      if (message.reaction.reactions[userIndex] == emoji) {
-        message.reaction.reactions.removeAt(userIndex);
-        message.reaction.reactedUserIds.removeAt(userIndex);
-      } else {
-        message.reaction.reactions[userIndex] = emoji;
-      }
-    } else {
-      message.reaction.reactions.add(emoji);
-      message.reaction.reactedUserIds.add(userId);
-    }
-    initialMessageList[indexOfMessage] = Message(
-      id: messageId,
-      message: message.message,
-      createdAt: message.createdAt,
-      sentBy: message.sentBy,
-      replyMessage: message.replyMessage,
-      reaction: message.reaction,
-      messageType: message.messageType,
-      status: message.status,
-    );
-    if (!messageStreamController.isClosed) {
-      messageStreamController.sink.add(initialMessageList);
-    }
+    //! Temporarily removed
+    // final message =
+    //     initialMessageList.firstWhere((element) => element.id == messageId);
+    // final reactedUserIds = message.reaction.reactedUserIds;
+    // final indexOfMessage = initialMessageList.indexOf(message);
+    // final userIndex = reactedUserIds.indexOf(userId);
+    // if (userIndex != -1) {
+    //   if (message.reaction.reactions[userIndex] == emoji) {
+    //     message.reaction.reactions.removeAt(userIndex);
+    //     message.reaction.reactedUserIds.removeAt(userIndex);
+    //   } else {
+    //     message.reaction.reactions[userIndex] = emoji;
+    //   }
+    // } else {
+    //   message.reaction.reactions.add(emoji);
+    //   message.reaction.reactedUserIds.add(userId);
+    // }
+    // initialMessageList[indexOfMessage] = Message(
+    //   id: messageId,
+    //   message: message.message,
+    //   createdAt: message.createdAt,
+    //   sentBy: message.sentBy,
+    //   replyMessage: message.replyMessage,
+    //   reaction: message.reaction,
+    //   messageType: message.messageType,
+    //   status: message.status,
+    // );
+    // if (!messageStreamController.isClosed) {
+    //   messageStreamController.sink.add(initialMessageList);
+    // }
   }
 
   /// Function to scroll to last messages in chat view
@@ -163,14 +162,14 @@ class ChatController {
   /// Function for loading data while pagination.
   void loadMoreData(List<Message> messageList) {
     /// Here, we have passed 0 index as we need to add data before first data
-    initialMessageList.insertAll(0, messageList);
-    if (!messageStreamController.isClosed) {
-      messageStreamController.sink.add(initialMessageList);
-    }
+    //! Temporarily removed
+    // initialMessageList.insertAll(0, messageList);
+    // if (!messageStreamController.isClosed) {
+    //   messageStreamController.sink.add(initialMessageList);
+    // }
   }
 
   /// Function for getting ChatUser object from user id
-  ChatUser getUserFromId(String userId) => userId == currentUser.id
-      ? currentUser
-      : otherUsers.firstWhere((element) => element.id == userId);
+  ChatUser getUserFromId(String userId) =>
+      userId == currentUser.id ? currentUser : otherUsers.firstWhere((element) => element.id == userId);
 }

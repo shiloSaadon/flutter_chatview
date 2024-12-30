@@ -64,8 +64,7 @@ class ChatGroupedListWidget extends StatefulWidget {
   State<ChatGroupedListWidget> createState() => _ChatGroupedListWidgetState();
 }
 
-class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
-    with TickerProviderStateMixin {
+class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with TickerProviderStateMixin {
   bool get showPopUp => widget.showPopUp;
 
   bool highlightMessage = false;
@@ -80,8 +79,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
 
   bool get isEnableSwipeToSeeTime => widget.isEnableSwipeToSeeTime;
 
-  ChatBackgroundConfiguration get chatBackgroundConfig =>
-      chatListConfig.chatBackgroundConfig;
+  ChatBackgroundConfiguration get chatBackgroundConfig => chatListConfig.chatBackgroundConfig;
 
   double chatTextFieldHeight = 0;
 
@@ -102,8 +100,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       setState(() {
-        chatTextFieldHeight =
-            chatViewIW?.chatTextFieldViewKey.currentContext?.size?.height ?? 10;
+        chatTextFieldHeight = chatViewIW?.chatTextFieldViewKey.currentContext?.size?.height ?? 10;
       });
     });
   }
@@ -140,15 +137,10 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
 
   @override
   Widget build(BuildContext context) {
-    final suggestionsListConfig =
-        suggestionsConfig?.listConfig ?? const SuggestionListConfig();
+    final suggestionsListConfig = suggestionsConfig?.listConfig ?? const SuggestionListConfig();
     return GestureDetector(
-      onHorizontalDragUpdate: (details) => isEnableSwipeToSeeTime && !showPopUp
-          ? _onHorizontalDrag(details)
-          : null,
-      onHorizontalDragEnd: (details) => isEnableSwipeToSeeTime && !showPopUp
-          ? _animationController?.reverse()
-          : null,
+      onHorizontalDragUpdate: (details) => isEnableSwipeToSeeTime && !showPopUp ? _onHorizontalDrag(details) : null,
+      onHorizontalDragEnd: (details) => isEnableSwipeToSeeTime && !showPopUp ? _animationController?.reverse() : null,
       onTap: widget.onChatListTap,
       child: _animationController != null
           ? AnimatedBuilder(
@@ -161,22 +153,20 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
     );
   }
 
-  Future<void> _onReplyTap(String id, List<Message>? messages) async {
+  Future<void> _onReplyTap(String id, Set<Message>? messages) async {
     print("ffewfe");
     // Finds the replied message if exists
     final repliedMessages = messages?.firstWhere((message) => id == message.id);
     print('repliedMessages  -> $repliedMessages');
-    final repliedMsgAutoScrollConfig =
-        chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig;
-    final highlightDuration = repliedMsgAutoScrollConfig?.highlightDuration ??
-        const Duration(milliseconds: 300);
+    final repliedMsgAutoScrollConfig = chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig;
+    final highlightDuration = repliedMsgAutoScrollConfig?.highlightDuration ?? const Duration(milliseconds: 300);
     // Scrolls to replied message and highlights
     if (repliedMessages != null && repliedMessages.key.currentState == null) {
       int counter = 0;
       while (repliedMessages.key.currentState == null && counter < 200) {
         widget.scrollController.jumpTo(widget.scrollController.offset + 10);
         counter++;
-        await Future.delayed(Duration(milliseconds: 1));
+        await Future.delayed(const Duration(milliseconds: 1));
       }
     }
     if (repliedMessages != null && repliedMessages.key.currentState != null) {
@@ -185,8 +175,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
         repliedMessages.key.currentState!.context,
         // This value will make widget to be in center when auto scrolled.
         alignment: 0.5,
-        curve:
-            repliedMsgAutoScrollConfig?.highlightScrollCurve ?? Curves.easeIn,
+        curve: repliedMsgAutoScrollConfig?.highlightScrollCurve ?? Curves.easeIn,
         duration: highlightDuration,
       );
       if (repliedMsgAutoScrollConfig?.enableHighlightRepliedMsg ?? false) {
@@ -211,9 +200,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
       ),
     );
 
-    details.delta.dx > 1
-        ? _animationController?.reverse()
-        : _animationController?.forward();
+    details.delta.dx > 1 ? _animationController?.reverse() : _animationController?.forward();
   }
 
   @override
@@ -225,21 +212,17 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
 
   Widget get _chatStreamBuilder {
     // DateTime lastMatchedDate = DateTime.now();
-    return StreamBuilder<List<Message>>(
+    return StreamBuilder<Set<Message>>(
       stream: chatController?.messageStreamController.stream,
       builder: (context, snapshot) {
         if (!snapshot.connectionState.isActive) {
           return Center(
-            child: chatBackgroundConfig.loadingWidget ??
-                const CircularProgressIndicator(),
+            child: chatBackgroundConfig.loadingWidget ?? const CircularProgressIndicator(),
           );
         } else {
-          final messages = (chatBackgroundConfig.sortEnable
-              ? sortMessage(snapshot.data!)
-              : snapshot.data!);
+          final messages = (chatBackgroundConfig.sortEnable ? sortMessage(snapshot.data!) : snapshot.data!);
 
-          final enableSeparator =
-              (featureActiveConfig?.enableChatSeparator ?? false);
+          final enableSeparator = (featureActiveConfig?.enableChatSeparator ?? false);
 
           // Create a combined list of messages and separators
           var combinedList = <dynamic>[];
@@ -250,15 +233,14 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
             for (int i = 0; i < messages.length; i++) {
               // Add separator if it's the first message or date changes
               if (combinedList.isEmpty ||
-                  lastMatchedDate.getDateFromDateTime !=
-                      messages[i].createdAt.getDateFromDateTime) {
+                  lastMatchedDate.getDateFromDateTime != messages.elementAt(i).createdAt.getDateFromDateTime) {
                 // Add date separator
-                combinedList.add(messages[i].createdAt);
-                lastMatchedDate = messages[i].createdAt;
+                combinedList.add(messages.elementAt(i).createdAt);
+                lastMatchedDate = messages.elementAt(i).createdAt;
               }
 
               // Add message
-              combinedList.add(messages[i]);
+              combinedList.add(messages.elementAt(i));
             }
           } else {
             // If separators are disabled, just use the messages list
@@ -286,27 +268,21 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
                 valueListenable: _replyId,
                 builder: (context, state, child) {
                   final message = item as Message;
-                  final enableScrollToRepliedMsg = chatListConfig
-                          .repliedMessageConfig
-                          ?.repliedMsgAutoScrollConfig
-                          .enableScrollToRepliedMsg ??
-                      false;
+                  final enableScrollToRepliedMsg =
+                      chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig.enableScrollToRepliedMsg ?? false;
 
                   return ChatBubbleWidget(
                     key: message.key,
                     message: message,
                     slideAnimation: _slideAnimation,
-                    onLongPress: (yCoordinate, xCoordinate) =>
-                        widget.onChatBubbleLongPress(
+                    onLongPress: (yCoordinate, xCoordinate) => widget.onChatBubbleLongPress(
                       yCoordinate,
                       xCoordinate,
                       message,
                     ),
                     onSwipe: widget.assignReplyMessage,
                     shouldHighlight: state == message.id,
-                    onReplyTap: enableScrollToRepliedMsg
-                        ? (replyId) => _onReplyTap(replyId, snapshot.data)
-                        : null,
+                    onReplyTap: enableScrollToRepliedMsg ? (replyId) => _onReplyTap(replyId, snapshot.data) : null,
                   );
                 },
               );
@@ -317,16 +293,15 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
     );
   }
 
-  List<Message> sortMessage(List<Message> messages) {
+  Set<Message> sortMessage(Set<Message> messages) {
     final elements = [...messages];
     elements.sort(
-      chatBackgroundConfig.messageSorter ??
-          (a, b) => a.createdAt.compareTo(b.createdAt),
+      chatBackgroundConfig.messageSorter ?? (a, b) => a.createdAt.compareTo(b.createdAt),
     );
     if (chatBackgroundConfig.groupedListOrder.isAsc) {
-      return elements.toList();
+      return elements.toSet();
     } else {
-      return elements.reversed.toList();
+      return elements.reversed.toSet();
     }
   }
 
@@ -340,8 +315,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
 
     /// When the conversation starts on a new date,
     /// we are returning new date [message.createdAt].
-    return lastMatchedDate.getDateFromDateTime ==
-            message.createdAt.getDateFromDateTime
+    return lastMatchedDate.getDateFromDateTime == message.createdAt.getDateFromDateTime
         ? lastMatchedDate
         : message.createdAt;
   }
@@ -350,8 +324,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
     return featureActiveConfig?.enableChatSeparator ?? false
         ? _GroupSeparatorBuilder(
             separator: createdAt,
-            defaultGroupSeparatorConfig:
-                chatBackgroundConfig.defaultGroupSeparatorConfig,
+            defaultGroupSeparatorConfig: chatBackgroundConfig.defaultGroupSeparatorConfig,
             groupSeparatorBuilder: chatBackgroundConfig.groupSeparatorBuilder,
           )
         : const SizedBox.shrink();

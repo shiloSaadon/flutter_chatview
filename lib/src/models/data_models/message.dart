@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 /*
  * Copyright (c) 2022 Simform Solutions
  *
@@ -69,8 +70,7 @@ class Message {
         _status = ValueNotifier(status),
         assert(
           (messageType.isVoice
-              ? ((defaultTargetPlatform == TargetPlatform.iOS ||
-                  defaultTargetPlatform == TargetPlatform.android))
+              ? ((defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android))
               : true),
           "Voice messages are only supported with android and ios platform",
         );
@@ -93,23 +93,17 @@ class Message {
   factory Message.fromJson(Map<String, dynamic> json) => Message(
         id: json['id']?.toString() ?? '',
         message: json['message']?.toString() ?? '',
-        createdAt:
-            DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now(),
+        createdAt: DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now(),
         sentBy: json['sentBy']?.toString() ?? '',
         replyMessage: json['reply_message'] is Map<String, dynamic>
             ? ReplyMessage.fromJson(json['reply_message'])
             : const ReplyMessage(),
-        reaction: json['reaction'] is Map<String, dynamic>
-            ? Reaction.fromJson(json['reaction'])
-            : null,
-        messageType: MessageType.tryParse(json['message_type']?.toString()) ??
-            MessageType.text,
+        reaction: json['reaction'] is Map<String, dynamic> ? Reaction.fromJson(json['reaction']) : null,
+        messageType: MessageType.tryParse(json['message_type']?.toString()) ?? MessageType.text,
         voiceMessageDuration: Duration(
-          microseconds:
-              int.tryParse(json['voice_message_duration'].toString()) ?? 0,
+          microseconds: int.tryParse(json['voice_message_duration'].toString()) ?? 0,
         ),
-        status: MessageStatus.tryParse(json['status']?.toString()) ??
-            MessageStatus.pending,
+        status: MessageStatus.tryParse(json['status']?.toString()) ?? MessageStatus.pending,
       );
 
   Map<String, dynamic> toJson() => {
@@ -143,12 +137,34 @@ class Message {
       createdAt: createdAt ?? this.createdAt,
       sentBy: sentBy ?? this.sentBy,
       messageType: messageType ?? this.messageType,
-      voiceMessageDuration: forceNullValue
-          ? voiceMessageDuration
-          : voiceMessageDuration ?? this.voiceMessageDuration,
+      voiceMessageDuration: forceNullValue ? voiceMessageDuration : voiceMessageDuration ?? this.voiceMessageDuration,
       reaction: reaction ?? this.reaction,
       replyMessage: replyMessage ?? this.replyMessage,
       status: status ?? this.status,
     );
   }
+
+  @override
+  bool operator ==(covariant Message other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode;
+  }
 }
+
+// class ChatMessage {
+//   final String id;
+//   final dynamic sender;
+//   final DateTime createdAt;
+//   final List<ChatReaction> reactions;
+// }
+
+// class ChatReaction {
+//   final dynamic user;
+//   final String reaction;
+// }
