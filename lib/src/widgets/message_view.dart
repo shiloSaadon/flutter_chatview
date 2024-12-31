@@ -21,7 +21,6 @@
  */
 import 'package:chatview/chatview.dart';
 import 'package:chatview/src/extensions/extensions.dart';
-import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/widgets/chat_view_inherited_widget.dart';
 import 'package:chatview/src/widgets/voice_message_view.dart';
 import 'package:flutter/material.dart';
@@ -189,61 +188,61 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
     final emojiMessageConfiguration = messageConfig?.emojiMessageConfig;
     final useInternalMessageWrapper = messageConfig?.customMessageWrapperBuilder == null;
     Widget? messageData;
-    if (messageContent is TextMessage) {
-      messageData = messageContent.text.isAllEmoji
-          ? Padding(
-              padding: emojiMessageConfiguration?.padding ??
-                  EdgeInsets.fromLTRB(
-                    leftPadding2,
-                    4,
-                    leftPadding2,
-                    widget.message.reactions.isNotEmpty ? 14 : 0,
+    switch (widget.message) {
+      case Message<TextMessage> e:
+        messageData = e.content.text.isAllEmoji
+            ? Padding(
+                padding: emojiMessageConfiguration?.padding ??
+                    EdgeInsets.fromLTRB(
+                      leftPadding2,
+                      4,
+                      leftPadding2,
+                      widget.message.reactions.isNotEmpty ? 14 : 0,
+                    ),
+                child: Transform.scale(
+                  scale: widget.shouldHighlight ? widget.highlightScale : 1.0,
+                  child: Text(
+                    e.content.text,
+                    style: emojiMessageConfiguration?.textStyle ?? const TextStyle(fontSize: 30),
                   ),
-              child: Transform.scale(
-                scale: widget.shouldHighlight ? widget.highlightScale : 1.0,
-                child: Text(
-                  messageContent.text,
-                  style: emojiMessageConfiguration?.textStyle ?? const TextStyle(fontSize: 30),
                 ),
-              ),
-            )
-          : TextMessageView(
-              inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
-              outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
-              isMessageBySender: widget.isMessageBySender,
-              message: widget.message as Message<TextMessage>,
-              chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
-              messageReactionConfig: messageConfig?.messageReactionConfig,
-              highlightColor: widget.highlightColor,
-              highlightMessage: widget.shouldHighlight,
-              useIndernalMessageWrpper: useInternalMessageWrapper,
-            );
-    } else if (messageContent is ImagesMessage) {
-      messageData = ImageMessageView(
-        message: widget.message as Message<ImagesMessage>,
-        isMessageBySender: widget.isMessageBySender,
-        imageMessageConfig: messageConfig?.imageMessageConfig,
-        messageReactionConfig: messageConfig?.messageReactionConfig,
-        highlightImage: widget.shouldHighlight,
-        highlightScale: widget.highlightScale,
-      );
-    } else if (messageContent is VoiceMessage) {
-      messageData = VoiceMessageView(
-        screenWidth: MediaQuery.of(context).size.width,
-        message: widget.message as Message<VoiceMessage>,
-        config: messageConfig?.voiceMessageConfig,
-        onMaxDuration: widget.onMaxDuration,
-        isMessageBySender: widget.isMessageBySender,
-        messageReactionConfig: messageConfig?.messageReactionConfig,
-        inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
-        outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
-        useInternalMessageWrapper: useInternalMessageWrapper,
-      );
+              )
+            : TextMessageView(
+                inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
+                outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
+                isMessageBySender: widget.isMessageBySender,
+                message: e,
+                chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
+                messageReactionConfig: messageConfig?.messageReactionConfig,
+                highlightColor: widget.highlightColor,
+                highlightMessage: widget.shouldHighlight,
+                useIndernalMessageWrpper: useInternalMessageWrapper,
+              );
+        break;
+      case Message<ImagesMessage> e:
+        messageData = ImageMessageView(
+          message: e,
+          isMessageBySender: widget.isMessageBySender,
+          imageMessageConfig: messageConfig?.imageMessageConfig,
+          messageReactionConfig: messageConfig?.messageReactionConfig,
+          highlightImage: widget.shouldHighlight,
+          highlightScale: widget.highlightScale,
+        );
+        break;
+      case Message<VoiceMessage> e:
+        messageData = VoiceMessageView(
+          screenWidth: MediaQuery.of(context).size.width,
+          message: e,
+          config: messageConfig?.voiceMessageConfig,
+          onMaxDuration: widget.onMaxDuration,
+          isMessageBySender: widget.isMessageBySender,
+          messageReactionConfig: messageConfig?.messageReactionConfig,
+          inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
+          outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
+          useInternalMessageWrapper: useInternalMessageWrapper,
+        );
+        break;
     }
-    //! Temporarily removed
-    // else if (widget.message.messageType.isCustom && messageConfig?.customMessageBuilder != null) {
-    //   messageData = messageConfig?.customMessageBuilder!(widget.message);
-    // }
 
     if (messageData == null) {
       return const SizedBox();
