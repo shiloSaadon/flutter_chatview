@@ -186,50 +186,44 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
   Widget get singleMessageBubble {
     final emojiMessageConfiguration = messageConfig?.emojiMessageConfig;
     final useInternalMessageWrapper = messageConfig?.customMessageWrapperBuilder == null;
-    Widget? messageData;
-    switch (widget.message) {
-      case Message<TextMessage> e:
-        messageData = e.content.text.isAllEmoji
-            ? Padding(
-                padding: emojiMessageConfiguration?.padding ??
-                    EdgeInsets.fromLTRB(
-                      leftPadding2,
-                      4,
-                      leftPadding2,
-                      widget.message.reactions.isNotEmpty ? 14 : 0,
-                    ),
-                child: Transform.scale(
-                  scale: widget.shouldHighlight ? widget.highlightScale : 1.0,
-                  child: Text(
-                    e.content.text,
-                    style: emojiMessageConfiguration?.textStyle ?? const TextStyle(fontSize: 30),
+    final Widget messageData = switch (widget.message) {
+      Message<TextMessage> e => e.content.text.isAllEmoji
+          ? Padding(
+              padding: emojiMessageConfiguration?.padding ??
+                  EdgeInsets.fromLTRB(
+                    leftPadding2,
+                    4,
+                    leftPadding2,
+                    widget.message.reactions.isNotEmpty ? 14 : 0,
                   ),
+              child: Transform.scale(
+                scale: widget.shouldHighlight ? widget.highlightScale : 1.0,
+                child: Text(
+                  e.content.text,
+                  style: emojiMessageConfiguration?.textStyle ?? const TextStyle(fontSize: 30),
                 ),
-              )
-            : TextMessageView(
-                inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
-                outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
-                isMessageBySender: widget.isMessageBySender,
-                message: e,
-                chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
-                messageReactionConfig: messageConfig?.messageReactionConfig,
-                highlightColor: widget.highlightColor,
-                highlightMessage: widget.shouldHighlight,
-                useIndernalMessageWrpper: useInternalMessageWrapper,
-              );
-        break;
-      case Message<ImagesMessage> e:
-        messageData = ImageMessageView(
+              ),
+            )
+          : TextMessageView(
+              inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
+              outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
+              isMessageBySender: widget.isMessageBySender,
+              message: e,
+              chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
+              messageReactionConfig: messageConfig?.messageReactionConfig,
+              highlightColor: widget.highlightColor,
+              highlightMessage: widget.shouldHighlight,
+              useIndernalMessageWrpper: useInternalMessageWrapper,
+            ),
+      Message<ImagesMessage> e => ImageMessageView(
           message: e,
           isMessageBySender: widget.isMessageBySender,
           imageMessageConfig: messageConfig?.imageMessageConfig,
           messageReactionConfig: messageConfig?.messageReactionConfig,
           highlightImage: widget.shouldHighlight,
           highlightScale: widget.highlightScale,
-        );
-        break;
-      case Message<VoiceMessage> e:
-        messageData = VoiceMessageView(
+        ),
+      Message<VoiceMessage> e => VoiceMessageView(
           screenWidth: MediaQuery.of(context).size.width,
           message: e,
           config: messageConfig?.voiceMessageConfig,
@@ -239,13 +233,16 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
           inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
           outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
           useInternalMessageWrapper: useInternalMessageWrapper,
-        );
-        break;
-    }
-
-    if (messageData == null) {
-      return const SizedBox();
-    }
+        ),
+      _ => Text(
+          'Message data could not be parsed for some reason',
+          textAlign: TextAlign.start,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: Colors.white,
+                fontSize: 16,
+              ),
+        ),
+    };
 
     //  Custom message wrapper
     if (messageConfig?.customMessageWrapperBuilder != null) {
