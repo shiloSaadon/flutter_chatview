@@ -105,7 +105,7 @@ class _ReactionWidgetState extends State<ReactionWidget> {
                   if (!(widget.reactions.length > 2) && !(widget.reactions.length > 1))
                     ...List.generate(
                       widget.reactions.length,
-                      (reactedUserIndex) => widget.reactions.elementAt(reactedUserIndex).user.getUserProfilePicture(
+                      (reactedUserIndex) => widget.reactions.elementAt(reactedUserIndex).idUser.getUserProfilePicture(
                             getChatUser: (userId) => chatController?.getUserFromId(userId),
                             profileCirclePadding: messageReactionConfig?.profileCirclePadding,
                             profileCircleRadius: messageReactionConfig?.profileCircleRadius,

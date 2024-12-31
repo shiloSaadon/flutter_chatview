@@ -56,37 +56,41 @@
 // }
 
 class Reaction {
-  final String user;
+  final String idMessage;
+  final String idUser;
   final String reaction;
   Reaction({
-    required this.user,
+    required this.idMessage,
+    required this.idUser,
     required this.reaction,
   });
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'user': user,
+      'id_message': idMessage,
+      'id_user': idUser,
       'reaction': reaction,
     };
   }
 
   factory Reaction.fromJson(Map<String, dynamic> map) {
     return Reaction(
-      user: map['user'] as String,
+      idMessage: map['id_message'] as String,
+      idUser: map['id_user'] as String,
       reaction: map['reaction'] as String,
     );
   }
 
   @override
-  String toString() => 'Reaction(user: $user, reaction: $reaction)';
+  String toString() => 'Reaction(idMessage: $idMessage, idUser: $idUser, reaction: $reaction)';
 
   @override
   bool operator ==(covariant Reaction other) {
     if (identical(this, other)) return true;
 
-    return other.user == user && other.reaction == reaction;
+    return other.idMessage == idMessage && other.idUser == idUser;
   }
 
   @override
-  int get hashCode => user.hashCode ^ reaction.hashCode;
+  int get hashCode => idMessage.hashCode ^ idUser.hashCode;
 }

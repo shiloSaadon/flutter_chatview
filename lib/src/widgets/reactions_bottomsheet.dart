@@ -46,7 +46,7 @@ class ReactionsBottomSheet {
                       ),
                   itemCount: reactions.length,
                   itemBuilder: (_, index) {
-                    final reactedUser = chatController.getUserFromId(reactions.elementAt(index).user);
+                    final reactedUser = chatController.getUserFromId(reactions.elementAt(index).idUser);
                     return GestureDetector(
                       onTap: () {
                         reactionsBottomSheetConfig?.reactedUserCallback?.call(

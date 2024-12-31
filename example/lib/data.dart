@@ -65,7 +65,7 @@ class Data {
       content: TextMessage(text: "That's fine"),
       sentAt: DateTime.now(),
       sentBy: '2',
-      reactions: {Reaction(user: '1', reaction: '\u{2764}')},
+      reactions: {},
       status: MessageStatus.read,
     ),
     Message(
@@ -87,11 +87,7 @@ class Data {
       content: TextMessage(text: "https://bit.ly/3JHS2Wl"),
       sentAt: DateTime.now(),
       sentBy: '2',
-      reactions: {
-        Reaction(user: '2', reaction: '\u{2764}'),
-        Reaction(user: '3', reaction: '\u{1F44D}'),
-        Reaction(user: '4', reaction: '\u{1F44D}'),
-      },
+      reactions: {},
       status: MessageStatus.read,
       replyOfMsg: ReplyMessage(
         id: '4',
@@ -106,11 +102,7 @@ class Data {
       sentAt: DateTime.now(),
       sentBy: '1',
       status: MessageStatus.read,
-      reactions: {
-        Reaction(user: '2', reaction: '\u{2764}'),
-        Reaction(user: '3', reaction: '\u{2764}'),
-        Reaction(user: '4', reaction: '\u{2764}'),
-      },
+      reactions: {},
     ),
     Message(
       id: '12',

@@ -43,12 +43,10 @@ class ReactionPopup extends StatefulWidget {
   ReactionPopupState createState() => ReactionPopupState();
 }
 
-class ReactionPopupState extends State<ReactionPopup>
-    with SingleTickerProviderStateMixin {
+class ReactionPopupState extends State<ReactionPopup> with SingleTickerProviderStateMixin {
   late final AnimationController _animationController = AnimationController(
     vsync: this,
-    duration: reactionPopupConfig?.animationDuration ??
-        const Duration(milliseconds: 180),
+    duration: reactionPopupConfig?.animationDuration ?? const Duration(milliseconds: 180),
   );
 
   late final Animation<double> _scaleAnimation = CurvedAnimation(
@@ -57,8 +55,7 @@ class ReactionPopupState extends State<ReactionPopup>
     reverseCurve: Curves.easeInOutSine,
   );
 
-  ReactionPopupConfiguration? get reactionPopupConfig =>
-      chatListConfig.reactionPopupConfig;
+  ReactionPopupConfiguration? get reactionPopupConfig => chatListConfig.reactionPopupConfig;
 
   bool get showPopUp => widget.showPopUp;
   double _yCoordinate = 0.0;
@@ -111,18 +108,15 @@ class ReactionPopupState extends State<ReactionPopup>
                           child: _reactionPopupRow,
                         )
                       : Container(
-                          constraints: BoxConstraints(
-                              maxWidth: reactionPopupConfig?.maxWidth ?? 350),
-                          margin: reactionPopupConfig?.margin ??
-                              const EdgeInsets.symmetric(horizontal: 25),
+                          constraints: BoxConstraints(maxWidth: reactionPopupConfig?.maxWidth ?? 350),
+                          margin: reactionPopupConfig?.margin ?? const EdgeInsets.symmetric(horizontal: 25),
                           padding: reactionPopupConfig?.padding ??
                               const EdgeInsets.symmetric(
                                 vertical: 6,
                                 horizontal: 14,
                               ),
                           decoration: BoxDecoration(
-                            color: reactionPopupConfig?.backgroundColor ??
-                                Colors.white,
+                            color: reactionPopupConfig?.backgroundColor ?? Colors.white,
                             borderRadius: BorderRadius.circular(30),
                             boxShadow: [
                               reactionPopupConfig?.shadow ??
@@ -150,8 +144,8 @@ class ReactionPopupState extends State<ReactionPopup>
             if (!(reactionPopupConfig?.overrideUserReactionCallback ?? false)) {
               chatController?.setReaction(
                 emoji: emoji,
-                messageId: _message!.id,
-                userId: currentUser!.id,
+                message: _message!,
+                idUser: currentUser!.id,
               );
             }
             reactionPopupConfig?.userReactionCallback?.call(
@@ -169,8 +163,7 @@ class ReactionPopupState extends State<ReactionPopup>
   }) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        final yPosition = yCoordinate -
-            (chatViewIW!.reactionPopupKey.currentContext?.size?.height ?? 0);
+        final yPosition = yCoordinate - (chatViewIW!.reactionPopupKey.currentContext?.size?.height ?? 0);
         _message = message;
         _xCoordinate = xCoordinate;
         _yCoordinate = yPosition < 0 ? 0 : yPosition;

@@ -28,7 +28,7 @@ import 'package:flutter/material.dart';
 
 class ChatController {
   /// Represents initial message list in chat which can be add by user.
-  Set<Message> initialMessageList;
+  Set<Message<MessageContent>> initialMessageList;
 
   ScrollController scrollController;
 
@@ -79,7 +79,7 @@ class ChatController {
   });
 
   /// Represents message stream of chat
-  StreamController<Set<Message>> messageStreamController = StreamController();
+  StreamController<Set<Message<MessageContent>>> messageStreamController = StreamController();
 
   /// Used to dispose ValueNotifiers and Streams.
   void dispose() {
@@ -87,14 +87,6 @@ class ChatController {
     _replySuggestion.dispose();
     scrollController.dispose();
     messageStreamController.close();
-  }
-
-  /// Used to add message in message list.
-  void addMessage(Message message) {
-    initialMessageList.add(message);
-    if (!messageStreamController.isClosed) {
-      messageStreamController.sink.add(initialMessageList);
-    }
   }
 
   /// Set status of a message in message list.
@@ -118,40 +110,50 @@ class ChatController {
 
   /// Function for setting reaction on specific chat bubble
   void setReaction({
+    required Message<MessageContent> message,
+    required String idUser,
     required String emoji,
-    required String messageId,
-    required String userId,
   }) {
-    //! Temporarily removed
-    // final message =
-    //     initialMessageList.firstWhere((element) => element.id == messageId);
-    // final reactedUserIds = message.reaction.reactedUserIds;
-    // final indexOfMessage = initialMessageList.indexOf(message);
-    // final userIndex = reactedUserIds.indexOf(userId);
-    // if (userIndex != -1) {
-    //   if (message.reaction.reactions[userIndex] == emoji) {
-    //     message.reaction.reactions.removeAt(userIndex);
-    //     message.reaction.reactedUserIds.removeAt(userIndex);
-    //   } else {
-    //     message.reaction.reactions[userIndex] = emoji;
-    //   }
-    // } else {
-    //   message.reaction.reactions.add(emoji);
-    //   message.reaction.reactedUserIds.add(userId);
-    // }
-    // initialMessageList[indexOfMessage] = Message(
-    //   id: messageId,
-    //   message: message.message,
-    //   createdAt: message.createdAt,
-    //   sentBy: message.sentBy,
-    //   replyMessage: message.replyMessage,
-    //   reaction: message.reaction,
-    //   messageType: message.messageType,
-    //   status: message.status,
-    // );
-    // if (!messageStreamController.isClosed) {
-    //   messageStreamController.sink.add(initialMessageList);
-    // }
+    final reaction = message.reactions.where((r) => r.idMessage == message.id && r.idUser == idUser).firstOrNull;
+    // There is no reaction on this message by this user
+    if (reaction == null) {
+      initialMessageList = {
+        ...initialMessageList.where((m) => m.id != message.id),
+        message.copyWith(
+          reactions: {
+            ...message.reactions,
+            Reaction(idMessage: message.id, idUser: idUser, reaction: emoji),
+          },
+        ),
+      };
+    } else {
+      // There is already a reaction by this user
+      if (reaction.reaction == emoji) {
+        // The reaction is the same. So we remove the existing one
+        initialMessageList = {
+          ...initialMessageList.where((m) => m.id != message.id),
+          message.copyWith(
+            reactions: {
+              ...message.reactions.where((r) => r.idUser != idUser && r.idMessage == message.id),
+            },
+          ),
+        };
+      } else {
+        // The reaction is different. So we remove the previous and add the new
+        initialMessageList = {
+          ...initialMessageList.where((m) => m.id != message.id),
+          message.copyWith(
+            reactions: {
+              ...message.reactions.where((r) => r.idUser != idUser && r.idMessage == message.id),
+              Reaction(idMessage: message.id, idUser: idUser, reaction: emoji),
+            },
+          ),
+        };
+      }
+    }
+    if (!messageStreamController.isClosed) {
+      messageStreamController.sink.add(initialMessageList);
+    }
   }
 
   /// Function to scroll to last messages in chat view
@@ -167,6 +169,14 @@ class ChatController {
         },
       );
 
+  /// Used to add message in message list.
+  void addMessage(Message message) {
+    initialMessageList.add(message);
+    if (!messageStreamController.isClosed) {
+      messageStreamController.sink.add(initialMessageList);
+    }
+  }
+
   /// Function for loading data while pagination.
   void loadMoreData(Set<Message> messageList) {
     /// Here, we have passed 0 index as we need to add data before first data
@@ -178,8 +188,9 @@ class ChatController {
 
   /// Function for adding messages. This replaces all existing data.
   void addMessages(Set<Message> messageList) {
+    initialMessageList = {...messageList};
     if (!messageStreamController.isClosed) {
-      messageStreamController.sink.add(messageList);
+      messageStreamController.sink.add(initialMessageList);
     }
   }
 
