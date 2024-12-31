@@ -58,15 +58,15 @@ class TextMessage extends MessageContent {
 
 class ImagesMessage extends MessageContent {
   final List<String> images;
-  final String caption;
+  final String? caption;
   ImagesMessage({
     required this.images,
-    required this.caption,
+    this.caption,
   }) : assert(images.isNotEmpty);
 
   factory ImagesMessage.fromJson(Map<String, dynamic> json) {
     return ImagesMessage(
-      caption: json['caption'] as String,
+      caption: json['caption'] as String?,
       images: json['images'] as List<String>,
     );
   }

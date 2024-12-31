@@ -1,5 +1,4 @@
 import 'package:chatview/chatview.dart';
-import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/utils/package_strings.dart';
 import 'package:flutter/material.dart';
 
@@ -50,8 +49,7 @@ class SendMessageController extends ChangeNotifier {
 
   void onImageSelected(List<String> paths) {
     debugPrint('Call in Send Message Widget');
-    //! Temporarily removed
-    // onSendTap.call(imagesMsg, replyMessage);
+    onSendTap.call(ImagesMessage(images: paths), replyMessage);
     resetReply();
   }
 
