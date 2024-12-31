@@ -226,7 +226,7 @@ class Message<Content extends MessageContent> {
       reactions: map['reactions'] == null
           ? {}
           : Set<Reaction>.from(
-              (map['reactions'] as List<int>).map<Reaction>(
+              (map['reactions'] as List<dynamic>).map<Reaction>(
                 (x) => Reaction.fromJson(x as Map<String, dynamic>),
               ),
             ),
@@ -237,5 +237,17 @@ class Message<Content extends MessageContent> {
           map['reply_of_msg'] != null ? ReplyMessage.fromJson(map['reply_of_msg'] as Map<String, dynamic>) : null,
       status: MessageStatus.delivered,
     );
+  }
+
+  @override
+  bool operator ==(covariant Message<Content> other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode;
   }
 }
