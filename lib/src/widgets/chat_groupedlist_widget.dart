@@ -293,7 +293,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
     );
   }
 
-  Set<Message> sortMessage(Set<Message> messages) {
+  Set<Message<MessageContent>> sortMessage(Set<Message<MessageContent>> messages) {
     final elements = [...messages];
     elements.sort(
       chatBackgroundConfig.messageSorter ?? (a, b) => a.sentAt.compareTo(b.sentAt),

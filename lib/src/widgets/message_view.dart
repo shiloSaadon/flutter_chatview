@@ -30,7 +30,7 @@ import 'image_message_view.dart';
 import 'reaction_widget.dart';
 import 'text_message_view.dart';
 
-class MessageView extends StatefulWidget {
+class MessageView<Content extends MessageContent> extends StatefulWidget {
   const MessageView({
     Key? key,
     required this.message,
@@ -52,7 +52,7 @@ class MessageView extends StatefulWidget {
   }) : super(key: key);
 
   /// Provides message instance of chat.
-  final Message message;
+  final Message<Content> message;
 
   /// Represents current message is sent by current user.
   final bool isMessageBySender;
@@ -186,6 +186,9 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
   Widget get singleMessageBubble {
     final emojiMessageConfiguration = messageConfig?.emojiMessageConfig;
     final useInternalMessageWrapper = messageConfig?.customMessageWrapperBuilder == null;
+    print(widget.message.runtimeType);
+    print(widget.message is Message<TextMessage>);
+    print(widget.message is Message<MessageContent>);
     final Widget messageData = switch (widget.message) {
       Message<TextMessage> e => e.content.text.isAllEmoji
           ? Padding(

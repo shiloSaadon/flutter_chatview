@@ -29,7 +29,7 @@ import 'message_view.dart';
 import 'profile_circle.dart';
 import 'swipe_to_reply.dart';
 
-class ChatBubbleWidget extends StatefulWidget {
+class ChatBubbleWidget<Content extends MessageContent> extends StatefulWidget {
   const ChatBubbleWidget({
     required GlobalKey key,
     required this.message,
@@ -41,13 +41,13 @@ class ChatBubbleWidget extends StatefulWidget {
   }) : super(key: key);
 
   /// Represent current instance of message.
-  final Message message;
+  final Message<Content> message;
 
   /// Give callback once user long press on chat bubble.
   final DoubleCallBack onLongPress;
 
   /// Provides callback of when user swipe chat bubble for reply.
-  final AssignReplayCallBack onSwipe;
+  final AssignReplayCallBack<Content> onSwipe;
 
   /// Provides slide animation when user swipe whole chat.
   final Animation<Offset>? slideAnimation;
@@ -62,7 +62,7 @@ class ChatBubbleWidget extends StatefulWidget {
   State<ChatBubbleWidget> createState() => _ChatBubbleWidgetState();
 }
 
-class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
+class _ChatBubbleWidgetState<Content extends MessageContent> extends State<ChatBubbleWidget> {
   MessageContent? get replyMessage => widget.message.replyOfMsg?.content;
 
   bool get isMessageBySender => widget.message.sentBy == currentUser?.id;

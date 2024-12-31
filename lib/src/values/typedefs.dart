@@ -21,12 +21,12 @@
  */
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatview/chatview.dart';
-import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/widgets/profile_circle.dart';
 import 'package:flutter/material.dart';
 
 typedef StringCallback = void Function(String);
-typedef MessageContentCallBack = void Function(MessageContent content, ReplyMessage? replyMessage);
+typedef MessageContentCallBack<Content extends MessageContent> = void Function(
+    Content content, ReplyMessage? replyMessage);
 typedef ReplyMessageWithReturnWidget = Widget Function(
   ReplyMessage? replyMessage,
 );
@@ -38,19 +38,20 @@ typedef SendMessageWithReturnWidget = Widget Function(
 typedef ReplyMessageCallBack = void Function(ReplyMessage? replyMessage);
 typedef VoidCallBack = void Function();
 typedef DoubleCallBack = void Function(double, double);
-typedef MessageCallBack = void Function(Message message);
-typedef AssignReplayCallBack = void Function(Message message, BuildContext context);
+typedef MessageCallBack<Content extends MessageContent> = void Function(Message<Content> message);
+typedef AssignReplayCallBack<Content extends MessageContent> = void Function(
+    Message<Content> message, BuildContext context);
 typedef VoidCallBackWithFuture = Future<void> Function();
 typedef StringsCallBack = void Function(String emoji, String messageId);
 typedef ImagesCallBack = void Function(List<String> paths);
 typedef StringWithReturnWidget = Widget Function(String separator);
 typedef DragUpdateDetailsCallback = void Function(DragUpdateDetails);
-typedef MoreTapCallBack = void Function(
-  Message message,
+typedef MoreTapCallBack<Content extends MessageContent> = void Function(
+  Message<Content> message,
   bool sentByCurrentUser,
 );
-typedef ReactionCallback = void Function(
-  Message message,
+typedef ReactionCallback<Content extends MessageContent> = void Function(
+  Message<Content> message,
   String emoji,
 );
 typedef ReactedUserCallback = void Function(
@@ -66,11 +67,11 @@ typedef CustomMessageReplyViewBuilder = Widget Function(
 typedef SenderDataWidgets = (ProfileCircle profileCircle, Widget name);
 
 /// to allow the user edit the container around the message
-typedef CustomMessageWrapperBuilder = Widget Function(
+typedef CustomMessageWrapperBuilder<Content extends MessageContent> = Widget Function(
   bool isMessageBySender,
   bool highlightMessage,
   Color highlightColor,
-  Message message,
+  Message<Content> message,
   ChatBubble? inComingChatBubbleConfig,
   ChatBubble? outgoingChatBubbleConfig,
   VoiceMessageConfiguration? voiceMessageConfiguration,
@@ -79,8 +80,8 @@ typedef CustomMessageWrapperBuilder = Widget Function(
 );
 
 typedef MessageSorter = int Function(
-  Message message1,
-  Message message2,
+  Message<MessageContent> message1,
+  Message<MessageContent> message2,
 );
 
 /// customView for replying to any message
