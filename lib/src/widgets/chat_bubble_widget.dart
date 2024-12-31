@@ -21,6 +21,7 @@
  */
 import 'package:chatview/src/extensions/extensions.dart';
 import 'package:chatview/src/utils/constants/constants.dart';
+import 'package:chatview/src/widgets/reply_message_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../chatview.dart';
@@ -63,7 +64,7 @@ class ChatBubbleWidget<Content extends MessageContent> extends StatefulWidget {
 }
 
 class _ChatBubbleWidgetState<Content extends MessageContent> extends State<ChatBubbleWidget> {
-  MessageContent? get replyMessage => widget.message.replyOfMsg?.content;
+  ReplyMessage? get replyMessage => widget.message.replyOfMsg;
 
   bool get isMessageBySender => widget.message.sentBy == currentUser?.id;
 
@@ -252,15 +253,14 @@ class _ChatBubbleWidgetState<Content extends MessageContent> extends State<ChatB
             return chatListConfig.chatBubbleConfig?.inComingChatBubbleConfig?.padding ??
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 4);
           }),
-        //! Temporarily removed
-        // if (replyMessage.isNotEmpty)
-        //   chatListConfig.repliedMessageConfig?.repliedMessageWidgetBuilder != null
-        //       ? chatListConfig.repliedMessageConfig!.repliedMessageWidgetBuilder!(widget.message.replyMessage)
-        //       : ReplyMessageWidget(
-        //           message: widget.message,
-        //           repliedMessageConfig: chatListConfig.repliedMessageConfig,
-        //           onTap: () => widget.onReplyTap?.call(widget.message.replyMessage.messageId),
-        //         ),
+        if (replyMessage != null)
+          chatListConfig.repliedMessageConfig?.repliedMessageWidgetBuilder != null
+              ? chatListConfig.repliedMessageConfig!.repliedMessageWidgetBuilder!(replyMessage)
+              : ReplyMessageWidget(
+                  message: replyMessage!,
+                  repliedMessageConfig: chatListConfig.repliedMessageConfig,
+                  onTap: () => widget.onReplyTap?.call(replyMessage!.id),
+                ),
         SwipeToReply(
           isMessageByCurrentUser: isMessageBySender,
           onSwipe: isMessageBySender ? onLeftSwipe : onRightSwipe,

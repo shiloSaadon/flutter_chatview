@@ -102,6 +102,7 @@ class ReplyMessage extends Message {
     required super.content,
   }) : super(replyOfMsg: null);
 
+  @Deprecated('ReplyMessage cannot have replyTo')
   @override
   ReplyMessage? get replyOfMsg => throw UnimplementedError('ChatReplyMessage cannot have replyTo');
 
