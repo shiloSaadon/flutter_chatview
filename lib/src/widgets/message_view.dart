@@ -48,7 +48,7 @@ class MessageView extends StatefulWidget {
     this.highlightScale = 1.2,
     this.messageConfig,
     this.onMaxDuration,
-    this.controller,
+    required this.controller,
   }) : super(key: key);
 
   /// Provides message instance of chat.
@@ -94,7 +94,7 @@ class MessageView extends StatefulWidget {
   /// Data about the sender to allow differen modes for the ui
   final SenderDataWidgets senderDataWidgets;
 
-  final ChatController? controller;
+  final ChatController controller;
 
   final Function(int)? onMaxDuration;
 
@@ -184,7 +184,6 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
       );
 
   Widget get singleMessageBubble {
-    final messageContent = widget.message.content;
     final emojiMessageConfiguration = messageConfig?.emojiMessageConfig;
     final useInternalMessageWrapper = messageConfig?.customMessageWrapperBuilder == null;
     Widget? messageData;
@@ -287,7 +286,8 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
 
   Widget get lastSeenIndicator {
     if (widget.isMessageBySender &&
-        widget.controller?.initialMessageList.last.id == widget.message.id &&
+        widget.controller.initialMessageList.isNotEmpty &&
+        widget.controller.initialMessageList.last.id == widget.message.id &&
         widget.message.status == MessageStatus.read) {
       if (ChatViewInheritedWidget.of(context)?.featureActiveConfig.lastSeenAgoBuilderVisibility ?? true) {
         return widget.outgoingChatBubbleConfig?.receiptsWidgetConfig?.lastSeenAgoBuilder

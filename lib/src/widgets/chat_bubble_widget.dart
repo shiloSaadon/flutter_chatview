@@ -20,7 +20,6 @@
  * SOFTWARE.
  */
 import 'package:chatview/src/extensions/extensions.dart';
-import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -266,33 +265,37 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
           isMessageByCurrentUser: isMessageBySender,
           onSwipe: isMessageBySender ? onLeftSwipe : onRightSwipe,
           child: MessageView(
-              outgoingChatBubbleConfig: chatListConfig.chatBubbleConfig?.outgoingChatBubbleConfig,
-              isLongPressEnable: (featureActiveConfig?.enableReactionPopup ?? true) ||
-                  (featureActiveConfig?.enableReplySnackBar ?? true),
-              inComingChatBubbleConfig: chatListConfig.chatBubbleConfig?.inComingChatBubbleConfig,
-              message: widget.message,
-              isMessageBySender: isMessageBySender,
-              messageConfig: chatListConfig.messageConfig,
-              onLongPress: widget.onLongPress,
-              chatBubbleMaxWidth: chatListConfig.chatBubbleConfig?.maxWidth,
-              longPressAnimationDuration: chatListConfig.chatBubbleConfig?.longPressAnimationDuration,
-              onDoubleTap: featureActiveConfig?.enableDoubleTapToLike ?? false
-                  ? chatListConfig.chatBubbleConfig?.onDoubleTap ??
-                      (message) => currentUser != null
-                          ? chatController?.setReaction(
-                              emoji: heart,
-                              messageId: message.id,
-                              userId: currentUser!.id,
-                            )
-                          : null
-                  : null,
-              shouldHighlight: widget.shouldHighlight,
-              controller: chatController,
-              highlightColor:
-                  chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig.highlightColor ?? Colors.grey,
-              highlightScale: chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig.highlightScale ?? 1.1,
-              onMaxDuration: _onMaxDuration,
-              senderDataWidgets: (profileCircle(messagedUser), senderName(messagedUser, () => EdgeInsets.zero))),
+            outgoingChatBubbleConfig: chatListConfig.chatBubbleConfig?.outgoingChatBubbleConfig,
+            isLongPressEnable: (featureActiveConfig?.enableReactionPopup ?? true) ||
+                (featureActiveConfig?.enableReplySnackBar ?? true),
+            inComingChatBubbleConfig: chatListConfig.chatBubbleConfig?.inComingChatBubbleConfig,
+            message: widget.message,
+            isMessageBySender: isMessageBySender,
+            messageConfig: chatListConfig.messageConfig,
+            onLongPress: widget.onLongPress,
+            chatBubbleMaxWidth: chatListConfig.chatBubbleConfig?.maxWidth,
+            longPressAnimationDuration: chatListConfig.chatBubbleConfig?.longPressAnimationDuration,
+            onDoubleTap: featureActiveConfig?.enableDoubleTapToLike ?? false
+                ? chatListConfig.chatBubbleConfig?.onDoubleTap ??
+                    (message) => currentUser != null
+                        ? chatController?.setReaction(
+                            emoji: heart,
+                            messageId: message.id,
+                            userId: currentUser!.id,
+                          )
+                        : null
+                : null,
+            shouldHighlight: widget.shouldHighlight,
+            controller: chatController!,
+            highlightColor:
+                chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig.highlightColor ?? Colors.grey,
+            highlightScale: chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig.highlightScale ?? 1.1,
+            onMaxDuration: _onMaxDuration,
+            senderDataWidgets: (
+              profileCircle(messagedUser),
+              senderName(messagedUser, () => EdgeInsets.zero),
+            ),
+          ),
         ),
       ],
     );
