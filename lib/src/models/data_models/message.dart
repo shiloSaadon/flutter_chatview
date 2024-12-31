@@ -250,4 +250,9 @@ class Message<Content extends MessageContent> {
   int get hashCode {
     return id.hashCode;
   }
+
+  @override
+  String toString() {
+    return 'Message(id: $id, sentBy: $sentBy, sentAt: $sentAt, reactions: $reactions, isStarred: $isStarred, isRead: $isRead, content: $content, replyOfMsg: $replyOfMsg, status: $status)';
+  }
 }

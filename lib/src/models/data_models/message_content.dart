@@ -1,7 +1,11 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:chatview/chatview.dart';
 
 abstract class MessageContent {
   MessageContent();
+
+  @override
+  String toString();
 
   Map<String, dynamic> toJson();
 
@@ -47,6 +51,9 @@ class TextMessage extends MessageContent {
       'text': text,
     };
   }
+
+  @override
+  String toString() => 'TextMessage(text: $text)';
 }
 
 class ImagesMessage extends MessageContent {
@@ -71,6 +78,9 @@ class ImagesMessage extends MessageContent {
       'images': images,
     };
   }
+
+  @override
+  String toString() => 'ImagesMessage(images: $images, caption: $caption)';
 }
 
 class VoiceMessage extends MessageContent {
@@ -97,4 +107,7 @@ class VoiceMessage extends MessageContent {
       'duration': duration.inMicroseconds,
     };
   }
+
+  @override
+  String toString() => 'VoiceMessage(url: $url, duration: $duration)';
 }
