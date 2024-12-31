@@ -168,13 +168,19 @@ class ChatController {
       );
 
   /// Function for loading data while pagination.
-  void loadMoreData(List<Message> messageList) {
+  void loadMoreData(Set<Message> messageList) {
     /// Here, we have passed 0 index as we need to add data before first data
-    //! Temporarily removed
-    // initialMessageList.insertAll(0, messageList);
-    // if (!messageStreamController.isClosed) {
-    //   messageStreamController.sink.add(initialMessageList);
-    // }
+    initialMessageList = {...messageList, ...initialMessageList};
+    if (!messageStreamController.isClosed) {
+      messageStreamController.sink.add(initialMessageList);
+    }
+  }
+
+  /// Function for adding messages. This replaces all existing data.
+  void addMessages(Set<Message> messageList) {
+    if (!messageStreamController.isClosed) {
+      messageStreamController.sink.add(messageList);
+    }
   }
 
   /// Function for getting ChatUser object from user id
