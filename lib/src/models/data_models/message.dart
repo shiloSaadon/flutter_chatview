@@ -222,7 +222,7 @@ class Message<Content extends MessageContent> {
     return Message<Content>(
       id: map['id'] as String,
       sentBy: map['sent_by'] as String,
-      sentAt: DateTime.fromMillisecondsSinceEpoch(map['sent_at'] as int),
+      sentAt: DateTime.parse(map['sent_at'] as String),
       reactions: map['reactions'] == null
           ? {}
           : Set<Reaction>.from(
