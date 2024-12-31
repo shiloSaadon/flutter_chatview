@@ -20,7 +20,6 @@
  * SOFTWARE.
  */
 import 'package:chatview/src/extensions/extensions.dart';
-import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/models/models.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +30,7 @@ class TextMessageView extends StatelessWidget {
   const TextMessageView({
     Key? key,
     required this.isMessageBySender,
-    required this.message,
+    required this.messageContent,
     this.chatBubbleMaxWidth,
     this.inComingChatBubbleConfig,
     this.outgoingChatBubbleConfig,
@@ -39,13 +38,17 @@ class TextMessageView extends StatelessWidget {
     this.useIndernalMessageWrpper = true,
     this.highlightMessage = false,
     this.highlightColor,
+    this.reactions = const {},
   }) : super(key: key);
 
   /// Represents current message is sent by current user.
   final bool isMessageBySender;
 
   /// Provides message instance of chat.
-  final Message<TextMessage> message;
+  final TextMessage messageContent;
+
+  /// Provides reactions for this message.
+  final Set<Reaction> reactions;
 
   /// Allow users to give max width of chat bubble.
   final double? chatBubbleMaxWidth;
@@ -71,7 +74,7 @@ class TextMessageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final textMessage = message.content.text;
+    final textMessage = messageContent.text;
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -118,13 +121,13 @@ class TextMessageView extends StatelessWidget {
   EdgeInsetsGeometry? get _margin => !useIndernalMessageWrpper
       ? null
       : (isMessageBySender ? outgoingChatBubbleConfig?.margin : inComingChatBubbleConfig?.margin) ??
-          EdgeInsets.fromLTRB(5, 0, 6, message.reactions.isNotEmpty ? 15 : 2);
+          EdgeInsets.fromLTRB(5, 0, 6, reactions.isNotEmpty ? 15 : 2);
 
   BoxDecoration? get _decoration => !useIndernalMessageWrpper
       ? null
       : BoxDecoration(
           color: highlightMessage ? highlightColor : _color,
-          borderRadius: _borderRadius(message.content.text),
+          borderRadius: _borderRadius(messageContent.text),
         );
 
   LinkPreviewConfiguration? get _linkPreviewConfig =>

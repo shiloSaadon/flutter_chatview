@@ -23,7 +23,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:chatview/src/extensions/extensions.dart';
-import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/models/models.dart';
 import 'package:flutter/material.dart';
 
@@ -32,22 +31,24 @@ import 'share_icon.dart';
 class ImageMessageView extends StatelessWidget {
   const ImageMessageView({
     Key? key,
-    required this.message,
+    required this.messageContent,
     required this.isMessageBySender,
     this.imageMessageConfig,
     this.messageReactionConfig,
     this.highlightImage = false,
     this.highlightScale = 1.2,
+    this.reactions = const {},
   }) : super(key: key);
 
-  final Message<ImagesMessage> message;
+  final ImagesMessage messageContent;
+  final Set<Reaction> reactions;
   final bool isMessageBySender;
   final ImageMessageConfiguration? imageMessageConfig;
   final MessageReactionConfiguration? messageReactionConfig;
   final bool highlightImage;
   final double highlightScale;
 
-  String get imageUrl => message.content.images.first;
+  String get imageUrl => messageContent.images.first;
 
   Widget get iconButton => ShareIcon(
         shareIconConfig: imageMessageConfig?.shareIconConfig,
@@ -95,7 +96,7 @@ class ImageMessageView extends StatelessWidget {
                           top: 6,
                           right: isMessageBySender ? 6 : 0,
                           left: isMessageBySender ? 0 : 6,
-                          bottom: message.reactions.isNotEmpty ? 15 : 0,
+                          bottom: reactions.isNotEmpty ? 15 : 0,
                         ),
                     height: imageMessageConfig?.height ?? 200,
                     width: imageMessageConfig?.width ?? 150,

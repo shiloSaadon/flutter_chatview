@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:chatview/chatview.dart';
-import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +9,7 @@ class VoiceMessageView extends StatefulWidget {
   const VoiceMessageView({
     Key? key,
     required this.screenWidth,
-    required this.message,
+    required this.messageContent,
     required this.isMessageBySender,
     this.inComingChatBubbleConfig,
     this.outgoingChatBubbleConfig,
@@ -18,6 +17,7 @@ class VoiceMessageView extends StatefulWidget {
     this.messageReactionConfig,
     this.useInternalMessageWrapper = false,
     this.config,
+    this.reactions = const {},
   }) : super(key: key);
 
   /// Provides configuration related to voice message.
@@ -27,7 +27,8 @@ class VoiceMessageView extends StatefulWidget {
   final double screenWidth;
 
   /// Provides message instance of chat.
-  final Message<VoiceMessage> message;
+  final VoiceMessage messageContent;
+  final Set<Reaction> reactions;
   final Function(int)? onMaxDuration;
 
   /// Represents current message is sent by current user.
@@ -64,7 +65,7 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
     super.initState();
     controller = PlayerController()
       ..preparePlayer(
-        path: widget.message.content.url,
+        path: widget.messageContent.url,
         noOfSamples: widget.config?.playerWaveStyle?.getSamplesForWidth(widget.screenWidth * 0.5) ??
             playerWaveStyle.getSamplesForWidth(widget.screenWidth * 0.5),
       ).whenComplete(() => widget.onMaxDuration?.call(controller.maxDuration));
@@ -102,7 +103,7 @@ class _VoiceMessageViewState extends State<VoiceMessageView> {
               : widget.config?.margin ??
                   EdgeInsets.symmetric(
                     horizontal: 8,
-                    vertical: widget.message.reactions.isNotEmpty ? 15 : 0,
+                    vertical: widget.reactions.isNotEmpty ? 15 : 0,
                   ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

@@ -192,7 +192,7 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
     print(widget.message is Message<TextMessage>);
     print(widget.message is Message<MessageContent>);
     final Widget messageData = switch (widget.message) {
-      Message<TextMessage> e => e.content.text.isAllEmoji
+      Message(content: TextMessage content, reactions: final reactions) => content.text.isAllEmoji
           ? Padding(
               padding: emojiMessageConfiguration?.padding ??
                   EdgeInsets.fromLTRB(
@@ -204,7 +204,7 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
               child: Transform.scale(
                 scale: widget.shouldHighlight ? widget.highlightScale : 1.0,
                 child: Text(
-                  e.content.text,
+                  content.text,
                   style: emojiMessageConfiguration?.textStyle ?? const TextStyle(fontSize: 30),
                 ),
               ),
@@ -213,24 +213,27 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
               inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
               outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
               isMessageBySender: widget.isMessageBySender,
-              message: e,
+              messageContent: content,
+              reactions: reactions,
               chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
               messageReactionConfig: messageConfig?.messageReactionConfig,
               highlightColor: widget.highlightColor,
               highlightMessage: widget.shouldHighlight,
               useIndernalMessageWrpper: useInternalMessageWrapper,
             ),
-      Message<ImagesMessage> e => ImageMessageView(
-          message: e,
+      Message(content: ImagesMessage content, reactions: final reactions) => ImageMessageView(
+          messageContent: content,
+          reactions: reactions,
           isMessageBySender: widget.isMessageBySender,
           imageMessageConfig: messageConfig?.imageMessageConfig,
           messageReactionConfig: messageConfig?.messageReactionConfig,
           highlightImage: widget.shouldHighlight,
           highlightScale: widget.highlightScale,
         ),
-      Message<VoiceMessage> e => VoiceMessageView(
+      Message(content: VoiceMessage content, reactions: final reactions) => VoiceMessageView(
           screenWidth: MediaQuery.of(context).size.width,
-          message: e,
+          messageContent: content,
+          reactions: reactions,
           config: messageConfig?.voiceMessageConfig,
           onMaxDuration: widget.onMaxDuration,
           isMessageBySender: widget.isMessageBySender,
