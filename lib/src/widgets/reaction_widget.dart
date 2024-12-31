@@ -96,7 +96,7 @@ class _ReactionWidgetState extends State<ReactionWidget> {
             child: Row(
               children: [
                 Text(
-                  widget.reactions.join(' '),
+                  widget.reactions.map((r) => r.reaction).join(' '),
                   style: TextStyle(
                     fontSize: messageReactionConfig?.reactionSize ?? 13,
                   ),
