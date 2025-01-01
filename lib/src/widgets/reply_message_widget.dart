@@ -19,8 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import 'dart:io';
-
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +32,7 @@ class ReplyMessageWidget extends StatelessWidget {
   const ReplyMessageWidget({
     Key? key,
     required this.message,
+    required this.remoteUrlGetter,
     this.repliedMessageConfig,
     this.onTap,
   }) : super(key: key);
@@ -44,6 +43,8 @@ class ReplyMessageWidget extends StatelessWidget {
   /// Provides configurations related to replied message such as textstyle
   /// padding, margin etc. Also, this widget is located upon chat bubble.
   final RepliedMessageConfiguration? repliedMessageConfig;
+
+  final ImageRemoteUrlGetter remoteUrlGetter;
 
   /// Provides call back when user taps on replied message.
   final VoidCallback? onTap;
@@ -89,10 +90,11 @@ class ReplyMessageWidget extends StatelessWidget {
                     child: Opacity(
                       opacity: repliedMessageConfig?.opacity ?? 0.8,
                       child: message.content is ImagesMessage
-                          ? _ImagePreview(
-                              repliedMessageConfig: repliedMessageConfig,
-                              message: message as ReplyMessage<ImagesMessage>,
-                            )
+                          ? const SizedBox()
+                          //! ? _ImagePreview(
+                          //     repliedMessageConfig: repliedMessageConfig,
+                          //     message: message as ReplyMessage<ImagesMessage>,
+                          //   )
                           : Container(
                               constraints: BoxConstraints(
                                 maxWidth: repliedMessageConfig?.maxWidth ?? 280,
@@ -162,32 +164,33 @@ class ReplyMessageWidget extends StatelessWidget {
                   : BorderRadius.circular(replyBorderRadius2));
 }
 
-class _ImagePreview extends StatelessWidget {
-  const _ImagePreview({
-    super.key,
-    required this.repliedMessageConfig,
-    required this.message,
-  });
+//! Preview of image for which the user is replying
+// class _ImagePreview extends StatelessWidget {
+//   const _ImagePreview({
+//     super.key,
+//     required this.repliedMessageConfig,
+//     required this.message,
+//   });
 
-  final RepliedMessageConfiguration? repliedMessageConfig;
-  final ReplyMessage<ImagesMessage> message;
+//   final RepliedMessageConfiguration? repliedMessageConfig;
+//   final ReplyMessage<ImagesMessage> message;
 
-  ChatImage get image => message.content.images.first;
-  ImageProvider get imageProvider =>
-      image.file == null ? NetworkImage(image.url) : FileImage(File(image.file!.path)) as ImageProvider;
+//   ChatImage get image => message.content.images.first;
+//   ImageProvider get imageProvider =>
+//       image.file == null ? const NetworkImage('image.url') : FileImage(File(image.file!.path)) as ImageProvider;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: repliedMessageConfig?.repliedImageMessageHeight ?? 100,
-      width: repliedMessageConfig?.repliedImageMessageWidth ?? 80,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: imageProvider,
-          fit: BoxFit.fill,
-        ),
-        borderRadius: repliedMessageConfig?.borderRadius ?? BorderRadius.circular(14),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       height: repliedMessageConfig?.repliedImageMessageHeight ?? 100,
+//       width: repliedMessageConfig?.repliedImageMessageWidth ?? 80,
+//       decoration: BoxDecoration(
+//         image: DecorationImage(
+//           image: imageProvider,
+//           fit: BoxFit.fill,
+//         ),
+//         borderRadius: repliedMessageConfig?.borderRadius ?? BorderRadius.circular(14),
+//       ),
+//     );
+//   }
+// }

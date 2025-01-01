@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 /*
  * Copyright (c) 2022 Simform Solutions
  *
@@ -22,6 +23,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:chatview/chatview.dart';
 import 'package:chatview/src/extensions/extensions.dart';
 import 'package:chatview/src/models/models.dart';
 import 'package:flutter/material.dart';
@@ -31,122 +33,66 @@ import 'share_icon.dart';
 class ImageMessageView extends StatelessWidget {
   const ImageMessageView({
     Key? key,
+    required this.idMsg,
     required this.messageContent,
     required this.isMessageBySender,
-    this.imageMessageConfig,
+    required this.imageMessageConfig,
     this.messageReactionConfig,
     this.highlightImage = false,
     this.highlightScale = 1.2,
     this.reactions = const {},
   }) : super(key: key);
 
+  final String idMsg;
   final ImagesMessage messageContent;
   final Set<Reaction> reactions;
   final bool isMessageBySender;
-  final ImageMessageConfiguration? imageMessageConfig;
+  final ImageMessageConfiguration imageMessageConfig;
   final MessageReactionConfiguration? messageReactionConfig;
   final bool highlightImage;
   final double highlightScale;
 
   ChatImage get image => messageContent.images.first;
-  String get imageUrl => image.file == null ? image.url : image.file!.path;
-
-  Widget get iconButton => ShareIcon(
-        shareIconConfig: imageMessageConfig?.shareIconConfig,
-        imageUrl: imageUrl,
-      );
-
-  void _openFullScreenImage(BuildContext context) {
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 400),
-        reverseTransitionDuration: const Duration(milliseconds: 400),
-        pageBuilder: (context, animation, secondaryAnimation) {
-          print("egrwrw");
-          return FadeTransition(
-            opacity: animation,
-            child: FullScreenImageView(
-              imageUrl: imageUrl,
-            ),
-          );
-        },
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: isMessageBySender ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: [
-        if (isMessageBySender && !(imageMessageConfig?.hideShareIcon ?? false)) iconButton,
-        Stack(
-          children: [
-            GestureDetector(
-              onTap: () => _openFullScreenImage(context),
-              child: Hero(
-                tag: imageUrl,
-                child: Transform.scale(
-                  scale: highlightImage ? highlightScale : 1.0,
-                  alignment: isMessageBySender ? Alignment.centerRight : Alignment.centerLeft,
-                  child: Container(
-                    padding: imageMessageConfig?.padding ?? EdgeInsets.zero,
-                    margin: imageMessageConfig?.margin ??
-                        EdgeInsets.only(
-                          top: 6,
-                          right: isMessageBySender ? 6 : 0,
-                          left: isMessageBySender ? 0 : 6,
-                          bottom: reactions.isNotEmpty ? 15 : 0,
-                        ),
-                    height: imageMessageConfig?.height ?? 200,
-                    width: imageMessageConfig?.width ?? 150,
-                    child: ClipRRect(
-                      borderRadius: imageMessageConfig?.borderRadius ?? BorderRadius.circular(14),
-                      child: (() {
-                        if (imageUrl.isUrl) {
-                          return Image.network(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            },
-                          );
-                        } else if (imageUrl.fromMemory) {
-                          return Image.memory(
-                            base64Decode(imageUrl.substring(imageUrl.indexOf('base64') + 7)),
-                            fit: BoxFit.cover,
-                          );
-                        } else {
-                          return Image.file(
-                            File(imageUrl),
-                            fit: BoxFit.cover,
-                          );
-                        }
-                      }()),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            // if (message.reaction.reactions.isNotEmpty)
-            //   ReactionWidget(
-            //     isMessageBySender: isMessageBySender,
-            //     reaction: message.reaction,
-            //     messageReactionConfig: messageReactionConfig,
-            //   ),
-          ],
-        ),
-        if (!isMessageBySender && !(imageMessageConfig?.hideShareIcon ?? false)) iconButton,
-      ],
-    );
+    return image.file != null
+        ? _ImageShell(
+            idImage: image.id,
+            imageUrl: image.file!.path,
+            image: FileImage(File(image.file!.path)),
+            messageContent: messageContent,
+            reactions: reactions,
+            isMessageBySender: isMessageBySender,
+            imageMessageConfig: imageMessageConfig,
+            messageReactionConfig: messageReactionConfig,
+            highlightImage: highlightImage,
+            highlightScale: highlightScale,
+          )
+        : FutureBuilder(
+            future: imageMessageConfig.remoteUrlGetter(idMsg, image),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
+              if (snapshot.hasData) {
+                return _ImageShell(
+                  idImage: image.id,
+                  imageUrl: snapshot.requireData,
+                  image: NetworkImage(snapshot.requireData),
+                  messageContent: messageContent,
+                  reactions: reactions,
+                  isMessageBySender: isMessageBySender,
+                  imageMessageConfig: imageMessageConfig,
+                  messageReactionConfig: messageReactionConfig,
+                  highlightImage: highlightImage,
+                  highlightScale: highlightScale,
+                );
+              }
+              // Is this loading state???
+              return const CircularProgressIndicator();
+            },
+          );
   }
 }
 
@@ -185,6 +131,116 @@ class FullScreenImageView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ImageShell extends StatelessWidget {
+  final String idImage;
+  final String imageUrl;
+  final ImageProvider image;
+  final ImagesMessage messageContent;
+  final Set<Reaction> reactions;
+  final bool isMessageBySender;
+  final ImageMessageConfiguration imageMessageConfig;
+  final MessageReactionConfiguration? messageReactionConfig;
+  final bool highlightImage;
+  final double highlightScale;
+  const _ImageShell({
+    Key? key,
+    required this.idImage,
+    required this.imageUrl,
+    required this.image,
+    required this.messageContent,
+    required this.reactions,
+    required this.isMessageBySender,
+    required this.imageMessageConfig,
+    required this.messageReactionConfig,
+    required this.highlightImage,
+    required this.highlightScale,
+  }) : super(key: key);
+
+  Widget get iconButton => ShareIcon(
+        shareIconConfig: imageMessageConfig.shareIconConfig,
+        imageUrl: imageUrl,
+      );
+
+  void _openFullScreenImage(BuildContext context) {
+    //! Fix and reimplement later
+    // Navigator.of(context).push(
+    //   PageRouteBuilder(
+    //     transitionDuration: const Duration(milliseconds: 400),
+    //     reverseTransitionDuration: const Duration(milliseconds: 400),
+    //     pageBuilder: (context, animation, secondaryAnimation) {
+    //       print("egrwrw");
+    //       return FadeTransition(
+    //         opacity: animation,
+    //         child: FullScreenImageView(
+    //           imageUrl: imageUrl,
+    //         ),
+    //       );
+    //     },
+    //   ),
+    // );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: isMessageBySender ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        Stack(
+          children: [
+            GestureDetector(
+              // onTap: () => _openFullScreenImage(context),
+              child: Hero(
+                tag: idImage,
+                child: Transform.scale(
+                  scale: highlightImage ? highlightScale : 1.0,
+                  alignment: isMessageBySender ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    padding: imageMessageConfig.padding ?? EdgeInsets.zero,
+                    margin: imageMessageConfig.margin ??
+                        EdgeInsets.only(
+                          top: 6,
+                          right: isMessageBySender ? 6 : 0,
+                          left: isMessageBySender ? 0 : 6,
+                          bottom: reactions.isNotEmpty ? 15 : 0,
+                        ),
+                    height: imageMessageConfig.height ?? 200,
+                    width: imageMessageConfig.width ?? 150,
+                    child: ClipRRect(
+                      borderRadius: imageMessageConfig.borderRadius ?? BorderRadius.circular(14),
+                      child: Image(
+                        image: image,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // if (message.reaction.reactions.isNotEmpty)
+            //   ReactionWidget(
+            //     isMessageBySender: isMessageBySender,
+            //     reaction: message.reaction,
+            //     messageReactionConfig: messageReactionConfig,
+            //   ),
+          ],
+        ),
+        if (!isMessageBySender && !imageMessageConfig.hideShareIcon) iconButton,
+      ],
     );
   }
 }

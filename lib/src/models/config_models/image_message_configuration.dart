@@ -19,9 +19,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
-
-import '../../values/typedefs.dart';
 
 class ImageMessageConfiguration {
   /// Provides configuration of share button while image message is appeared.
@@ -48,6 +47,9 @@ class ImageMessageConfiguration {
   /// Used for giving border radius of image message.
   final BorderRadius? borderRadius;
 
+  /// Construct url for the image
+  final ImageRemoteUrlGetter remoteUrlGetter;
+
   const ImageMessageConfiguration({
     this.hideShareIcon = false,
     this.shareIconConfig,
@@ -57,6 +59,7 @@ class ImageMessageConfiguration {
     this.padding,
     this.margin,
     this.borderRadius,
+    required this.remoteUrlGetter,
   });
 }
 

@@ -1,15 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/v4.dart';
 
 class ChatImage {
   /// This is the path of the image in the [chats] bucket in the backend
-  final String? _url;
-  String get url {
-    if (_url == null) {
-      throw ArgumentError.notNull('url');
-    }
-    return _url;
-  }
+  final String id;
 
   /// The file bytes are stored under a random UUID so we need to store
   /// the file name as well so it can be used in the display or when someone
@@ -23,14 +18,14 @@ class ChatImage {
   final XFile? file;
 
   ChatImage._({
-    required String? url,
+    required this.id,
     required this.name,
     required this.file,
-  }) : _url = url;
+  });
 
   ChatImage.fromPicker({
     required XFile this.file,
-  })  : _url = null,
+  })  : id = const UuidV4().generate(),
         name = file.name;
 
   // Image copyWith({
@@ -47,30 +42,30 @@ class ChatImage {
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      // 'url': url,
-      // 'name': name,
+      'id': id,
+      'name': name,
       // 'file': file?.toMap(),
     };
   }
 
   factory ChatImage.fromJson(Map<String, dynamic> map) {
     return ChatImage._(
-      url: map['url'] as String,
+      id: map['id'] as String,
       name: map['name'] as String,
       file: null,
     );
   }
 
   @override
-  String toString() => 'ChatImage(url: $_url, name: $name, file: $file)';
+  String toString() => 'ChatImage(id: $id, name: $name, file: $file)';
 
   @override
   bool operator ==(covariant ChatImage other) {
     if (identical(this, other)) return true;
 
-    return other.url == url && other.name == name && other.file == file;
+    return other.id == id && other.name == name && other.file == file;
   }
 
   @override
-  int get hashCode => url.hashCode ^ name.hashCode ^ file.hashCode;
+  int get hashCode => id.hashCode ^ name.hashCode ^ file.hashCode;
 }

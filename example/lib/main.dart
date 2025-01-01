@@ -317,6 +317,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
         imageMessageConfig: ImageMessageConfiguration(
+          remoteUrlGetter: (idMsg, img) async => 'you_construct_your_url_here',
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
           shareIconConfig: ShareIconConfiguration(
             defaultIconBackgroundColor: theme.shareIconBackgroundColor,

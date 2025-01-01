@@ -45,8 +45,7 @@ class ReplyIcon extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(replyIconSize),
             color: animationValue >= 1.0
-                ? swipeToReplyConfig?.replyIconBackgroundColor ??
-                    Colors.grey.shade300
+                ? swipeToReplyConfig?.replyIconBackgroundColor ?? Colors.grey.shade300
                 : Colors.transparent,
           ),
           height: replyIconSize,
@@ -55,8 +54,7 @@ class ReplyIcon extends StatelessWidget {
             value: animationValue,
             backgroundColor: Colors.transparent,
             strokeWidth: 1.5,
-            color: swipeToReplyConfig?.replyIconProgressRingColor ??
-                Colors.grey.shade300,
+            color: swipeToReplyConfig?.replyIconProgressRingColor ?? Colors.grey.shade300,
           ),
         ),
         Transform.scale(

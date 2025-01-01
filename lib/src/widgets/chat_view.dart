@@ -23,7 +23,6 @@ import 'dart:io';
 
 import 'package:chatview/chatview.dart';
 import 'package:chatview/src/extensions/extensions.dart';
-import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/widgets/chat_list_widget.dart';
 import 'package:chatview/src/widgets/chat_view_inherited_widget.dart';
 import 'package:chatview/src/widgets/chatview_state_widget.dart';
@@ -49,7 +48,7 @@ class ChatView extends StatefulWidget {
     this.reactionPopupConfig,
     this.loadMoreData,
     this.loadingWidget,
-    this.messageConfig,
+    required this.messageConfig,
     this.isLastPage,
     this.appBar,
     ChatBackgroundConfiguration? chatBackgroundConfig,
@@ -77,7 +76,7 @@ class ChatView extends StatefulWidget {
 
   /// Allow user to giving customisation different types
   /// messages.
-  final MessageConfiguration? messageConfig;
+  final MessageConfiguration messageConfig;
 
   /// Provides configuration for replied message view which is located upon chat
   /// bubble.

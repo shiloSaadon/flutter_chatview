@@ -26,7 +26,7 @@ import '../../values/typedefs.dart';
 
 class MessageConfiguration {
   /// Provides configuration of image message appearance.
-  final ImageMessageConfiguration? imageMessageConfig;
+  final ImageMessageConfiguration imageMessageConfig;
 
   /// Provides configuration of image message appearance.
   final MessageReactionConfiguration? messageReactionConfig;
@@ -47,7 +47,7 @@ class MessageConfiguration {
   final CustomMessageWrapperBuilder? customMessageWrapperBuilder;
 
   const MessageConfiguration({
-    this.imageMessageConfig,
+    required this.imageMessageConfig,
     this.messageReactionConfig,
     this.emojiMessageConfig,
     this.customMessageBuilder,

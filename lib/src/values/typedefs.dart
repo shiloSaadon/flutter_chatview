@@ -109,3 +109,4 @@ typedef SuggestionItemBuilder = Widget Function(
   int index,
   SuggestionItemData suggestionItemData,
 );
+typedef ImageRemoteUrlGetter = Future<String> Function(String idMsg, ChatImage img);

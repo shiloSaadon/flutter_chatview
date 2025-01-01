@@ -123,13 +123,16 @@ extension StatefulWidgetExtension on State {
   ReplySuggestionsConfig? get suggestionsConfig =>
       context.mounted ? SuggestionsConfigIW.of(context)?.suggestionsConfig : null;
 
-  ConfigurationsInheritedWidget get chatListConfig =>
-      context.mounted && ConfigurationsInheritedWidget.of(context) != null
-          ? ConfigurationsInheritedWidget.of(context)!
-          : const ConfigurationsInheritedWidget(
-              chatBackgroundConfig: ChatBackgroundConfiguration(),
-              child: SizedBox.shrink(),
-            );
+  ConfigurationsInheritedWidget get chatListConfig {
+    if (!mounted) {
+      throw Exception('ConfigurationsInheritedWidget not found');
+    }
+    var config = ConfigurationsInheritedWidget.of(context);
+    if (config == null) {
+      throw Exception('ConfigurationsInheritedWidget not found');
+    }
+    return config;
+  }
 }
 
 /// Extension on State for accessing inherited widget.
@@ -138,10 +141,14 @@ extension BuildContextExtension on BuildContext {
 
   ReplySuggestionsConfig? get suggestionsConfig => mounted ? SuggestionsConfigIW.of(this)?.suggestionsConfig : null;
 
-  ConfigurationsInheritedWidget get chatListConfig => mounted && ConfigurationsInheritedWidget.of(this) != null
-      ? ConfigurationsInheritedWidget.of(this)!
-      : const ConfigurationsInheritedWidget(
-          chatBackgroundConfig: ChatBackgroundConfiguration(),
-          child: SizedBox.shrink(),
-        );
+  ConfigurationsInheritedWidget get chatListConfig {
+    if (!mounted) {
+      throw Exception('ConfigurationsInheritedWidget not found');
+    }
+    var config = ConfigurationsInheritedWidget.of(this);
+    if (config == null) {
+      throw Exception('ConfigurationsInheritedWidget not found');
+    }
+    return config;
+  }
 }

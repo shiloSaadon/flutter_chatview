@@ -137,7 +137,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
 
   @override
   Widget build(BuildContext context) {
-    final suggestionsListConfig = suggestionsConfig?.listConfig ?? const SuggestionListConfig();
+    // final suggestionsListConfig = suggestionsConfig?.listConfig ?? const SuggestionListConfig();
     return GestureDetector(
       onHorizontalDragUpdate: (details) => isEnableSwipeToSeeTime && !showPopUp ? _onHorizontalDrag(details) : null,
       onHorizontalDragEnd: (details) => isEnableSwipeToSeeTime && !showPopUp ? _animationController?.reverse() : null,

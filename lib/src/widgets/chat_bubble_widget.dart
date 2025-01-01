@@ -259,6 +259,7 @@ class _ChatBubbleWidgetState<Content extends MessageContent> extends State<ChatB
               : ReplyMessageWidget(
                   message: replyMessage!,
                   repliedMessageConfig: chatListConfig.repliedMessageConfig,
+                  remoteUrlGetter: chatListConfig.messageConfig.imageMessageConfig.remoteUrlGetter,
                   onTap: () => widget.onReplyTap?.call(replyMessage!.id),
                 ),
         SwipeToReply(

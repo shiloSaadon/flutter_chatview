@@ -46,7 +46,7 @@ class MessageView<Content extends MessageContent> extends StatefulWidget {
     this.highlightColor = Colors.grey,
     this.shouldHighlight = false,
     this.highlightScale = 1.2,
-    this.messageConfig,
+    required this.messageConfig,
     this.onMaxDuration,
     required this.controller,
   }) : super(key: key);
@@ -86,7 +86,7 @@ class MessageView<Content extends MessageContent> extends StatefulWidget {
 
   /// Allow user to giving customisation different types
   /// messages.
-  final MessageConfiguration? messageConfig;
+  final MessageConfiguration messageConfig;
 
   /// Allow user to turn on/off long press tap on chat bubble.
   final bool isLongPressEnable;
@@ -105,7 +105,7 @@ class MessageView<Content extends MessageContent> extends StatefulWidget {
 class _MessageViewState extends State<MessageView> with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
 
-  MessageConfiguration? get messageConfig => widget.messageConfig;
+  MessageConfiguration get messageConfig => widget.messageConfig;
 
   bool get isLongPressEnable => widget.isLongPressEnable;
 
@@ -178,14 +178,14 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
               // key: key,
               isMessageBySender: widget.isMessageBySender,
               reactions: widget.message.reactions,
-              messageReactionConfig: messageConfig?.messageReactionConfig,
+              messageReactionConfig: messageConfig.messageReactionConfig,
             ),
         ],
       );
 
   Widget get singleMessageBubble {
-    final emojiMessageConfiguration = messageConfig?.emojiMessageConfig;
-    final useInternalMessageWrapper = messageConfig?.customMessageWrapperBuilder == null;
+    final emojiMessageConfiguration = messageConfig.emojiMessageConfig;
+    final useInternalMessageWrapper = messageConfig.customMessageWrapperBuilder == null;
 
     final Widget messageData = switch (widget.message) {
       Message(content: TextMessage content, reactions: final reactions) => content.text.isAllEmoji
@@ -212,17 +212,18 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
               messageContent: content,
               reactions: reactions,
               chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
-              messageReactionConfig: messageConfig?.messageReactionConfig,
+              messageReactionConfig: messageConfig.messageReactionConfig,
               highlightColor: widget.highlightColor,
               highlightMessage: widget.shouldHighlight,
               useIndernalMessageWrpper: useInternalMessageWrapper,
             ),
-      Message(content: ImagesMessage content, reactions: final reactions) => ImageMessageView(
+      Message(content: ImagesMessage content, id: final idMsg, reactions: final reactions) => ImageMessageView(
+          idMsg: idMsg,
           messageContent: content,
           reactions: reactions,
           isMessageBySender: widget.isMessageBySender,
-          imageMessageConfig: messageConfig?.imageMessageConfig,
-          messageReactionConfig: messageConfig?.messageReactionConfig,
+          imageMessageConfig: messageConfig.imageMessageConfig,
+          messageReactionConfig: messageConfig.messageReactionConfig,
           highlightImage: widget.shouldHighlight,
           highlightScale: widget.highlightScale,
         ),
@@ -230,10 +231,10 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
           screenWidth: MediaQuery.of(context).size.width,
           messageContent: content,
           reactions: reactions,
-          config: messageConfig?.voiceMessageConfig,
+          config: messageConfig.voiceMessageConfig,
           onMaxDuration: widget.onMaxDuration,
           isMessageBySender: widget.isMessageBySender,
-          messageReactionConfig: messageConfig?.messageReactionConfig,
+          messageReactionConfig: messageConfig.messageReactionConfig,
           inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
           outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
           useInternalMessageWrapper: useInternalMessageWrapper,
@@ -249,15 +250,15 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
     };
 
     //  Custom message wrapper
-    if (messageConfig?.customMessageWrapperBuilder != null) {
-      return messageConfig!.customMessageWrapperBuilder!(
+    if (messageConfig.customMessageWrapperBuilder != null) {
+      return messageConfig.customMessageWrapperBuilder!(
         widget.isMessageBySender,
         widget.shouldHighlight,
         widget.highlightColor,
         widget.message,
         widget.inComingChatBubbleConfig,
         widget.outgoingChatBubbleConfig,
-        messageConfig?.voiceMessageConfig,
+        messageConfig.voiceMessageConfig,
         widget.senderDataWidgets,
         messageData,
       );
