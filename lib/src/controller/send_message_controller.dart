@@ -47,9 +47,9 @@ class SendMessageController extends ChangeNotifier {
     resetReply();
   }
 
-  void onImageSelected(List<String> paths) {
+  void onImageSelected(List<ChatImage> images) {
     debugPrint('Call in Send Message Widget');
-    onSendTap.call(ImagesMessage(images: paths), replyMessage);
+    onSendTap.call(ImagesMessage(images: images), replyMessage);
     resetReply();
   }
 

@@ -43,7 +43,7 @@ typedef AssignReplayCallBack<Content extends MessageContent> = void Function(
     Message<Content> message, BuildContext context);
 typedef VoidCallBackWithFuture = Future<void> Function();
 typedef StringsCallBack = void Function(String emoji, String messageId);
-typedef ImagesCallBack = void Function(List<String> paths);
+typedef ImagesCallBack = void Function(List<ChatImage> paths);
 typedef StringWithReturnWidget = Widget Function(String separator);
 typedef DragUpdateDetailsCallback = void Function(DragUpdateDetails);
 typedef MoreTapCallBack<Content extends MessageContent> = void Function(

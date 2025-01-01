@@ -48,7 +48,8 @@ class ImageMessageView extends StatelessWidget {
   final bool highlightImage;
   final double highlightScale;
 
-  String get imageUrl => messageContent.images.first;
+  ChatImage get image => messageContent.images.first;
+  String get imageUrl => image.file == null ? image.url : image.file!.path;
 
   Widget get iconButton => ShareIcon(
         shareIconConfig: imageMessageConfig?.shareIconConfig,

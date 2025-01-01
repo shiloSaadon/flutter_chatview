@@ -57,7 +57,7 @@ class TextMessage extends MessageContent {
 }
 
 class ImagesMessage extends MessageContent {
-  final List<String> images;
+  final List<ChatImage> images;
   final String? caption;
   ImagesMessage({
     required this.images,
@@ -67,7 +67,7 @@ class ImagesMessage extends MessageContent {
   factory ImagesMessage.fromJson(Map<String, dynamic> json) {
     return ImagesMessage(
       caption: json['caption'] as String?,
-      images: json['images'] as List<String>,
+      images: (json['images'] as List<dynamic>).map((e) => ChatImage.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
 

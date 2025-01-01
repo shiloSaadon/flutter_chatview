@@ -91,7 +91,7 @@ import 'package:chatview/chatview.dart';
 //   }
 // }
 
-class ReplyMessage extends Message {
+class ReplyMessage<Content extends MessageContent> extends Message<Content> {
   ReplyMessage({
     required super.id,
     required super.sentBy,
@@ -107,8 +107,8 @@ class ReplyMessage extends Message {
   ReplyMessage? get replyOfMsg => null;
 
   factory ReplyMessage.fromJson(Map<String, dynamic> map) {
-    final message = Message.fromJson(map);
-    return ReplyMessage(
+    final message = Message<Content>.fromJson(map);
+    return ReplyMessage<Content>(
       id: message.id,
       sentBy: message.sentBy,
       sentAt: message.sentAt,

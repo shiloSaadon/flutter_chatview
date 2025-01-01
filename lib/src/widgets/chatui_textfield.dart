@@ -23,7 +23,6 @@ import 'dart:async';
 import 'dart:io' show File, Platform;
 
 import 'package:audio_waveforms/audio_waveforms.dart';
-import 'package:chatview/src/models/data_models/message_content.dart';
 import 'package:chatview/src/utils/constants/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -326,21 +325,18 @@ class _ChatUITextFieldState extends State<ChatUITextField> {
     ImagePickerConfiguration? config,
   }) async {
     try {
-      final XFile? image = await _imagePicker.pickImage(
+      var image = await _imagePicker.pickImage(
         source: imageSource,
         maxHeight: config?.maxHeight,
         maxWidth: config?.maxWidth,
         imageQuality: config?.imageQuality,
         preferredCameraDevice: config?.preferredCameraDevice ?? CameraDevice.rear,
       );
-      String? imagePath = image?.path;
+      if (image == null) return;
       if (config?.onImagePicked != null) {
-        String? updatedImagePath = await config?.onImagePicked!(imagePath);
-        if (updatedImagePath != null) imagePath = updatedImagePath;
+        image = await config!.onImagePicked!(image);
       }
-      if (imagePath != null) {
-        widget.onImageSelected([imagePath]);
-      }
+      widget.onImageSelected([ChatImage.fromPicker(file: image)]);
     } catch (e) {
       print(e.toString());
     }
@@ -360,19 +356,20 @@ class _ChatUITextFieldState extends State<ChatUITextField> {
     ImagePickerConfiguration? config,
   }) async {
     try {
-      final List<XFile?> images = await _imagePicker.pickMultiImage(
+      List<XFile> images = await _imagePicker.pickMultiImage(
         maxHeight: config?.maxHeight,
         maxWidth: config?.maxWidth,
         imageQuality: config?.imageQuality,
       );
-      images.forEach((image) async {
-        String? imagePath = image?.path;
+      List<ChatImage> updatedImages = [];
+      for (var img in images) {
         if (config?.onImagePicked != null) {
-          String? updatedImagePath = await config?.onImagePicked!(imagePath);
-          if (updatedImagePath != null) imagePath = updatedImagePath;
+          updatedImages.add(ChatImage.fromPicker(file: await config!.onImagePicked!(img)));
+        } else {
+          updatedImages.add(ChatImage.fromPicker(file: img));
         }
-      });
-      widget.onImageSelected(images.map((image) => image?.path).nonNulls.toList());
+      }
+      widget.onImageSelected(updatedImages);
     } catch (e) {
       print(e.toString());
     }
