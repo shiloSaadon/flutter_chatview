@@ -55,7 +55,7 @@ class ScrollToBottomButtonState extends State<ScrollToBottomButton> {
       builder: (context, scale, child) {
         return Transform.scale(
           scale: scale,
-          child: InkWell(
+          child: GestureDetector(
             onTap: () {
               scrollToBottomButtonConfig?.onClick?.call();
               final scrollController =

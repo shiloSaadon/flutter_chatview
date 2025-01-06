@@ -19,6 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
 
 class SwipeToReplyConfiguration {
@@ -32,10 +33,10 @@ class SwipeToReplyConfiguration {
   final Color? replyIconBackgroundColor;
 
   /// Provides callback when user swipe chat bubble from left side.
-  final void Function(String message, String sentBy)? onLeftSwipe;
+  final void Function(Message<MessageContent> message)? onLeftSwipe;
 
   /// Provides callback when user swipe chat bubble from right side.
-  final void Function(String message, String sentBy)? onRightSwipe;
+  final void Function(Message<MessageContent> message)? onRightSwipe;
 
   const SwipeToReplyConfiguration({
     this.replyIconColor,

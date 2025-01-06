@@ -177,7 +177,7 @@ class Message<Content extends MessageContent> {
         content: content,
       );
 
-  Message copyWith({
+  Message<Content> copyWith<MessageContent>({
     String? id,
     GlobalKey? key,
     String? sentBy,
@@ -185,11 +185,11 @@ class Message<Content extends MessageContent> {
     Set<Reaction>? reactions,
     bool? isStarred,
     bool? isRead,
-    MessageContent? content,
+    Content? content,
     ReplyMessage? replyTo,
     MessageStatus? status,
   }) {
-    return Message(
+    return Message<Content>(
       id: id ?? this.id,
       sentBy: sentBy ?? this.sentBy,
       sentAt: sentAt ?? this.sentAt,
@@ -232,9 +232,12 @@ class Message<Content extends MessageContent> {
             ),
       isStarred: map['is_starred'] as bool,
       isRead: map['is_read'] as bool,
-      content: MessageContent.fromJson(map['content'] as Map<String, dynamic>, type!) as Content,
-      replyOfMsg:
-          map['reply_of_msg'] != null ? ReplyMessage.fromJson(map['reply_of_msg'] as Map<String, dynamic>) : null,
+      content:
+          MessageContent.fromJson(map['content'] as Map<String, dynamic>, type!)
+              as Content,
+      replyOfMsg: map['reply_of_msg'] != null
+          ? ReplyMessage.fromJson(map['reply_of_msg'] as Map<String, dynamic>)
+          : null,
       status: MessageStatus.delivered,
     );
   }

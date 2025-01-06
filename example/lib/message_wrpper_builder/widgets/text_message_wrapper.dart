@@ -43,27 +43,35 @@ class TextMessageWrapper extends StatelessWidget {
   }
 
   EdgeInsetsGeometry? get _padding =>
-      (isMessageBySender ? outgoingChatBubbleConfig?.padding : inComingChatBubbleConfig?.padding) ??
+      (isMessageBySender
+          ? outgoingChatBubbleConfig?.padding
+          : inComingChatBubbleConfig?.padding) ??
       const EdgeInsets.symmetric(
         horizontal: 12,
         vertical: 10,
       );
 
   EdgeInsetsGeometry? get _margin =>
-      (isMessageBySender ? outgoingChatBubbleConfig?.margin : inComingChatBubbleConfig?.margin) ??
+      (isMessageBySender
+          ? outgoingChatBubbleConfig?.margin
+          : inComingChatBubbleConfig?.margin) ??
       EdgeInsets.fromLTRB(5, 0, 6, message.reactions.isNotEmpty ? 15 : 2);
 
   BoxDecoration? get _decoration => BoxDecoration(
         color: highlightMessage ? highlightColor : _color,
-        //! Temporarily removed
-        // borderRadius: _borderRadius(message.message),
+        borderRadius: _borderRadius(content.text),
       );
 
+  TextMessage get content => message.content as TextMessage;
   BorderRadiusGeometry _borderRadius(String message) => isMessageBySender
       ? outgoingChatBubbleConfig?.borderRadius ??
-          (message.length < 37 ? BorderRadius.circular(18) : BorderRadius.circular(18))
+          (message.length < 37
+              ? BorderRadius.circular(18)
+              : BorderRadius.circular(18))
       : inComingChatBubbleConfig?.borderRadius ??
-          (message.length < 29 ? BorderRadius.circular(18) : BorderRadius.circular(18));
+          (message.length < 29
+              ? BorderRadius.circular(18)
+              : BorderRadius.circular(18));
 
   Color get _color => isMessageBySender
       ? outgoingChatBubbleConfig?.color ?? Colors.purple

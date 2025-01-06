@@ -98,8 +98,11 @@ class ImageMessageView extends StatelessWidget {
 
 class FullScreenImageView extends StatelessWidget {
   final String imageUrl;
+  final String idImage;
 
-  const FullScreenImageView({Key? key, required this.imageUrl}) : super(key: key);
+  const FullScreenImageView(
+      {Key? key, required this.imageUrl, required this.idImage})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +112,7 @@ class FullScreenImageView extends StatelessWidget {
         onTap: () => Navigator.of(context).pop(),
         child: Center(
           child: Hero(
-            tag: imageUrl,
+            tag: idImage,
             child: (() {
               if (imageUrl.isUrl) {
                 return Image.network(
@@ -118,7 +121,8 @@ class FullScreenImageView extends StatelessWidget {
                 );
               } else if (imageUrl.fromMemory) {
                 return Image.memory(
-                  base64Decode(imageUrl.substring(imageUrl.indexOf('base64') + 7)),
+                  base64Decode(
+                      imageUrl.substring(imageUrl.indexOf('base64') + 7)),
                   fit: BoxFit.contain,
                 );
               } else {
@@ -166,39 +170,42 @@ class _ImageShell extends StatelessWidget {
       );
 
   void _openFullScreenImage(BuildContext context) {
-    //! Fix and reimplement later
-    // Navigator.of(context).push(
-    //   PageRouteBuilder(
-    //     transitionDuration: const Duration(milliseconds: 400),
-    //     reverseTransitionDuration: const Duration(milliseconds: 400),
-    //     pageBuilder: (context, animation, secondaryAnimation) {
-    //       print("egrwrw");
-    //       return FadeTransition(
-    //         opacity: animation,
-    //         child: FullScreenImageView(
-    //           imageUrl: imageUrl,
-    //         ),
-    //       );
-    //     },
-    //   ),
-    // );
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 400),
+        reverseTransitionDuration: const Duration(milliseconds: 400),
+        pageBuilder: (context, animation, secondaryAnimation) {
+          print("egrwrw");
+          return FadeTransition(
+            opacity: animation,
+            child: FullScreenImageView(
+              idImage: idImage,
+              imageUrl: imageUrl,
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: isMessageBySender ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment:
+          isMessageBySender ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         Stack(
           children: [
             GestureDetector(
-              // onTap: () => _openFullScreenImage(context),
+              onTap: () => _openFullScreenImage(context),
               child: Hero(
                 tag: idImage,
                 child: Transform.scale(
                   scale: highlightImage ? highlightScale : 1.0,
-                  alignment: isMessageBySender ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: isMessageBySender
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
                   child: Container(
                     padding: imageMessageConfig.padding ?? EdgeInsets.zero,
                     margin: imageMessageConfig.margin ??
@@ -211,7 +218,8 @@ class _ImageShell extends StatelessWidget {
                     height: imageMessageConfig.height ?? 200,
                     width: imageMessageConfig.width ?? 150,
                     child: ClipRRect(
-                      borderRadius: imageMessageConfig.borderRadius ?? BorderRadius.circular(14),
+                      borderRadius: imageMessageConfig.borderRadius ??
+                          BorderRadius.circular(14),
                       child: Image(
                         image: image,
                         fit: BoxFit.cover,
@@ -220,7 +228,8 @@ class _ImageShell extends StatelessWidget {
                           return Center(
                             child: CircularProgressIndicator(
                               value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
                                   : null,
                             ),
                           );

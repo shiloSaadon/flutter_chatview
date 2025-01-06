@@ -55,7 +55,8 @@ class Data {
     ),
     Message(
       id: '4',
-      content: TextMessage(text: "Can you write the time and place of the meeting?"),
+      content:
+          TextMessage(text: "Can you write the time and place of the meeting?"),
       sentAt: DateTime.now(),
       sentBy: '1',
       status: MessageStatus.read,
@@ -92,8 +93,9 @@ class Data {
       replyOfMsg: ReplyMessage(
         id: '4',
         sentAt: DateTime.now(),
-        content: TextMessage(text: "Can you write the time and place of the meeting?"),
-        sentBy: '1',
+        content: TextMessage(
+            text: "Can you write the time and place of the meeting?"),
+        sentBy: '2',
       ),
     ),
     Message(

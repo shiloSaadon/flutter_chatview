@@ -67,7 +67,9 @@ class ImagesMessage extends MessageContent {
   factory ImagesMessage.fromJson(Map<String, dynamic> json) {
     return ImagesMessage(
       caption: json['caption'] as String?,
-      images: (json['images'] as List<dynamic>).map((e) => ChatImage.fromJson(e as Map<String, dynamic>)).toList(),
+      images: (json['images'] as List<dynamic>)
+          .map((e) => ChatImage.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -106,6 +108,16 @@ class VoiceMessage extends MessageContent {
       'url': url,
       'duration': duration.inMicroseconds,
     };
+  }
+
+  VoiceMessage copyWith({
+    String? url,
+    Duration? duration,
+  }) {
+    return VoiceMessage(
+      url: url ?? this.url,
+      duration: duration ?? this.duration,
+    );
   }
 
   @override

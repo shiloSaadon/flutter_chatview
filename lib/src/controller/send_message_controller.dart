@@ -24,7 +24,7 @@ class SendMessageController extends ChangeNotifier {
   final ValueNotifier<bool> messagesListSizeUpdated = ValueNotifier(false);
 
   /// The user that we replayed to
-  ChatUser? repliedUser;
+  ChatUser? Function(ReplyMessage<MessageContent>? message) repliedUser;
 
   /// The current user that uses the chat
   ChatUser? currentUser;
@@ -40,7 +40,9 @@ class SendMessageController extends ChangeNotifier {
   /// The current message that been replyed
   ReplyMessage? get replyMessage => replyMessageListener.value;
 
-  String get replyTo => replyMessage?.sentBy == currentUser?.id ? PackageStrings.you : repliedUser?.name ?? '';
+  String get replyTo => replyMessage?.sentBy == currentUser?.id
+      ? PackageStrings.you
+      : repliedUser(replyMessage)?.name ?? '';
 
   void onRecordingComplete(VoiceMessage voiceMsg) {
     onSendTap.call(voiceMsg, replyMessage);

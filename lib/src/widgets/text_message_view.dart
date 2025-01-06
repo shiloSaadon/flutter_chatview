@@ -79,8 +79,10 @@ class TextMessageView extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Container(
-          constraints:
-              BoxConstraints(minWidth: 75, maxWidth: chatBubbleMaxWidth ?? MediaQuery.of(context).size.width * 0.75),
+          constraints: BoxConstraints(
+              minWidth: 75,
+              maxWidth: chatBubbleMaxWidth ??
+                  MediaQuery.of(context).size.width * 0.75),
           padding: _padding,
           margin: _margin,
           decoration: _decoration,
@@ -112,7 +114,9 @@ class TextMessageView extends StatelessWidget {
 
   EdgeInsetsGeometry? get _padding => !useIndernalMessageWrpper
       ? null
-      : (isMessageBySender ? outgoingChatBubbleConfig?.padding : inComingChatBubbleConfig?.padding) ??
+      : (isMessageBySender
+              ? outgoingChatBubbleConfig?.padding
+              : inComingChatBubbleConfig?.padding) ??
           const EdgeInsets.symmetric(
             horizontal: 12,
             vertical: 10,
@@ -120,7 +124,9 @@ class TextMessageView extends StatelessWidget {
 
   EdgeInsetsGeometry? get _margin => !useIndernalMessageWrpper
       ? null
-      : (isMessageBySender ? outgoingChatBubbleConfig?.margin : inComingChatBubbleConfig?.margin) ??
+      : (isMessageBySender
+              ? outgoingChatBubbleConfig?.margin
+              : inComingChatBubbleConfig?.margin) ??
           EdgeInsets.fromLTRB(5, 0, 6, reactions.isNotEmpty ? 15 : 2);
 
   BoxDecoration? get _decoration => !useIndernalMessageWrpper
@@ -130,17 +136,23 @@ class TextMessageView extends StatelessWidget {
           borderRadius: _borderRadius(messageContent.text),
         );
 
-  LinkPreviewConfiguration? get _linkPreviewConfig =>
-      isMessageBySender ? outgoingChatBubbleConfig?.linkPreviewConfig : inComingChatBubbleConfig?.linkPreviewConfig;
+  LinkPreviewConfiguration? get _linkPreviewConfig => isMessageBySender
+      ? outgoingChatBubbleConfig?.linkPreviewConfig
+      : inComingChatBubbleConfig?.linkPreviewConfig;
 
-  TextStyle? get _textStyle =>
-      isMessageBySender ? outgoingChatBubbleConfig?.textStyle : inComingChatBubbleConfig?.textStyle;
+  TextStyle? get _textStyle => isMessageBySender
+      ? outgoingChatBubbleConfig?.textStyle
+      : inComingChatBubbleConfig?.textStyle;
 
   BorderRadiusGeometry _borderRadius(String message) => isMessageBySender
       ? outgoingChatBubbleConfig?.borderRadius ??
-          (message.length < 37 ? BorderRadius.circular(replyBorderRadius2) : BorderRadius.circular(replyBorderRadius2))
+          (message.length < 37
+              ? BorderRadius.circular(replyBorderRadius2)
+              : BorderRadius.circular(replyBorderRadius2))
       : inComingChatBubbleConfig?.borderRadius ??
-          (message.length < 29 ? BorderRadius.circular(replyBorderRadius2) : BorderRadius.circular(replyBorderRadius2));
+          (message.length < 29
+              ? BorderRadius.circular(replyBorderRadius2)
+              : BorderRadius.circular(replyBorderRadius2));
 
   Color get _color => isMessageBySender
       ? outgoingChatBubbleConfig?.color ?? Colors.purple

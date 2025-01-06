@@ -102,7 +102,8 @@ class MessageView<Content extends MessageContent> extends StatefulWidget {
   State<MessageView> createState() => _MessageViewState();
 }
 
-class _MessageViewState extends State<MessageView> with SingleTickerProviderStateMixin {
+class _MessageViewState extends State<MessageView>
+    with SingleTickerProviderStateMixin {
   AnimationController? _animationController;
 
   MessageConfiguration get messageConfig => widget.messageConfig;
@@ -115,11 +116,13 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
     if (isLongPressEnable) {
       _animationController = AnimationController(
         vsync: this,
-        duration: widget.longPressAnimationDuration ?? const Duration(milliseconds: 250),
+        duration: widget.longPressAnimationDuration ??
+            const Duration(milliseconds: 250),
         upperBound: 0.1,
         lowerBound: 0.0,
       );
-      if (widget.message.status != MessageStatus.read && !widget.isMessageBySender) {
+      if (widget.message.status != MessageStatus.read &&
+          !widget.isMessageBySender) {
         widget.inComingChatBubbleConfig?.onMessageRead?.call(widget.message);
       }
       _animationController?.addStatusListener((status) {
@@ -185,39 +188,47 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
 
   Widget get singleMessageBubble {
     final emojiMessageConfiguration = messageConfig.emojiMessageConfig;
-    final useInternalMessageWrapper = messageConfig.customMessageWrapperBuilder == null;
+    final useInternalMessageWrapper =
+        messageConfig.customMessageWrapperBuilder == null;
 
     final Widget messageData = switch (widget.message) {
-      Message(content: TextMessage content, reactions: final reactions) => content.text.isAllEmoji
-          ? Padding(
-              padding: emojiMessageConfiguration?.padding ??
-                  EdgeInsets.fromLTRB(
-                    leftPadding2,
-                    4,
-                    leftPadding2,
-                    widget.message.reactions.isNotEmpty ? 14 : 0,
+      Message(content: TextMessage content, reactions: final reactions) =>
+        content.text.isAllEmoji
+            ? Padding(
+                padding: emojiMessageConfiguration?.padding ??
+                    EdgeInsets.fromLTRB(
+                      leftPadding2,
+                      4,
+                      leftPadding2,
+                      widget.message.reactions.isNotEmpty ? 14 : 0,
+                    ),
+                child: Transform.scale(
+                  scale: widget.shouldHighlight ? widget.highlightScale : 1.0,
+                  child: Text(
+                    content.text,
+                    style: emojiMessageConfiguration?.textStyle ??
+                        const TextStyle(fontSize: 30),
                   ),
-              child: Transform.scale(
-                scale: widget.shouldHighlight ? widget.highlightScale : 1.0,
-                child: Text(
-                  content.text,
-                  style: emojiMessageConfiguration?.textStyle ?? const TextStyle(fontSize: 30),
                 ),
+              )
+            : TextMessageView(
+                inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
+                outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
+                isMessageBySender: widget.isMessageBySender,
+                messageContent: content,
+                reactions: reactions,
+                chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
+                messageReactionConfig: messageConfig.messageReactionConfig,
+                highlightColor: widget.highlightColor,
+                highlightMessage: widget.shouldHighlight,
+                useIndernalMessageWrpper: useInternalMessageWrapper,
               ),
-            )
-          : TextMessageView(
-              inComingChatBubbleConfig: widget.inComingChatBubbleConfig,
-              outgoingChatBubbleConfig: widget.outgoingChatBubbleConfig,
-              isMessageBySender: widget.isMessageBySender,
-              messageContent: content,
-              reactions: reactions,
-              chatBubbleMaxWidth: widget.chatBubbleMaxWidth,
-              messageReactionConfig: messageConfig.messageReactionConfig,
-              highlightColor: widget.highlightColor,
-              highlightMessage: widget.shouldHighlight,
-              useIndernalMessageWrpper: useInternalMessageWrapper,
-            ),
-      Message(content: ImagesMessage content, id: final idMsg, reactions: final reactions) => ImageMessageView(
+      Message(
+        content: ImagesMessage content,
+        id: final idMsg,
+        reactions: final reactions
+      ) =>
+        ImageMessageView(
           idMsg: idMsg,
           messageContent: content,
           reactions: reactions,
@@ -227,7 +238,8 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
           highlightImage: widget.shouldHighlight,
           highlightScale: widget.highlightScale,
         ),
-      Message(content: VoiceMessage content, reactions: final reactions) => VoiceMessageView(
+      Message(content: VoiceMessage content, reactions: final reactions) =>
+        VoiceMessageView(
           screenWidth: MediaQuery.of(context).size.width,
           messageContent: content,
           reactions: reactions,
@@ -291,10 +303,16 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
         widget.controller.initialMessageList.isNotEmpty &&
         widget.controller.initialMessageList.last.id == widget.message.id &&
         widget.message.status == MessageStatus.read) {
-      if (ChatViewInheritedWidget.of(context)?.featureActiveConfig.lastSeenAgoBuilderVisibility ?? true) {
-        return widget.outgoingChatBubbleConfig?.receiptsWidgetConfig?.lastSeenAgoBuilder
-                ?.call(widget.message, applicationDateFormatter(widget.message.sentAt)) ??
-            lastSeenAgoBuilder(widget.message, applicationDateFormatter(widget.message.sentAt));
+      if (ChatViewInheritedWidget.of(context)
+              ?.featureActiveConfig
+              .lastSeenAgoBuilderVisibility ??
+          true) {
+        return widget.outgoingChatBubbleConfig?.receiptsWidgetConfig
+                ?.lastSeenAgoBuilder
+                ?.call(widget.message,
+                    applicationDateFormatter(widget.message.sentAt)) ??
+            lastSeenAgoBuilder(widget.message,
+                applicationDateFormatter(widget.message.sentAt));
       }
       return const SizedBox();
     }
