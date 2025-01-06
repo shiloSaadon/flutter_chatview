@@ -62,7 +62,9 @@ class LinkPreview extends StatelessWidget {
                     ),
                   )
                 : AnyLinkPreview(
-                    link: url,
+                    link: url
+                        .replaceAll('HTTPS://', 'https://')
+                        .replaceAll('HTTP://', 'http://'),
                     removeElevation: true,
                     errorBody: linkPreviewConfig?.errorBody,
                     proxyUrl: linkPreviewConfig?.proxyUrl,
