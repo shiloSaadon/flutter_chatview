@@ -60,13 +60,12 @@ class ReplyMessageView extends StatelessWidget {
             ),
           ],
         ),
-      ImagesMessage _ => Row(
+      ImageMessage _ => Row(
           children: [
             Icon(
               Icons.photo,
               size: 20,
-              color:
-                  sendMessageConfig?.replyMessageColor ?? Colors.grey.shade700,
+              color: sendMessageConfig?.replyMessageColor ?? Colors.grey.shade700,
             ),
             Text(
               PackageStrings.photo,

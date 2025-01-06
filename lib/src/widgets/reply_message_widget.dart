@@ -66,24 +66,19 @@ class ReplyMessageWidget extends StatelessWidget {
               left: horizontalPadding,
               bottom: 4,
             ),
-        constraints:
-            BoxConstraints(maxWidth: repliedMessageConfig?.maxWidth ?? 280),
+        constraints: BoxConstraints(maxWidth: repliedMessageConfig?.maxWidth ?? 280),
         child: Column(
-          crossAxisAlignment:
-              replyBySender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: replyBySender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             Text(
               "${PackageStrings.repliedBy} $replyBy",
               style: repliedMessageConfig?.replyTitleTextStyle ??
-                  textTheme.bodyMedium!
-                      .copyWith(fontSize: 14, letterSpacing: 0.3),
+                  textTheme.bodyMedium!.copyWith(fontSize: 14, letterSpacing: 0.3),
             ),
             const SizedBox(height: 6),
             IntrinsicHeight(
               child: Row(
-                mainAxisAlignment: replyBySender
-                    ? MainAxisAlignment.end
-                    : MainAxisAlignment.start,
+                mainAxisAlignment: replyBySender ? MainAxisAlignment.end : MainAxisAlignment.start,
                 children: [
                   if (!replyBySender)
                     VerticalLine(
@@ -94,7 +89,7 @@ class ReplyMessageWidget extends StatelessWidget {
                   Flexible(
                     child: Opacity(
                       opacity: repliedMessageConfig?.opacity ?? 0.8,
-                      child: message.content is ImagesMessage
+                      child: message.content is ImageMessage
                           ? const SizedBox()
                           //! ? _ImagePreview(
                           //     repliedMessageConfig: repliedMessageConfig,
@@ -111,12 +106,10 @@ class ReplyMessageWidget extends StatelessWidget {
                                   ),
                               decoration: BoxDecoration(
                                 borderRadius: _borderRadius(
-                                  replyMessage:
-                                      (message.content as TextMessage).text,
+                                  replyMessage: (message.content as TextMessage).text,
                                   replyBySender: replyBySender,
                                 ),
-                                color: repliedMessageConfig?.backgroundColor ??
-                                    Colors.grey.shade500,
+                                color: repliedMessageConfig?.backgroundColor ?? Colors.grey.shade500,
                               ),
                               child: message.content is VoiceMessage
                                   ? Row(
@@ -124,25 +117,19 @@ class ReplyMessageWidget extends StatelessWidget {
                                       children: [
                                         Icon(
                                           Icons.mic,
-                                          color: repliedMessageConfig
-                                                  ?.micIconColor ??
-                                              Colors.white,
+                                          color: repliedMessageConfig?.micIconColor ?? Colors.white,
                                         ),
                                         const SizedBox(width: 2),
                                         Text(
-                                          (message.content as VoiceMessage)
-                                              .duration
-                                              .toHHMMSS(),
-                                          style:
-                                              repliedMessageConfig?.textStyle,
+                                          (message.content as VoiceMessage).duration.toHHMMSS(),
+                                          style: repliedMessageConfig?.textStyle,
                                         ),
                                       ],
                                     )
                                   : Text(
                                       (message.content as TextMessage).text,
                                       style: repliedMessageConfig?.textStyle ??
-                                          textTheme.bodyMedium!
-                                              .copyWith(color: Colors.black),
+                                          textTheme.bodyMedium!.copyWith(color: Colors.black),
                                     ),
                             ),
                     ),

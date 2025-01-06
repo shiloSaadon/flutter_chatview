@@ -40,7 +40,7 @@ Widget messageWrapperBuilder(
         senderDataWidgets: senderDataWidgets,
         messageDataWidget: messageDataWidget,
       );
-    case ImagesMessage _:
+    case ImageMessage _:
       return ImageMessageWrapper(
         isMessageBySender: isMessageBySender,
         highlightMessage: highlightMessage,

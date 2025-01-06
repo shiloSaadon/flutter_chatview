@@ -40,9 +40,8 @@ class SendMessageController extends ChangeNotifier {
   /// The current message that been replyed
   ReplyMessage? get replyMessage => replyMessageListener.value;
 
-  String get replyTo => replyMessage?.sentBy == currentUser?.id
-      ? PackageStrings.you
-      : repliedUser(replyMessage)?.name ?? '';
+  String get replyTo =>
+      replyMessage?.sentBy == currentUser?.id ? PackageStrings.you : repliedUser(replyMessage)?.name ?? '';
 
   void onRecordingComplete(VoiceMessage voiceMsg) {
     onSendTap.call(voiceMsg, replyMessage);
@@ -51,7 +50,9 @@ class SendMessageController extends ChangeNotifier {
 
   void onImageSelected(List<ChatImage> images) {
     debugPrint('Call in Send Message Widget');
-    onSendTap.call(ImagesMessage(images: images), replyMessage);
+    for (var img in images) {
+      onSendTap.call(ImageMessage(image: img), replyMessage);
+    }
     resetReply();
   }
 

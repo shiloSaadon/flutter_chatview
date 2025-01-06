@@ -14,7 +14,7 @@ abstract class MessageContent {
       case MessageType.text:
         return TextMessage.fromJson(json);
       case MessageType.image:
-        return ImagesMessage.fromJson(json);
+        return ImageMessage.fromJson(json);
       case MessageType.voiceNote:
         return VoiceMessage.fromJson(json);
       case MessageType.gif:
@@ -56,20 +56,18 @@ class TextMessage extends MessageContent {
   String toString() => 'TextMessage(text: $text)';
 }
 
-class ImagesMessage extends MessageContent {
-  final List<ChatImage> images;
+class ImageMessage extends MessageContent {
+  final ChatImage image;
   final String? caption;
-  ImagesMessage({
-    required this.images,
+  ImageMessage({
+    required this.image,
     this.caption,
-  }) : assert(images.isNotEmpty);
+  });
 
-  factory ImagesMessage.fromJson(Map<String, dynamic> json) {
-    return ImagesMessage(
+  factory ImageMessage.fromJson(Map<String, dynamic> json) {
+    return ImageMessage(
       caption: json['caption'] as String?,
-      images: (json['images'] as List<dynamic>)
-          .map((e) => ChatImage.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      image: ChatImage.fromJson(json['image'] as Map<String, dynamic>),
     );
   }
 
@@ -77,12 +75,12 @@ class ImagesMessage extends MessageContent {
   Map<String, dynamic> toJson() {
     return {
       'caption': caption,
-      'images': images.map((e) => e.toJson()).toList(),
+      'images': image.toJson(),
     };
   }
 
   @override
-  String toString() => 'ImagesMessage(images: $images, caption: $caption)';
+  String toString() => 'ImagesMessage(image: $image, caption: $caption)';
 }
 
 class VoiceMessage extends MessageContent {

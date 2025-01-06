@@ -44,7 +44,7 @@ class ImageMessageView extends StatelessWidget {
   }) : super(key: key);
 
   final String idMsg;
-  final ImagesMessage messageContent;
+  final ImageMessage messageContent;
   final Set<Reaction> reactions;
   final bool isMessageBySender;
   final ImageMessageConfiguration imageMessageConfig;
@@ -52,7 +52,7 @@ class ImageMessageView extends StatelessWidget {
   final bool highlightImage;
   final double highlightScale;
 
-  ChatImage get image => messageContent.images.first;
+  ChatImage get image => messageContent.image;
 
   @override
   Widget build(BuildContext context) {
@@ -100,9 +100,7 @@ class FullScreenImageView extends StatelessWidget {
   final String imageUrl;
   final String idImage;
 
-  const FullScreenImageView(
-      {Key? key, required this.imageUrl, required this.idImage})
-      : super(key: key);
+  const FullScreenImageView({Key? key, required this.imageUrl, required this.idImage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -121,8 +119,7 @@ class FullScreenImageView extends StatelessWidget {
                 );
               } else if (imageUrl.fromMemory) {
                 return Image.memory(
-                  base64Decode(
-                      imageUrl.substring(imageUrl.indexOf('base64') + 7)),
+                  base64Decode(imageUrl.substring(imageUrl.indexOf('base64') + 7)),
                   fit: BoxFit.contain,
                 );
               } else {
@@ -143,7 +140,7 @@ class _ImageShell extends StatelessWidget {
   final String idImage;
   final String imageUrl;
   final ImageProvider image;
-  final ImagesMessage messageContent;
+  final ImageMessage messageContent;
   final Set<Reaction> reactions;
   final bool isMessageBySender;
   final ImageMessageConfiguration imageMessageConfig;
@@ -192,8 +189,7 @@ class _ImageShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment:
-          isMessageBySender ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment: isMessageBySender ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         Stack(
           children: [
@@ -203,9 +199,7 @@ class _ImageShell extends StatelessWidget {
                 tag: idImage,
                 child: Transform.scale(
                   scale: highlightImage ? highlightScale : 1.0,
-                  alignment: isMessageBySender
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
+                  alignment: isMessageBySender ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     padding: imageMessageConfig.padding ?? EdgeInsets.zero,
                     margin: imageMessageConfig.margin ??
@@ -218,8 +212,7 @@ class _ImageShell extends StatelessWidget {
                     height: imageMessageConfig.height ?? 200,
                     width: imageMessageConfig.width ?? 150,
                     child: ClipRRect(
-                      borderRadius: imageMessageConfig.borderRadius ??
-                          BorderRadius.circular(14),
+                      borderRadius: imageMessageConfig.borderRadius ?? BorderRadius.circular(14),
                       child: Image(
                         image: image,
                         fit: BoxFit.cover,
@@ -228,8 +221,7 @@ class _ImageShell extends StatelessWidget {
                           return Center(
                             child: CircularProgressIndicator(
                               value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
+                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                                   : null,
                             ),
                           );
