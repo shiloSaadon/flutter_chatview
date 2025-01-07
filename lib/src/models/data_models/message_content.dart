@@ -75,7 +75,7 @@ class ImageMessage extends MessageContent {
   Map<String, dynamic> toJson() {
     return {
       'caption': caption,
-      'images': image.toJson(),
+      'image': image.toJson(),
     };
   }
 
