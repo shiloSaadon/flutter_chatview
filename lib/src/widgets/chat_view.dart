@@ -356,11 +356,15 @@ class _ChatViewState extends State<ChatView>
                       ),
                       if (widget.appBar != null &&
                           widget.appBarConfiguration.extendListBelowAppbar)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            widget.appBar!,
-                          ],
+                        SizedBox(
+                          width: double.infinity,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              widget.appBar!,
+                            ],
+                          ),
                         ),
                       if (featureActiveConfig.enableReactionPopup)
                         ValueListenableBuilder<bool>(
