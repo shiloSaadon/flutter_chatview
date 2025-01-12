@@ -357,6 +357,7 @@ class _ChatViewState extends State<ChatView>
                       if (widget.appBar != null &&
                           widget.appBarConfiguration.extendListBelowAppbar)
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             widget.appBar!,
                           ],
