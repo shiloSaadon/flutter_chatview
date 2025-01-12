@@ -75,22 +75,25 @@ class RepliedMessageConfiguration {
   /// Color for microphone icon.
   final Color? micIconColor;
 
-  const RepliedMessageConfiguration({
-    this.verticalBarColor,
-    this.backgroundColor,
-    this.textStyle,
-    this.replyTitleTextStyle,
-    this.margin,
-    this.padding,
-    this.maxWidth,
-    this.borderRadius,
-    this.verticalBarWidth,
-    this.repliedImageMessageHeight,
-    this.repliedImageMessageWidth,
-    this.repliedImageMessageBorderRadius,
-    this.repliedMessageWidgetBuilder,
-    this.opacity,
-    this.repliedMsgAutoScrollConfig = const RepliedMsgAutoScrollConfig(),
-    this.micIconColor,
-  });
+  /// whether to display the replay or not  (allow the user to customize the reply)
+  final bool? displyeReply;
+
+  const RepliedMessageConfiguration(
+      {this.verticalBarColor,
+      this.backgroundColor,
+      this.textStyle,
+      this.replyTitleTextStyle,
+      this.margin,
+      this.padding,
+      this.maxWidth,
+      this.borderRadius,
+      this.verticalBarWidth,
+      this.repliedImageMessageHeight,
+      this.repliedImageMessageWidth,
+      this.repliedImageMessageBorderRadius,
+      this.repliedMessageWidgetBuilder,
+      this.opacity,
+      this.repliedMsgAutoScrollConfig = const RepliedMsgAutoScrollConfig(),
+      this.micIconColor,
+      this.displyeReply});
 }

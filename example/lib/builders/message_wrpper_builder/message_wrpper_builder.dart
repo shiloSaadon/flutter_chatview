@@ -15,6 +15,7 @@ Widget messageWrapperBuilder(
   VoiceMessageConfiguration? voiceMessageConfiguration,
   SenderDataWidgets senderDataWidgets,
   Widget messageDataWidget,
+  dynamic Function(String)? onReplyTap,
 ) {
   switch (message.content) {
     case TextMessage _:
@@ -27,6 +28,7 @@ Widget messageWrapperBuilder(
         outgoingChatBubbleConfig: outgoingChatBubbleConfig,
         senderDataWidgets: senderDataWidgets,
         messageDataWidget: messageDataWidget,
+        onReplyTap: onReplyTap,
       );
     case VoiceMessage _:
       return VoiceMessageWrapper(

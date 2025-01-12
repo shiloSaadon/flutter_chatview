@@ -38,7 +38,8 @@ typedef SendMessageWithReturnWidget = Widget Function(
 typedef ReplyMessageCallBack = void Function(ReplyMessage? replyMessage);
 typedef VoidCallBack = void Function();
 typedef DoubleCallBack = void Function(double, double);
-typedef MessageCallBack<Content extends MessageContent> = void Function(Message<Content> message);
+typedef MessageCallBack<Content extends MessageContent> = void Function(
+    Message<Content> message);
 typedef AssignReplayCallBack<Content extends MessageContent> = void Function(
     Message<Content> message, BuildContext context);
 typedef VoidCallBackWithFuture = Future<void> Function();
@@ -67,7 +68,8 @@ typedef CustomMessageReplyViewBuilder = Widget Function(
 typedef SenderDataWidgets = (ProfileCircle profileCircle, Widget name);
 
 /// to allow the user edit the container around the message
-typedef CustomMessageWrapperBuilder<Content extends MessageContent> = Widget Function(
+typedef CustomMessageWrapperBuilder<Content extends MessageContent> = Widget
+    Function(
   bool isMessageBySender,
   bool highlightMessage,
   Color highlightColor,
@@ -77,6 +79,7 @@ typedef CustomMessageWrapperBuilder<Content extends MessageContent> = Widget Fun
   VoiceMessageConfiguration? voiceMessageConfiguration,
   SenderDataWidgets senderDataWidgets,
   Widget messageDataWidget,
+  dynamic Function(String)? onReplyTap,
 );
 
 typedef MessageSorter = int Function(
@@ -109,4 +112,5 @@ typedef SuggestionItemBuilder = Widget Function(
   int index,
   SuggestionItemData suggestionItemData,
 );
-typedef ImageRemoteUrlGetter = Future<String> Function(String idMsg, ChatImage img);
+typedef ImageRemoteUrlGetter = Future<String> Function(
+    String idMsg, ChatImage img);

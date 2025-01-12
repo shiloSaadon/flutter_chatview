@@ -347,6 +347,7 @@ class _ChatScreenState extends State<ChatScreen> {
           profileImageUrl: Data.profileImage,
           circleRadius: 10),
       repliedMessageConfig: RepliedMessageConfiguration(
+        displyeReply: false,
         backgroundColor: theme.repliedMessageColor,
         verticalBarColor: theme.verticalBarColor,
         repliedMsgAutoScrollConfig: RepliedMsgAutoScrollConfig(

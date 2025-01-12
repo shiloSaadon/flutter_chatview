@@ -25,6 +25,10 @@ class TextMessageWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ConfigurationsInheritedWidget.of(context)
+        ?.messageConfig
+        .imageMessageConfig
+        .remoteUrlGetter;
     return Container(
       padding: _padding,
       margin: _margin,

@@ -12,6 +12,7 @@ class TextMessageWrapper extends StatelessWidget {
   final ChatBubble? outgoingChatBubbleConfig;
   final SenderDataWidgets senderDataWidgets;
   final Widget messageDataWidget;
+  final dynamic Function(String)? onReplyTap;
   const TextMessageWrapper({
     required this.isMessageBySender,
     required this.highlightMessage,
@@ -21,6 +22,7 @@ class TextMessageWrapper extends StatelessWidget {
     required this.outgoingChatBubbleConfig,
     required this.senderDataWidgets,
     required this.messageDataWidget,
+    required this.onReplyTap,
     super.key,
   });
 

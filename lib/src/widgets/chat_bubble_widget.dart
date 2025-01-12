@@ -271,7 +271,8 @@ class _ChatBubbleWidgetState<Content extends MessageContent>
                     .chatBubbleConfig?.inComingChatBubbleConfig?.padding ??
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 4);
           }),
-        if (replyMessage != null)
+        if (replyMessage != null &&
+            chatListConfig.repliedMessageConfig?.displyeReply != false)
           chatListConfig.repliedMessageConfig?.repliedMessageWidgetBuilder !=
                   null
               ? chatListConfig.repliedMessageConfig!
@@ -287,6 +288,7 @@ class _ChatBubbleWidgetState<Content extends MessageContent>
           isMessageByCurrentUser: isMessageBySender,
           onSwipe: isMessageBySender ? onLeftSwipe : onRightSwipe,
           child: MessageView(
+            onReplyTap: widget.onReplyTap,
             outgoingChatBubbleConfig:
                 chatListConfig.chatBubbleConfig?.outgoingChatBubbleConfig,
             isLongPressEnable:
