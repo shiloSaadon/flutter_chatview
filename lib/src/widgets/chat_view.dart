@@ -63,6 +63,7 @@ class ChatView extends StatefulWidget {
     this.replyMessageBuilder,
     this.replySuggestionsConfig,
     this.scrollToBottomButtonConfig,
+    this.appBarConfiguration = const AppBarConfiguration(),
   })  : chatBackgroundConfig =
             chatBackgroundConfig ?? const ChatBackgroundConfiguration(),
         chatViewStateConfig =
@@ -79,6 +80,9 @@ class ChatView extends StatefulWidget {
   /// Allow user to giving customisation different types
   /// messages.
   final MessageConfiguration messageConfig;
+
+  /// Allow user to giving customisation to the app bar behavoiur
+  final AppBarConfiguration appBarConfiguration;
 
   /// Provides configuration for replied message view which is located upon chat
   /// bubble.
@@ -240,6 +244,7 @@ class _ChatViewState extends State<ChatView>
             swipeToReplyConfig: widget.swipeToReplyConfig,
             emojiPickerSheetConfig: widget.emojiPickerSheetConfig,
             scrollToBottomButtonConfig: widget.scrollToBottomButtonConfig,
+            appBarConfiguration: widget.appBarConfiguration,
             child: Stack(
               children: [
                 Container(
@@ -271,7 +276,10 @@ class _ChatViewState extends State<ChatView>
                         margin: chatBackgroundConfig.margin,
                         child: Column(
                           children: [
-                            if (widget.appBar != null) widget.appBar!,
+                            if (widget.appBar != null &&
+                                !widget
+                                    .appBarConfiguration.extendListBelowAppbar)
+                              widget.appBar!,
                             Expanded(
                               child: Stack(
                                 children: [
@@ -346,6 +354,13 @@ class _ChatViewState extends State<ChatView>
                           ],
                         ),
                       ),
+                      if (widget.appBar != null &&
+                          widget.appBarConfiguration.extendListBelowAppbar)
+                        Column(
+                          children: [
+                            widget.appBar!,
+                          ],
+                        ),
                       if (featureActiveConfig.enableReactionPopup)
                         ValueListenableBuilder<bool>(
                           valueListenable: context.chatViewIW!.showPopUp,

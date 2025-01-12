@@ -6,9 +6,10 @@ class ConfigurationsInheritedWidget extends InheritedWidget {
   const ConfigurationsInheritedWidget({
     Key? key,
     required Widget child,
+    required this.appBarConfiguration,
     required this.chatBackgroundConfig,
-    this.reactionPopupConfig,
     required this.messageConfig,
+    this.reactionPopupConfig,
     this.chatBubbleConfig,
     this.profileCircleConfig,
     this.swipeToReplyConfig,
@@ -28,6 +29,9 @@ class ConfigurationsInheritedWidget extends InheritedWidget {
   /// Provides configuration for customisation of different types
   /// messages.
   final MessageConfiguration messageConfig;
+
+  /// Allow user to giving customisation to the app bar behavoiur
+  final AppBarConfiguration appBarConfiguration;
 
   /// Provides configuration of chat bubble's appearance.
   final ChatBubbleConfiguration? chatBubbleConfig;
@@ -54,9 +58,10 @@ class ConfigurationsInheritedWidget extends InheritedWidget {
   /// Provides a configuration for scroll to bottom button config
   final ScrollToBottomButtonConfig? scrollToBottomButtonConfig;
 
-  static ConfigurationsInheritedWidget? of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<ConfigurationsInheritedWidget>();
+  static ConfigurationsInheritedWidget? of(BuildContext context) => context
+      .dependOnInheritedWidgetOfExactType<ConfigurationsInheritedWidget>();
 
   @override
-  bool updateShouldNotify(covariant ConfigurationsInheritedWidget oldWidget) => oldWidget != this;
+  bool updateShouldNotify(covariant ConfigurationsInheritedWidget oldWidget) =>
+      oldWidget != this;
 }

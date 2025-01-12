@@ -264,12 +264,17 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
             combinedList.addAll(messages);
           }
           combinedList = combinedList.reversed.toList();
+          print(chatListConfig.appBarConfiguration.extendListBelowAppbar);
           return ListView.builder(
             cacheExtent: 30,
             controller: widget.scrollController,
             key: widget.key,
             physics: showPopUp ? const NeverScrollableScrollPhysics() : null,
-            padding: EdgeInsets.only(bottom: chatTextFieldHeight),
+            padding: EdgeInsets.only(
+                bottom: chatTextFieldHeight,
+                top: chatListConfig.appBarConfiguration.extendListBelowAppbar
+                    ? appBarSize
+                    : 10),
             shrinkWrap: false,
             reverse: true,
             itemCount: combinedList.length,
@@ -315,6 +320,22 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
         }
       },
     );
+  }
+
+  double get appBarSize {
+    if (chatListConfig.appBarConfiguration.extendListBelowAppbar &&
+        chatListConfig.appBarConfiguration.key != null) {
+      final renderObj = chatListConfig.appBarConfiguration.key!.currentContext
+          ?.findRenderObject() as RenderBox?;
+
+      if (renderObj == null) {
+        return 10.0;
+      }
+
+      return renderObj.size.height + 10;
+    }
+    ;
+    return 10.0;
   }
 
   Set<Message<MessageContent>> sortMessage(

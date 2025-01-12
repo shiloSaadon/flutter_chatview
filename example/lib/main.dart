@@ -111,6 +111,7 @@ class _ChatScreenState extends State<ChatScreen> {
     ]);
   }
 
+  final GlobalKey appBarKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return ChatView(
@@ -149,7 +150,10 @@ class _ChatScreenState extends State<ChatScreen> {
         flashingCircleBrightColor: theme.flashingCircleBrightColor,
         flashingCircleDarkColor: theme.flashingCircleDarkColor,
       ),
+      appBarConfiguration:
+          AppBarConfiguration(extendListBelowAppbar: true, key: appBarKey),
       appBar: ChatViewAppBar(
+        key: appBarKey,
         elevation: theme.elevation,
         backGroundColor: theme.appBarColor,
         profilePicture: Data.profileImage,
