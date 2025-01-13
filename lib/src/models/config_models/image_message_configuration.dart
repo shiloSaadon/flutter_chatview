@@ -47,8 +47,11 @@ class ImageMessageConfiguration {
   /// Used for giving border radius of image message.
   final BorderRadius? borderRadius;
 
-  /// Construct url for the image
-  final ImageRemoteUrlGetter remoteUrlGetter;
+  /// Headers to pass for network image
+  final Map<String, String> networkImageHeaders;
+
+  /// Url of the image
+  final ImageUrlGetter imageUrlGetter;
 
   const ImageMessageConfiguration({
     this.hideShareIcon = false,
@@ -59,7 +62,8 @@ class ImageMessageConfiguration {
     this.padding,
     this.margin,
     this.borderRadius,
-    required this.remoteUrlGetter,
+    required this.networkImageHeaders,
+    required this.imageUrlGetter,
   });
 }
 

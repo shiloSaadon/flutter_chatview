@@ -20,11 +20,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:chatview/chatview.dart';
-import 'package:chatview/src/extensions/extensions.dart';
 import 'package:chatview/src/models/models.dart';
 import 'package:flutter/material.dart';
 
@@ -56,6 +54,7 @@ class ImageMessageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final url = imageMessageConfig.imageUrlGetter(idMsg, image);
     return image.file != null
         ? _ImageShell(
             idImage: image.id,
@@ -69,38 +68,30 @@ class ImageMessageView extends StatelessWidget {
             highlightImage: highlightImage,
             highlightScale: highlightScale,
           )
-        : FutureBuilder(
-            future: imageMessageConfig.remoteUrlGetter(idMsg, image),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              }
-              if (snapshot.hasData) {
-                return _ImageShell(
-                  idImage: image.id,
-                  imageUrl: snapshot.requireData,
-                  image: NetworkImage(snapshot.requireData),
-                  messageContent: messageContent,
-                  reactions: reactions,
-                  isMessageBySender: isMessageBySender,
-                  imageMessageConfig: imageMessageConfig,
-                  messageReactionConfig: messageReactionConfig,
-                  highlightImage: highlightImage,
-                  highlightScale: highlightScale,
-                );
-              }
-              // Is this loading state???
-              return const CircularProgressIndicator();
-            },
+        : _ImageShell(
+            idImage: image.id,
+            imageUrl: url,
+            image: NetworkImage(url, headers: imageMessageConfig.networkImageHeaders),
+            messageContent: messageContent,
+            reactions: reactions,
+            isMessageBySender: isMessageBySender,
+            imageMessageConfig: imageMessageConfig,
+            messageReactionConfig: messageReactionConfig,
+            highlightImage: highlightImage,
+            highlightScale: highlightScale,
           );
   }
 }
 
 class FullScreenImageView extends StatelessWidget {
-  final String imageUrl;
   final String idImage;
+  final ImageProvider image;
 
-  const FullScreenImageView({Key? key, required this.imageUrl, required this.idImage}) : super(key: key);
+  const FullScreenImageView({
+    super.key,
+    required this.image,
+    required this.idImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -111,24 +102,10 @@ class FullScreenImageView extends StatelessWidget {
         child: Center(
           child: Hero(
             tag: idImage,
-            child: (() {
-              if (imageUrl.isUrl) {
-                return Image.network(
-                  imageUrl,
-                  fit: BoxFit.contain,
-                );
-              } else if (imageUrl.fromMemory) {
-                return Image.memory(
-                  base64Decode(imageUrl.substring(imageUrl.indexOf('base64') + 7)),
-                  fit: BoxFit.contain,
-                );
-              } else {
-                return Image.file(
-                  File(imageUrl),
-                  fit: BoxFit.contain,
-                );
-              }
-            }()),
+            child: Image(
+              image: image,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ),
@@ -177,7 +154,7 @@ class _ImageShell extends StatelessWidget {
             opacity: animation,
             child: FullScreenImageView(
               idImage: idImage,
-              imageUrl: imageUrl,
+              image: image,
             ),
           );
         },
