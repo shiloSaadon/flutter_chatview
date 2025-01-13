@@ -23,9 +23,9 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chatview/chatview.dart';
-import 'package:chatview/src/models/models.dart';
+import 'package:chatview/chatview.dart' hide Config;
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'share_icon.dart';
 
@@ -74,6 +74,13 @@ class ImageMessageView extends StatelessWidget {
             imageUrl: url,
             image: CachedNetworkImageProvider(
               url,
+              cacheManager: CacheManager(
+                Config(
+                  'imagesCacheManager',
+                  maxNrOfCacheObjects: 1000,
+                  stalePeriod: const Duration(days: 7),
+                ),
+              ),
               maxHeight: 1024,
               maxWidth: 1024,
               cacheKey: url,

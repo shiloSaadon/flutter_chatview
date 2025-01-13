@@ -28,6 +28,8 @@ dependencies:
   # For formatting time locale in message receipts
   timeago: ^3.7.0
   cached_network_image: ^3.4.1
+  #cache manager
+  flutter_cache_manager: ^3.3.0
   uuid: ^4.5.1
 
 dev_dependencies:
