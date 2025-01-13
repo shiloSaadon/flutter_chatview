@@ -58,6 +58,7 @@ class ImageMessageView extends StatelessWidget {
     final url = imageMessageConfig.imageUrlGetter(idMsg, image);
     return image.file != null
         ? _ImageShell(
+            isLocalImage: true,
             idImage: image.id,
             imageUrl: image.file!.path,
             image: FileImage(File(image.file!.path)),
@@ -70,15 +71,11 @@ class ImageMessageView extends StatelessWidget {
             highlightScale: highlightScale,
           )
         : _ImageShell(
+            isLocalImage: false,
             idImage: image.id,
             imageUrl: url,
-            image: CachedNetworkImageProvider(
-              url,
-              maxHeight: 1024,
-              maxWidth: 1024,
-              cacheKey: url,
-              headers: imageMessageConfig.networkImageHeaders,
-            ),
+            image: NetworkImage(url,
+                headers: imageMessageConfig.networkImageHeaders),
             messageContent: messageContent,
             reactions: reactions,
             isMessageBySender: isMessageBySender,
@@ -131,6 +128,7 @@ class _ImageShell extends StatelessWidget {
   final MessageReactionConfiguration? messageReactionConfig;
   final bool highlightImage;
   final double highlightScale;
+  final bool isLocalImage;
   const _ImageShell({
     Key? key,
     required this.idImage,
@@ -143,6 +141,7 @@ class _ImageShell extends StatelessWidget {
     required this.messageReactionConfig,
     required this.highlightImage,
     required this.highlightScale,
+    required this.isLocalImage,
   }) : super(key: key);
 
   Widget get iconButton => ShareIcon(
@@ -156,7 +155,6 @@ class _ImageShell extends StatelessWidget {
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 400),
         pageBuilder: (context, animation, secondaryAnimation) {
-          print("egrwrw");
           return FadeTransition(
             opacity: animation,
             child: FullScreenImageView(
@@ -199,24 +197,45 @@ class _ImageShell extends StatelessWidget {
                     height: imageMessageConfig.height ?? 200,
                     width: imageMessageConfig.width ?? 150,
                     child: ClipRRect(
-                      borderRadius: imageMessageConfig.borderRadius ??
-                          BorderRadius.circular(14),
-                      child: Image(
-                        image: image,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                        borderRadius: imageMessageConfig.borderRadius ??
+                            BorderRadius.circular(14),
+                        child: isLocalImage
+                            ? Image(
+                                image: image,
+                                fit: BoxFit.cover,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      value:
+                                          loadingProgress.expectedTotalBytes !=
+                                                  null
+                                              ? loadingProgress
+                                                      .cumulativeBytesLoaded /
+                                                  loadingProgress
+                                                      .expectedTotalBytes!
+                                              : null,
+                                    ),
+                                  );
+                                },
+                              )
+                            : CachedNetworkImage(
+                                cacheKey: imageUrl,
+                                imageUrl: imageUrl,
+                                height: 1024,
+                                width: 1024,
+                                fit: BoxFit.cover,
+                                progressIndicatorBuilder:
+                                    (context, url, progress) => Center(
+                                  child: CircularProgressIndicator(
+                                    valueColor:
+                                        const AlwaysStoppedAnimation<Color>(
+                                            Colors.blue),
+                                    value: progress.progress ?? 0,
+                                  ),
+                                ),
+                              )),
                   ),
                 ),
               ),
