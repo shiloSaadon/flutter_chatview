@@ -230,35 +230,9 @@ class Message<Content extends MessageContent> {
                 (x) => Reaction.fromJson(x as Map<String, dynamic>),
               ),
             ),
-      isStarred: map['is_starred'] as bool,
-      isRead: map['is_read'] as bool,
+      isStarred: map['is_starred'] == null ? false : map['is_starred'] as bool,
+      isRead: map['is_read'] == null ? false : map['is_read'] as bool,
       content: MessageContent.fromJson(map['content'] as Map<String, dynamic>, type!) as Content,
-      replyOfMsg:
-          map['reply_of_msg'] != null ? ReplyMessage.fromJson(map['reply_of_msg'] as Map<String, dynamic>) : null,
-      status: MessageStatus.delivered,
-    );
-  }
-
-  factory Message.fromEncryptedJson(
-    Map<String, dynamic> map,
-    Content content,
-  ) {
-    final type = MessageType.tryParse(map['type'] as String);
-    assert(type != null, "Message type must be provided");
-    return Message<Content>(
-      id: map['id'] as String,
-      sentBy: map['sent_by'] as String,
-      sentAt: DateTime.parse(map['sent_at'] as String),
-      reactions: map['reactions'] == null
-          ? {}
-          : Set<Reaction>.from(
-              (map['reactions'] as List<dynamic>).map<Reaction>(
-                (x) => Reaction.fromJson(x as Map<String, dynamic>),
-              ),
-            ),
-      isStarred: map['is_starred'] as bool,
-      isRead: map['is_read'] as bool,
-      content: content,
       replyOfMsg:
           map['reply_of_msg'] != null ? ReplyMessage.fromJson(map['reply_of_msg'] as Map<String, dynamic>) : null,
       status: MessageStatus.delivered,
