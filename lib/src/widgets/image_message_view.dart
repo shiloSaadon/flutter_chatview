@@ -81,8 +81,6 @@ class ImageMessageView extends StatelessWidget {
                   stalePeriod: const Duration(days: 7),
                 ),
               ),
-              maxHeight: 1024,
-              maxWidth: 1024,
               cacheKey: url,
               headers: imageMessageConfig.networkImageHeaders,
             ),
