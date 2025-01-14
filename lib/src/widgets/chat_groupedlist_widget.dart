@@ -172,7 +172,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
     // Scrolls to replied message and highlights
     if (repliedMessages != null && repliedMessages.key.currentState == null) {
       int counter = 0;
-      while (repliedMessages.key.currentState == null && counter < 200) {
+      while (repliedMessages.key.currentState == null && counter < 1200) {
         widget.scrollController.jumpTo(widget.scrollController.offset + 10);
         counter++;
         await Future.delayed(const Duration(milliseconds: 1));
