@@ -94,11 +94,12 @@ import 'package:chatview/chatview.dart';
 class ReplyMessage<Content extends MessageContent> extends Message<Content> {
   ReplyMessage({
     required super.id,
+    required super.idGroup,
     required super.sentBy,
     required super.sentAt,
     super.reactions = const {},
     super.isStarred = false,
-    super.isRead = false,
+    super.readBy = const {},
     required super.content,
   }) : super(replyOfMsg: null);
 
@@ -110,11 +111,12 @@ class ReplyMessage<Content extends MessageContent> extends Message<Content> {
     final message = Message<Content>.fromJson(map);
     return ReplyMessage<Content>(
       id: message.id,
+      idGroup: message.idGroup,
       sentBy: message.sentBy,
       sentAt: message.sentAt,
       reactions: message.reactions,
       isStarred: message.isStarred,
-      isRead: message.isRead,
+      readBy: message.readBy,
       content: message.content,
     );
   }

@@ -122,7 +122,7 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
         upperBound: 0.1,
         lowerBound: 0.0,
       );
-      if (widget.message.status != MessageStatus.read && !widget.isMessageBySender) {
+      if (!widget.message.isMsgRead(widget.controller.otherUsers) && !widget.isMessageBySender) {
         widget.inComingChatBubbleConfig?.onMessageRead?.call(widget.message);
       }
       _animationController?.addStatusListener((status) {
@@ -293,7 +293,7 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
     if (widget.isMessageBySender &&
         widget.controller.initialMessageList.isNotEmpty &&
         widget.controller.initialMessageList.last.id == widget.message.id &&
-        widget.message.status == MessageStatus.read) {
+        widget.message.isMsgRead(widget.controller.otherUsers)) {
       if (ChatViewInheritedWidget.of(context)?.featureActiveConfig.lastSeenAgoBuilderVisibility ?? true) {
         return widget.outgoingChatBubbleConfig?.receiptsWidgetConfig?.lastSeenAgoBuilder
                 ?.call(widget.message, applicationDateFormatter(widget.message.sentAt)) ??

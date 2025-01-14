@@ -376,6 +376,7 @@ class _ChatScreenState extends State<ChatScreen> {
     _chatController.addMessage(
       Message<MessageContent>(
         id: DateTime.now().toString(),
+        idGroup: '1',
         sentAt: DateTime.now(),
         sentBy: _chatController.currentUser.id,
         replyOfMsg: replyMessage,
@@ -386,7 +387,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _chatController.setMessageStatus(_chatController.initialMessageList.last, MessageStatus.undelivered);
     });
     Future.delayed(const Duration(seconds: 1), () {
-      _chatController.setMessageStatus(_chatController.initialMessageList.last, MessageStatus.read);
+      _chatController.setMessageStatus(_chatController.initialMessageList.last, MessageStatus.delivered);
     });
   }
 

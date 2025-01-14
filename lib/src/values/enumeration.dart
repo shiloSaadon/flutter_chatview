@@ -62,7 +62,7 @@ enum TypeWriterStatus { typing, typed }
 /// [MessageStatus] defines the current state of the message
 /// if you are sender sending a message then, the
 enum MessageStatus {
-  read,
+  // read,
   delivered,
   undelivered,
   pending;
@@ -70,9 +70,10 @@ enum MessageStatus {
   static MessageStatus? tryParse(String? value) {
     final status = value?.trim().toLowerCase();
     if (status?.isEmpty ?? true) return null;
-    if (status == read.name) {
-      return read;
-    } else if (status == delivered.name) {
+    // if (status == read.name) {
+    //   return read;
+    // } else
+    if (status == delivered.name) {
       return delivered;
     } else if (status == undelivered.name) {
       return undelivered;
