@@ -266,7 +266,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
           combinedList = combinedList.reversed.toList();
           print(chatListConfig.appBarConfiguration.extendListBelowAppbar);
           return ListView.builder(
-            cacheExtent: 30,
+            cacheExtent: 1000,
             controller: widget.scrollController,
             key: widget.key,
             physics: showPopUp ? const NeverScrollableScrollPhysics() : null,
