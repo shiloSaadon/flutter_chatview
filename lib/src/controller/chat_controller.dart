@@ -110,13 +110,16 @@ class ChatController {
 
   /// Function for setting reaction on specific chat bubble
   void setReaction({
-    required Message<MessageContent> message,
+    required String messageId,
     required String idUser,
-    required String emoji,
+    required String? emoji,
   }) {
+    final message = initialMessageList.where((m) => m.id == messageId).firstOrNull;
+    if (message == null) return;
     final reaction = message.reactions.where((r) => r.idMessage == message.id && r.idUser == idUser).firstOrNull;
     // There is no reaction on this message by this user
     if (reaction == null) {
+      if (emoji == null) return;
       initialMessageList = {
         ...initialMessageList.where((m) => m.id != message.id),
         message.copyWith(
@@ -127,8 +130,8 @@ class ChatController {
         ),
       };
     } else {
-      // There is already a reaction by this user
-      if (reaction.reaction == emoji) {
+      // Backend returns null or there is already a reaction by this user
+      if (emoji == null || reaction.reaction == emoji) {
         // The reaction is the same. So we remove the existing one
         initialMessageList = {
           ...initialMessageList.where((m) => m.id != message.id),
@@ -158,9 +161,11 @@ class ChatController {
 
   /// Function for marking a message as read
   void markAsRead({
-    required Message<MessageContent> message,
+    required String messageId,
     required String idUser,
   }) {
+    final message = initialMessageList.where((m) => m.id == messageId).firstOrNull;
+    if (message == null) return;
     initialMessageList = {
       ...initialMessageList.where((m) => m.id != message.id),
       message.copyWith(
