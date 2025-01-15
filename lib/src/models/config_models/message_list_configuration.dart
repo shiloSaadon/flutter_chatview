@@ -32,6 +32,9 @@ class ChatBackgroundConfiguration {
   /// Provides background image of chat view.
   final String? backgroundImage;
 
+  /// wheter the [backgroundImage] is local or from network
+  final bool isBackgroundLocal;
+
   /// Provides padding of chat view.
   final EdgeInsetsGeometry? padding;
 
@@ -83,6 +86,7 @@ class ChatBackgroundConfiguration {
     this.groupSeparatorBuilder,
     this.groupedListOrder = GroupedListOrder.asc,
     this.sortEnable = false,
+    this.isBackgroundLocal = false,
     this.padding,
     this.margin,
     this.messageTimeTextStyle,
