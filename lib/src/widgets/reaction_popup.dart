@@ -144,7 +144,7 @@ class ReactionPopupState extends State<ReactionPopup> with SingleTickerProviderS
             if (!(reactionPopupConfig?.overrideUserReactionCallback ?? false)) {
               chatController?.setReaction(
                 emoji: emoji,
-                message: _message!,
+                messageId: _message!.id,
                 idUser: currentUser!.id,
               );
             }

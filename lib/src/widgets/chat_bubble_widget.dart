@@ -283,7 +283,7 @@ class _ChatBubbleWidgetState<Content extends MessageContent> extends State<ChatB
                     (message) => currentUser != null
                         ? chatController?.setReaction(
                             emoji: heart,
-                            message: message,
+                            messageId: message.id,
                             idUser: currentUser!.id,
                           )
                         : null
