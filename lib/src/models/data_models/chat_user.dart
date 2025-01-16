@@ -52,6 +52,9 @@ class ChatUser {
   /// Progress indicator builder for network image
   final NetworkImageProgressIndicatorBuilder? networkImageProgressIndicatorBuilder;
 
+  /// Builder for when there is no image URL
+  final NoImageUrlBuilder? noImageUrlBuilder;
+
   ChatUser({
     required this.id,
     required this.name,
@@ -61,6 +64,7 @@ class ChatUser {
     this.assetImageErrorBuilder,
     this.networkImageErrorBuilder,
     this.networkImageProgressIndicatorBuilder,
+    this.noImageUrlBuilder,
   });
 
   factory ChatUser.fromJson(Map<String, dynamic> json) => ChatUser(

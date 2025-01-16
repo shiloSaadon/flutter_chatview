@@ -122,12 +122,7 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
         upperBound: 0.1,
         lowerBound: 0.0,
       );
-      print('Before: ${widget.message.readBy}');
-      print('Before: ${widget.isMessageBySender}');
-      print('Before: ${!widget.message.isMsgReadBy(widget.controller.currentUser)}');
-      print('Before: ${!widget.isMessageBySender}');
       if (!widget.message.isMsgReadBy(widget.controller.currentUser) && !widget.isMessageBySender) {
-        print('Inside');
         widget.inComingChatBubbleConfig?.onMessageRead?.call(widget.message);
       }
       _animationController?.addStatusListener((status) {

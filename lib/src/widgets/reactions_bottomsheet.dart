@@ -77,12 +77,7 @@ class ReactionsBottomSheet {
                           children: [
                             ProfileImageWidget(
                               circleRadius: reactionsBottomSheetConfig?.profileCircleRadius ?? 16,
-                              imageUrl: reactedUser.profilePhoto,
-                              imageType: reactedUser.imageType,
-                              defaultAvatarImage: reactedUser.defaultAvatarImage,
-                              assetImageErrorBuilder: reactedUser.assetImageErrorBuilder,
-                              networkImageErrorBuilder: reactedUser.networkImageErrorBuilder,
-                              networkImageProgressIndicatorBuilder: reactedUser.networkImageProgressIndicatorBuilder,
+                              user: reactedUser,
                             ),
                             const SizedBox(width: 12),
                             Expanded(

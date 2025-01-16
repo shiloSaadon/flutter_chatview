@@ -20,13 +20,12 @@
  * SOFTWARE.
  */
 import 'dart:io' if (kIsWeb) 'dart:html';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../../chatview.dart';
 import '../utils/constants/constants.dart';
-import 'profile_image_widget.dart';
 
 class ChatViewAppBar extends StatelessWidget {
   const ChatViewAppBar({
@@ -103,8 +102,7 @@ class ChatViewAppBar extends StatelessWidget {
   final ImageType imageType;
 
   /// Progress indicator builder for network image
-  final NetworkImageProgressIndicatorBuilder?
-      networkImageProgressIndicatorBuilder;
+  final NetworkImageProgressIndicatorBuilder? networkImageProgressIndicatorBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -124,28 +122,26 @@ class ChatViewAppBar extends StatelessWidget {
                   IconButton(
                     onPressed: onBackPress ?? () => Navigator.pop(context),
                     icon: Icon(
-                      (!kIsWeb && Platform.isIOS)
-                          ? Icons.arrow_back_ios
-                          : Icons.arrow_back,
+                      (!kIsWeb && Platform.isIOS) ? Icons.arrow_back_ios : Icons.arrow_back,
                       color: backArrowColor,
                     ),
                   ),
             Expanded(
               child: Row(
                 children: [
-                  if (profilePicture != null)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: ProfileImageWidget(
-                        imageUrl: profilePicture,
-                        defaultAvatarImage: defaultAvatarImage,
-                        assetImageErrorBuilder: assetImageErrorBuilder,
-                        networkImageErrorBuilder: networkImageErrorBuilder,
-                        imageType: imageType,
-                        networkImageProgressIndicatorBuilder:
-                            networkImageProgressIndicatorBuilder,
-                      ),
-                    ),
+                  // if (profilePicture != null)
+                  //   Padding(
+                  //     padding: const EdgeInsets.only(right: 8.0),
+                  //     child: ProfileImageWidget(
+                  //       imageUrl: profilePicture,
+                  //       defaultAvatarImage: defaultAvatarImage,
+                  //       assetImageErrorBuilder: assetImageErrorBuilder,
+                  //       networkImageErrorBuilder: networkImageErrorBuilder,
+                  //       imageType: imageType,
+                  //       networkImageProgressIndicatorBuilder:
+                  //           networkImageProgressIndicatorBuilder,
+                  //     ),
+                  //   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

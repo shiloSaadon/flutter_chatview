@@ -146,12 +146,7 @@ class _ChatBubbleWidgetState<Content extends MessageContent> extends State<ChatB
           ? profileCircleConfig?.bottomPadding ?? 15
           : profileCircleConfig?.bottomPadding ?? 2,
       profileCirclePadding: profileCircleConfig?.padding,
-      imageUrl: messagedUser?.profilePhoto,
-      imageType: messagedUser?.imageType,
-      defaultAvatarImage: messagedUser?.defaultAvatarImage ?? profileImage,
-      networkImageProgressIndicatorBuilder: messagedUser?.networkImageProgressIndicatorBuilder,
-      assetImageErrorBuilder: messagedUser?.assetImageErrorBuilder,
-      networkImageErrorBuilder: messagedUser?.networkImageErrorBuilder,
+      user: messagedUser,
       circleRadius: profileCircleConfig?.circleRadius,
       onTap: () => _onAvatarTap(messagedUser),
       onLongPress: () => _onAvatarLongPress(messagedUser),

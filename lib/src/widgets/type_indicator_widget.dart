@@ -23,10 +23,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../models/models.dart';
 import '../extensions/extensions.dart';
+import '../models/models.dart';
 import '../utils/constants/constants.dart';
-import 'profile_circle.dart';
 
 class TypingIndicator extends StatefulWidget {
   const TypingIndicator({
@@ -50,8 +49,7 @@ class TypingIndicator extends StatefulWidget {
   State<TypingIndicator> createState() => _TypingIndicatorState();
 }
 
-class _TypingIndicatorState extends State<TypingIndicator>
-    with TickerProviderStateMixin {
+class _TypingIndicatorState extends State<TypingIndicator> with TickerProviderStateMixin {
   late AnimationController _appearanceController;
 
   late Animation<double> _indicatorSpaceAnimation;
@@ -74,16 +72,12 @@ class _TypingIndicatorState extends State<TypingIndicator>
 
   double get indicatorSize => widget.typeIndicatorConfig?.indicatorSize ?? 10;
 
-  double get indicatorSpacing =>
-      widget.typeIndicatorConfig?.indicatorSpacing ?? 4;
+  double get indicatorSpacing => widget.typeIndicatorConfig?.indicatorSpacing ?? 4;
 
-  Color? get flashingCircleDarkColor =>
-      widget.typeIndicatorConfig?.flashingCircleDarkColor ??
-      const Color(0xFF939497);
+  Color? get flashingCircleDarkColor => widget.typeIndicatorConfig?.flashingCircleDarkColor ?? const Color(0xFF939497);
 
   Color? get flashingCircleBrightColor =>
-      widget.typeIndicatorConfig?.flashingCircleBrightColor ??
-      const Color(0xFFadacb0);
+      widget.typeIndicatorConfig?.flashingCircleBrightColor ?? const Color(0xFFadacb0);
 
   @override
   void initState() {
@@ -227,50 +221,43 @@ class _TypingIndicatorState extends State<TypingIndicator>
     required double bottom,
     required Widget bubble,
   }) {
-    return Positioned(
-      left: left,
-      bottom: bottom,
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: animation.value,
-            alignment: Alignment.centerLeft,
-            child: child,
-          );
-        },
-        child: Row(
-          children: [
-            ProfileCircle(
-              bottomPadding: 0,
-              imageUrl: profileCircleConfiguration?.profileImageUrl,
-              imageType: profileCircleConfiguration?.imageType,
-              assetImageErrorBuilder:
-                  profileCircleConfiguration?.assetImageErrorBuilder,
-              networkImageErrorBuilder:
-                  profileCircleConfiguration?.networkImageErrorBuilder,
-              defaultAvatarImage:
-                  profileCircleConfiguration?.defaultAvatarImage ??
-                      profileImage,
-              networkImageProgressIndicatorBuilder: profileCircleConfiguration
-                  ?.networkImageProgressIndicatorBuilder,
-            ),
-            bubble,
-          ],
-        ),
-      ),
-    );
+    return const SizedBox.shrink();
+    // return Positioned(
+    //   left: left,
+    //   bottom: bottom,
+    //   child: AnimatedBuilder(
+    //     animation: animation,
+    //     builder: (context, child) {
+    //       return Transform.scale(
+    //         scale: animation.value,
+    //         alignment: Alignment.centerLeft,
+    //         child: child,
+    //       );
+    //     },
+    //     child: Row(
+    //       children: [
+    //         ProfileCircle(
+    //           bottomPadding: 0,
+    //           imageUrl: profileCircleConfiguration?.profileImageUrl,
+    //           imageType: profileCircleConfiguration?.imageType,
+    //           assetImageErrorBuilder: profileCircleConfiguration?.assetImageErrorBuilder,
+    //           networkImageErrorBuilder: profileCircleConfiguration?.networkImageErrorBuilder,
+    //           defaultAvatarImage: profileCircleConfiguration?.defaultAvatarImage ?? profileImage,
+    //           networkImageProgressIndicatorBuilder: profileCircleConfiguration?.networkImageProgressIndicatorBuilder,
+    //         ),
+    //         bubble,
+    //       ],
+    //     ),
+    //   ),
+    // );
   }
 
   Widget _buildStatusBubble() {
     return Container(
-      padding: chatBubbleConfig?.padding ??
-          const EdgeInsets.fromLTRB(
-              leftPadding3, 0, leftPadding3, leftPadding3),
+      padding: chatBubbleConfig?.padding ?? const EdgeInsets.fromLTRB(leftPadding3, 0, leftPadding3, leftPadding3),
       margin: chatBubbleConfig?.margin ?? const EdgeInsets.fromLTRB(5, 0, 6, 2),
       decoration: BoxDecoration(
-        borderRadius: chatBubbleConfig?.borderRadius ??
-            BorderRadius.circular(replyBorderRadius2),
+        borderRadius: chatBubbleConfig?.borderRadius ?? BorderRadius.circular(replyBorderRadius2),
         color: chatBubbleConfig?.color ?? Colors.grey.shade500,
       ),
       child: Padding(
@@ -290,8 +277,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
     return AnimatedBuilder(
       animation: _jumpAnimations[value],
       builder: (context, child) {
-        final circleFlashPercent =
-            _dotIntervals[index].transform(_repeatingController.value);
+        final circleFlashPercent = _dotIntervals[index].transform(_repeatingController.value);
         final circleColorPercent = sin(pi * circleFlashPercent);
         return Transform.translate(
           offset: Offset(0, _jumpAnimations[value].value),
@@ -301,8 +287,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
             margin: EdgeInsets.symmetric(horizontal: indicatorSpacing),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Color.lerp(flashingCircleDarkColor,
-                  flashingCircleBrightColor, circleColorPercent),
+              color: Color.lerp(flashingCircleDarkColor, flashingCircleBrightColor, circleColorPercent),
             ),
           ),
         );
