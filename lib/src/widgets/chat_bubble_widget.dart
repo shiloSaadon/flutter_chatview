@@ -63,7 +63,8 @@ class ChatBubbleWidget<Content extends MessageContent> extends StatefulWidget {
   State<ChatBubbleWidget> createState() => _ChatBubbleWidgetState();
 }
 
-class _ChatBubbleWidgetState<Content extends MessageContent> extends State<ChatBubbleWidget> {
+class _ChatBubbleWidgetState<Content extends MessageContent> extends State<ChatBubbleWidget>
+    with AutomaticKeepAliveClientMixin {
   ReplyMessage? get replyMessage => widget.message.replyOfMsg;
 
   bool get isMessageBySender => widget.message.sentBy == currentUser?.id;
@@ -87,6 +88,7 @@ class _ChatBubbleWidgetState<Content extends MessageContent> extends State<ChatB
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     // Get user from id.
     final messagedUser = chatController?.getUserFromId(widget.message.sentBy);
     return Stack(
@@ -305,4 +307,8 @@ class _ChatBubbleWidgetState<Content extends MessageContent> extends State<ChatB
   }
 
   void _onMaxDuration(int duration) => maxDuration = duration;
+
+  /// Keep an image message's state alive
+  @override
+  bool get wantKeepAlive => widget.message.content is ImageMessage;
 }
