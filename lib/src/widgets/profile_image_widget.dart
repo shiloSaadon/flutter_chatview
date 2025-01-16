@@ -48,7 +48,7 @@ class ProfileImageWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(circleRadius ?? 20),
       child: imageUrl == null || imageUrl!.isEmpty
-          ? _defaultWidget(context)
+          ? _defaultWidget(context, radius)
           : switch (user!.imageType) {
               ImageType.asset => Image.asset(
                   imageUrl!,
@@ -76,7 +76,7 @@ class ProfileImageWidget extends StatelessWidget {
     );
   }
 
-  Widget _networkImageErrorWidget(context, url, error) {
+  Widget _networkImageErrorWidget(BuildContext context, String url, Object error) {
     return const Center(
       child: Icon(
         Icons.error_outline,
@@ -85,7 +85,7 @@ class ProfileImageWidget extends StatelessWidget {
     );
   }
 
-  Widget _errorWidget(context, error, stackTrace) {
+  Widget _errorWidget(BuildContext context, Object error, StackTrace? stackTrace) {
     return const Center(
       child: Icon(
         Icons.error_outline,
@@ -94,8 +94,11 @@ class ProfileImageWidget extends StatelessWidget {
     );
   }
 
-  Widget _defaultWidget(context) {
+  Widget _defaultWidget(BuildContext context, double radius) {
     assert(user?.noImageUrlBuilder != null);
-    return user!.noImageUrlBuilder!(context);
+    return SizedBox.square(
+      dimension: radius,
+      child: user!.noImageUrlBuilder!(context),
+    );
   }
 }
