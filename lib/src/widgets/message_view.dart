@@ -124,9 +124,9 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
       );
       print('Before: ${widget.message.readBy}');
       print('Before: ${widget.isMessageBySender}');
-      print('Before: ${!widget.message.isMsgRead(widget.controller.otherUsers)}');
+      print('Before: ${!widget.message.isMsgReadBy(widget.controller.currentUser)}');
       print('Before: ${!widget.isMessageBySender}');
-      if (!widget.message.isMsgRead(widget.controller.otherUsers) && !widget.isMessageBySender) {
+      if (!widget.message.isMsgReadBy(widget.controller.currentUser) && !widget.isMessageBySender) {
         print('Inside');
         widget.inComingChatBubbleConfig?.onMessageRead?.call(widget.message);
       }
@@ -298,7 +298,7 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
     if (widget.isMessageBySender &&
         widget.controller.initialMessageList.isNotEmpty &&
         widget.controller.initialMessageList.last.id == widget.message.id &&
-        widget.message.isMsgRead(widget.controller.otherUsers)) {
+        widget.message.isMsgRead(widget.controller.allUsers)) {
       if (ChatViewInheritedWidget.of(context)?.featureActiveConfig.lastSeenAgoBuilderVisibility ?? true) {
         return widget.outgoingChatBubbleConfig?.receiptsWidgetConfig?.lastSeenAgoBuilder
                 ?.call(widget.message, applicationDateFormatter(widget.message.sentAt)) ??

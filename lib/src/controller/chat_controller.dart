@@ -71,6 +71,8 @@ class ChatController {
   /// Provides current user which is sending messages.
   final ChatUser currentUser;
 
+  Set<ChatUser> get allUsers => {...otherUsers, currentUser};
+
   ChatController({
     required this.initialMessageList,
     required this.scrollController,

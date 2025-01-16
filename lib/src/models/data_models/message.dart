@@ -39,7 +39,10 @@ class Message<Content extends MessageContent> {
   ReplyMessage? get replyOfMsg => _replyOfMsg;
 
   /// Every other user is in the [readBy] set of users
-  bool isMsgRead(Set<ChatUser> otherUsers) => otherUsers.every((u) => readBy.contains(u.id));
+  bool isMsgRead(Set<ChatUser> allUsers) => allUsers.every((u) => readBy.contains(u.id));
+
+  /// Is user in the [readBy] set of users
+  bool isMsgReadBy(ChatUser user) => readBy.contains(user.id);
 
   Message({
     required this.id,
