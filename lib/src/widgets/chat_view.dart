@@ -63,10 +63,8 @@ class ChatView extends StatefulWidget {
     this.replySuggestionsConfig,
     this.scrollToBottomButtonConfig,
     this.appBarConfiguration = const AppBarConfiguration(),
-  })  : chatBackgroundConfig =
-            chatBackgroundConfig ?? const ChatBackgroundConfiguration(),
-        chatViewStateConfig =
-            chatViewStateConfig ?? const ChatViewStateConfiguration(),
+  })  : chatBackgroundConfig = chatBackgroundConfig ?? const ChatBackgroundConfiguration(),
+        chatViewStateConfig = chatViewStateConfig ?? const ChatViewStateConfiguration(),
         super(key: key);
 
   /// Provides configuration related to user profile circle avatar.
@@ -164,8 +162,7 @@ class ChatView extends StatefulWidget {
   State<ChatView> createState() => _ChatViewState();
 }
 
-class _ChatViewState extends State<ChatView>
-    with SingleTickerProviderStateMixin {
+class _ChatViewState extends State<ChatView> with SingleTickerProviderStateMixin {
   final GlobalKey<SendMessageWidgetState> _sendMessageKey = GlobalKey();
   ValueNotifier<ReplyMessage?> replyMessage = ValueNotifier(null);
 
@@ -173,13 +170,11 @@ class _ChatViewState extends State<ChatView>
 
   ChatController get chatController => widget.chatController;
 
-  ChatBackgroundConfiguration get chatBackgroundConfig =>
-      widget.chatBackgroundConfig;
+  ChatBackgroundConfiguration get chatBackgroundConfig => widget.chatBackgroundConfig;
 
   ChatViewState get chatViewState => widget.chatViewState;
 
-  ChatViewStateConfiguration? get chatViewStateConfig =>
-      widget.chatViewStateConfig;
+  ChatViewStateConfiguration? get chatViewStateConfig => widget.chatViewStateConfig;
 
   FeatureActiveConfig get featureActiveConfig => widget.featureActiveConfig;
 
@@ -198,9 +193,7 @@ class _ChatViewState extends State<ChatView>
       onReplyCallback: (reply) => replyMessage.value = reply,
       onReplyCloseCallback: () => replyMessage.value = null,
       currentUser: chatController.currentUser,
-      repliedUser: (replayMessage) => replayMessage == null
-          ? null
-          : chatController.getUserFromId(replayMessage.sentBy),
+      repliedUser: (replayMessage) => replayMessage == null ? null : chatController.getUserFromId(replayMessage.sentBy),
     );
   }
 
@@ -247,10 +240,8 @@ class _ChatViewState extends State<ChatView>
             child: Stack(
               children: [
                 Container(
-                  height: chatBackgroundConfig.height ??
-                      MediaQuery.of(context).size.height,
-                  width: chatBackgroundConfig.width ??
-                      MediaQuery.of(context).size.width,
+                  height: chatBackgroundConfig.height ?? MediaQuery.of(context).size.height,
+                  width: chatBackgroundConfig.width ?? MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     color: chatBackgroundConfig.backgroundColor ?? Colors.white,
                     image: chatBackgroundConfig.backgroundImage != null
@@ -258,10 +249,11 @@ class _ChatViewState extends State<ChatView>
                             fit: BoxFit.fill,
                             image: chatBackgroundConfig.isBackgroundLocal
                                 ? AssetImage(
-                                        chatBackgroundConfig.backgroundImage!)
-                                    as ImageProvider
+                                    chatBackgroundConfig.backgroundImage!,
+                                  ) as ImageProvider
                                 : NetworkImage(
-                                    chatBackgroundConfig.backgroundImage!),
+                                    chatBackgroundConfig.backgroundImage!,
+                                  ),
                           )
                         : null,
                   ),
@@ -271,69 +263,49 @@ class _ChatViewState extends State<ChatView>
                   body: Stack(
                     children: [
                       Container(
-                        height: chatBackgroundConfig.height ??
-                            MediaQuery.of(context).size.height,
-                        width: chatBackgroundConfig.width ??
-                            MediaQuery.of(context).size.width,
+                        height: chatBackgroundConfig.height ?? MediaQuery.of(context).size.height,
+                        width: chatBackgroundConfig.width ?? MediaQuery.of(context).size.width,
                         padding: chatBackgroundConfig.padding,
                         margin: chatBackgroundConfig.margin,
                         child: Column(
                           children: [
-                            if (widget.appBar != null &&
-                                !widget
-                                    .appBarConfiguration.extendListBelowAppbar)
+                            if (widget.appBar != null && !widget.appBarConfiguration.extendListBelowAppbar)
                               widget.appBar!,
                             Expanded(
                               child: Stack(
                                 children: [
                                   if (chatViewState.isLoading)
                                     ChatViewStateWidget(
-                                      chatViewStateWidgetConfig:
-                                          chatViewStateConfig
-                                              ?.loadingWidgetConfig,
+                                      chatViewStateWidgetConfig: chatViewStateConfig?.loadingWidgetConfig,
                                       chatViewState: chatViewState,
                                     )
                                   else if (chatViewState.noMessages)
                                     ChatViewStateWidget(
-                                      chatViewStateWidgetConfig:
-                                          chatViewStateConfig
-                                              ?.noMessageWidgetConfig,
+                                      chatViewStateWidgetConfig: chatViewStateConfig?.noMessageWidgetConfig,
                                       chatViewState: chatViewState,
-                                      onReloadButtonTap: chatViewStateConfig
-                                          ?.onReloadButtonTap,
+                                      onReloadButtonTap: chatViewStateConfig?.onReloadButtonTap,
                                     )
                                   else if (chatViewState.isError)
                                     ChatViewStateWidget(
-                                      chatViewStateWidgetConfig:
-                                          chatViewStateConfig
-                                              ?.errorWidgetConfig,
+                                      chatViewStateWidgetConfig: chatViewStateConfig?.errorWidgetConfig,
                                       chatViewState: chatViewState,
-                                      onReloadButtonTap: chatViewStateConfig
-                                          ?.onReloadButtonTap,
+                                      onReloadButtonTap: chatViewStateConfig?.onReloadButtonTap,
                                     )
                                   else if (chatViewState.hasMessages)
                                     ValueListenableBuilder<ReplyMessage?>(
                                       valueListenable: replyMessage,
                                       builder: (_, state, child) {
                                         return ValueListenableBuilder<bool>(
-                                            valueListenable:
-                                                sendMessageController
-                                                    .messagesListSizeUpdated,
+                                            valueListenable: sendMessageController.messagesListSizeUpdated,
                                             builder: (_, __, child) {
                                               return ChatListWidget(
                                                 replyMessage: state,
-                                                chatController:
-                                                    widget.chatController,
-                                                loadMoreData:
-                                                    widget.loadMoreData,
+                                                chatController: widget.chatController,
+                                                loadMoreData: widget.loadMoreData,
                                                 isLastPage: widget.isLastPage,
-                                                loadingWidget:
-                                                    widget.loadingWidget,
-                                                onChatListTap:
-                                                    widget.onChatListTap,
-                                                assignReplyMessage:
-                                                    sendMessageController
-                                                        .assignReplyMessage,
+                                                loadingWidget: widget.loadingWidget,
+                                                onChatListTap: widget.onChatListTap,
+                                                assignReplyMessage: sendMessageController.assignReplyMessage,
                                               );
                                             });
                                       },
@@ -341,15 +313,11 @@ class _ChatViewState extends State<ChatView>
                                   if (featureActiveConfig.enableTextField)
                                     SendMessageWidget(
                                       key: _sendMessageKey,
-                                      sendMessageBuilder:
-                                          widget.sendMessageBuilder,
-                                      sendMessageConfig:
-                                          widget.sendMessageConfig,
-                                      sendMessageController:
-                                          sendMessageController,
+                                      sendMessageBuilder: widget.sendMessageBuilder,
+                                      sendMessageConfig: widget.sendMessageConfig,
+                                      sendMessageController: sendMessageController,
                                       messageConfig: widget.messageConfig,
-                                      replyMessageBuilder:
-                                          widget.replyMessageBuilder,
+                                      replyMessageBuilder: widget.replyMessageBuilder,
                                     ),
                                 ],
                               ),
@@ -357,8 +325,7 @@ class _ChatViewState extends State<ChatView>
                           ],
                         ),
                       ),
-                      if (widget.appBar != null &&
-                          widget.appBarConfiguration.extendListBelowAppbar)
+                      if (widget.appBar != null && widget.appBarConfiguration.extendListBelowAppbar)
                         SizedBox(
                           width: double.infinity,
                           child: Column(
