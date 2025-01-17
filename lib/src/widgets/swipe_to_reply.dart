@@ -21,7 +21,7 @@
  */
 import 'package:chatview/src/extensions/extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 
 import 'reply_icon.dart';
 
@@ -54,6 +54,7 @@ class _SwipeToReplyState extends State<SwipeToReply> {
   double trackPaddingValue = 0;
   double initialTouchPoint = 0;
   bool isCallBackTriggered = false;
+  bool startFeddback = false;
 
   late bool isMessageByCurrentUser = widget.isMessageByCurrentUser;
 
@@ -87,9 +88,9 @@ class _SwipeToReplyState extends State<SwipeToReply> {
                       : 0.0,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                    right: isMessageByCurrentUser ? paddingValue : 0,
-                    left: isMessageByCurrentUser ? 0 : paddingValue,
+                  padding: EdgeInsetsDirectional.only(
+                    end: isMessageByCurrentUser ? paddingValue : 0,
+                    start: isMessageByCurrentUser ? 0 : paddingValue,
                   ),
                   child: widget.child,
                 ),
@@ -99,6 +100,17 @@ class _SwipeToReplyState extends State<SwipeToReply> {
   }
 
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    // Apply feedback
+    if (paddingValue >= paddingLimit && !startFeddback) {
+      startFeddback = true;
+      HapticFeedback.lightImpact();
+    }
+    // Release the feedback key
+    if (startFeddback && paddingValue < (paddingLimit - 10)) {
+      startFeddback = false;
+    }
+
+    // Handle other logic
     final swipeDistance = isMessageByCurrentUser
         ? (initialTouchPoint - details.globalPosition.dx)
         : (details.globalPosition.dx - initialTouchPoint);

@@ -32,6 +32,9 @@ class ChatBackgroundConfiguration {
   /// Provides background image of chat view.
   final String? backgroundImage;
 
+  /// Headers to pass for network image
+  final Map<String, String>? networkImageHeaders;
+
   /// wheter the [backgroundImage] is local or from network
   final bool isBackgroundLocal;
 
@@ -93,6 +96,7 @@ class ChatBackgroundConfiguration {
     this.messageTimeIconColor,
     this.loadingWidget,
     this.messageTimeAnimationCurve = Curves.decelerate,
+    this.networkImageHeaders,
     this.messageSorter,
   });
 }

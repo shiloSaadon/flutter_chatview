@@ -63,7 +63,8 @@ class Data {
     Message(
       id: '4',
       idGroup: '1',
-      content: TextMessage(text: "Can you write the time and place of the meeting?"),
+      content:
+          TextMessage(text: "Can you write the time and place of the meeting?"),
       sentAt: DateTime.now(),
       sentBy: '1',
       status: MessageStatus.delivered,
@@ -105,7 +106,8 @@ class Data {
         id: '4',
         sentAt: DateTime.now(),
         idGroup: '1',
-        content: TextMessage(text: "Can you write the time and place of the meeting?"),
+        content: TextMessage(
+            text: "Can you write the time and place of the meeting?"),
         sentBy: '2',
       ),
     ),

@@ -21,6 +21,7 @@
  * SOFTWARE.
  */
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatview/chatview.dart' hide Config;
@@ -107,17 +108,49 @@ class FullScreenImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: GestureDetector(
-        onTap: () => Navigator.of(context).pop(),
-        child: Center(
-          child: Hero(
-            tag: idImage,
-            child: Image(
-              image: image,
-              fit: BoxFit.contain,
-            ),
+    return GestureDetector(
+      // onTap: () => Navigator.of(context).pop(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+          child: Stack(
+            children: [
+              Center(
+                child: Hero(
+                  tag: idImage,
+                  child: Image(
+                    image: image,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              Align(
+                alignment: AlignmentDirectional.topEnd,
+                child: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: SafeArea(
+                      bottom: false,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(999),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
+                            child: Container(
+                              padding: const EdgeInsets.all(3),
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(.5),
+                                  shape: BoxShape.circle),
+                              child: const Icon(Icons.close_rounded),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )),
+              )
+            ],
           ),
         ),
       ),
@@ -160,8 +193,8 @@ class _ImageShell extends StatelessWidget {
       PageRouteBuilder(
         transitionDuration: const Duration(milliseconds: 400),
         reverseTransitionDuration: const Duration(milliseconds: 400),
+        opaque: false,
         pageBuilder: (context, animation, secondaryAnimation) {
-          print("egrwrw");
           return FadeTransition(
             opacity: animation,
             child: FullScreenImageView(
