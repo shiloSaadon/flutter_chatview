@@ -224,16 +224,19 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
     return StreamBuilder<Set<Message>>(
       stream: chatController?.messageStreamController.stream,
       builder: (context, snapshot) {
+        print('qqqqqqqqqqqq ->1');
         if (!snapshot.connectionState.isActive) {
+          print('qqqqqqqqqqqq ->2');
           return Center(
             child: chatBackgroundConfig.loadingWidget ??
                 const CircularProgressIndicator(),
           );
         } else {
+          print('qqqqqqqqqqqq ->3');
           final messages = (chatBackgroundConfig.sortEnable
               ? sortMessage(snapshot.data!)
               : snapshot.data!);
-
+          print('qqqqqqqqqqqq ->4');
           final enableSeparator =
               (featureActiveConfig?.enableChatSeparator ?? false);
 
@@ -241,13 +244,17 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
           var combinedList = <dynamic>[];
 
           if (enableSeparator) {
+            print('qqqqqqqqqqqq ->5');
             DateTime lastMatchedDate = DateTime.now();
 
+            print('qqqqqqqqqqqq ->6 length is ${messages.length}');
             for (int i = 0; i < messages.length; i++) {
               // Add separator if it's the first message or date changes
               if (combinedList.isEmpty ||
                   lastMatchedDate.getDateFromDateTime !=
                       messages.elementAt(i).sentAt.getDateFromDateTime) {
+                print(
+                    'qqqqqqqqqqqq ->7 message is is ${messages.elementAt(i)}');
                 // Add date separator
                 combinedList.add(messages.elementAt(i).sentAt);
                 lastMatchedDate = messages.elementAt(i).sentAt;
@@ -256,11 +263,14 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
               // Add message
               combinedList.add(messages.elementAt(i));
             }
+            print('qqqqqqqqqqqq ->8 length is ${combinedList.length}');
           } else {
             // If separators are disabled, just use the messages list
             combinedList.addAll(messages);
+            print('qqqqqqqqqqqq ->9 length is ${combinedList.length}');
           }
           combinedList = combinedList.reversed.toList();
+          print('qqqqqqqqqqqq ->10 length is ${combinedList.length}');
           return ListView.builder(
             cacheExtent: 1000,
             controller: widget.scrollController,
@@ -282,6 +292,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
 
               // Check if the item is a DateTime (separator)
               if (item is DateTime) {
+                print('qqqqqqqqqqqq ->11');
                 return _groupSeparator(item);
               }
 
