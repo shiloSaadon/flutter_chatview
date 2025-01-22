@@ -144,6 +144,7 @@ class _ChatScreenState extends State<ChatScreen> {
       chatViewState: ChatViewState.hasMessages,
       chatViewStateConfig: ChatViewStateConfiguration(
         loadingWidgetConfig: ChatViewStateWidgetConfiguration(
+          widget: Text("cewoijgerjo"),
           loadingIndicatorColor: theme.outgoingChatBubbleColor,
         ),
         onReloadButtonTap: () {},

@@ -60,6 +60,7 @@ class _SwipeToReplyState extends State<SwipeToReply> {
 
   final paddingLimit = 50;
   final double replyIconSize = 25;
+  final double replyPadding = 15;
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +82,15 @@ class _SwipeToReplyState extends State<SwipeToReply> {
                   : Alignment.centerLeft,
               fit: StackFit.passthrough,
               children: [
-                ReplyIcon(
-                  replyIconSize: replyIconSize,
-                  animationValue: paddingValue > replyIconSize
-                      ? (paddingValue) / (paddingLimit)
-                      : 0.0,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: replyPadding),
+                  child: ReplyIcon(
+                    replyIconSize: replyIconSize,
+                    animationValue:
+                        paddingValue > (replyIconSize + replyPadding)
+                            ? (paddingValue) / (paddingLimit)
+                            : 0.0,
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.only(
