@@ -210,6 +210,7 @@ class ChatController {
     initialMessageList = {message, ...initialMessageList};
     if (!messageStreamController.isClosed) {
       messageStreamController.sink.add(initialMessageList);
+      setChatViewState = initialMessageList.isEmpty ? ChatViewState.noData : ChatViewState.hasMessages;
     }
   }
 
@@ -219,6 +220,7 @@ class ChatController {
     initialMessageList = {...messageList, ...initialMessageList};
     if (!messageStreamController.isClosed) {
       messageStreamController.sink.add(initialMessageList);
+      setChatViewState = initialMessageList.isEmpty ? ChatViewState.noData : ChatViewState.hasMessages;
     }
   }
 
@@ -227,6 +229,7 @@ class ChatController {
     initialMessageList = {...messageList};
     if (!messageStreamController.isClosed) {
       messageStreamController.sink.add(initialMessageList);
+      setChatViewState = initialMessageList.isEmpty ? ChatViewState.noData : ChatViewState.hasMessages;
     }
   }
 
