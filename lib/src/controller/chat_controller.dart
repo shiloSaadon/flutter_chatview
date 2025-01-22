@@ -33,14 +33,15 @@ class ChatController {
   ScrollController scrollController;
 
   /// Allow user to show typing indicator defaults to false.
-  final ValueNotifier<ChatViewState> _chatViewState = ValueNotifier(ChatViewState.loading);
+  final ValueNotifier<ChatViewState> chatViewStateNotifier = ValueNotifier(ChatViewState.loading);
 
-  ChatViewState get chatViewState => _chatViewState.value;
+  ChatViewState get chatViewState => chatViewStateNotifier.value;
 
   /// Set state of the chat.
   set setChatViewState(ChatViewState value) {
-    if (value != _chatViewState.value) {
-      _chatViewState.value = value;
+    if (value != chatViewStateNotifier.value) {
+      chatViewStateNotifier.value = value;
+      // chatViewStateNotifier.notifyListeners();
     }
   }
 

@@ -276,55 +276,59 @@ class _ChatViewState extends State<ChatView> with SingleTickerProviderStateMixin
                             if (widget.appBar != null && !widget.appBarConfiguration.extendListBelowAppbar)
                               widget.appBar!,
                             Expanded(
-                              child: Stack(
-                                children: [
-                                  if (chatController.chatViewState.isLoading)
-                                    ChatViewStateWidget(
-                                      chatViewStateWidgetConfig: chatViewStateConfig?.loadingWidgetConfig,
-                                      chatViewState: chatController.chatViewState,
-                                    )
-                                  else if (chatController.chatViewState.noMessages)
-                                    ChatViewStateWidget(
-                                      chatViewStateWidgetConfig: chatViewStateConfig?.noMessageWidgetConfig,
-                                      chatViewState: chatController.chatViewState,
-                                      onReloadButtonTap: chatViewStateConfig?.onReloadButtonTap,
-                                    )
-                                  else if (chatController.chatViewState.isError)
-                                    ChatViewStateWidget(
-                                      chatViewStateWidgetConfig: chatViewStateConfig?.errorWidgetConfig,
-                                      chatViewState: chatController.chatViewState,
-                                      onReloadButtonTap: chatViewStateConfig?.onReloadButtonTap,
-                                    )
-                                  else if (chatController.chatViewState.hasMessages)
-                                    ValueListenableBuilder<ReplyMessage?>(
-                                      valueListenable: replyMessage,
-                                      builder: (_, state, child) {
-                                        return ValueListenableBuilder<bool>(
-                                            valueListenable: sendMessageController.messagesListSizeUpdated,
-                                            builder: (_, __, child) {
-                                              return ChatListWidget(
-                                                replyMessage: state,
-                                                chatController: widget.chatController,
-                                                loadMoreData: widget.loadMoreData,
-                                                isLastPage: widget.isLastPage,
-                                                loadingWidget: widget.loadingWidget,
-                                                onChatListTap: widget.onChatListTap,
-                                                assignReplyMessage: sendMessageController.assignReplyMessage,
-                                              );
-                                            });
-                                      },
-                                    ),
-                                  if (featureActiveConfig.enableTextField)
-                                    SendMessageWidget(
-                                      key: _sendMessageKey,
-                                      sendMessageBuilder: widget.sendMessageBuilder,
-                                      sendMessageConfig: widget.sendMessageConfig,
-                                      sendMessageController: sendMessageController,
-                                      messageConfig: widget.messageConfig,
-                                      replyMessageBuilder: widget.replyMessageBuilder,
-                                    ),
-                                ],
-                              ),
+                              child: ValueListenableBuilder(
+                                  valueListenable: chatController.chatViewStateNotifier,
+                                  builder: (context, value, _) {
+                                    return Stack(
+                                      children: [
+                                        if (value.isLoading)
+                                          ChatViewStateWidget(
+                                            chatViewStateWidgetConfig: chatViewStateConfig?.loadingWidgetConfig,
+                                            chatViewState: value,
+                                          )
+                                        else if (value.noMessages)
+                                          ChatViewStateWidget(
+                                            chatViewStateWidgetConfig: chatViewStateConfig?.noMessageWidgetConfig,
+                                            chatViewState: value,
+                                            onReloadButtonTap: chatViewStateConfig?.onReloadButtonTap,
+                                          )
+                                        else if (value.isError)
+                                          ChatViewStateWidget(
+                                            chatViewStateWidgetConfig: chatViewStateConfig?.errorWidgetConfig,
+                                            chatViewState: value,
+                                            onReloadButtonTap: chatViewStateConfig?.onReloadButtonTap,
+                                          )
+                                        else if (value.hasMessages)
+                                          ValueListenableBuilder<ReplyMessage?>(
+                                            valueListenable: replyMessage,
+                                            builder: (_, state, child) {
+                                              return ValueListenableBuilder<bool>(
+                                                  valueListenable: sendMessageController.messagesListSizeUpdated,
+                                                  builder: (_, __, child) {
+                                                    return ChatListWidget(
+                                                      replyMessage: state,
+                                                      chatController: widget.chatController,
+                                                      loadMoreData: widget.loadMoreData,
+                                                      isLastPage: widget.isLastPage,
+                                                      loadingWidget: widget.loadingWidget,
+                                                      onChatListTap: widget.onChatListTap,
+                                                      assignReplyMessage: sendMessageController.assignReplyMessage,
+                                                    );
+                                                  });
+                                            },
+                                          ),
+                                        if (featureActiveConfig.enableTextField)
+                                          SendMessageWidget(
+                                            key: _sendMessageKey,
+                                            sendMessageBuilder: widget.sendMessageBuilder,
+                                            sendMessageConfig: widget.sendMessageConfig,
+                                            sendMessageController: sendMessageController,
+                                            messageConfig: widget.messageConfig,
+                                            replyMessageBuilder: widget.replyMessageBuilder,
+                                          ),
+                                      ],
+                                    );
+                                  }),
                             ),
                           ],
                         ),
