@@ -22,6 +22,7 @@
  */
 import 'package:chatview/chatview.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 class Message<Content extends MessageContent> {
   final String id;
@@ -100,7 +101,7 @@ class Message<Content extends MessageContent> {
       'id': id,
       'id_group': idGroup,
       'sent_by': sentBy,
-      'sent_at': sentAt..toIso8601String(),
+      'sent_at': sentAt.toIso8601String(),
       'reactions': reactions.map((x) => x.toJson()).toList(),
       'is_starred': isStarred,
       'read_by': readBy,
@@ -117,7 +118,7 @@ class Message<Content extends MessageContent> {
       id: map['id'] as String,
       idGroup: map['id_group'] as String,
       sentBy: map['sent_by'] as String,
-      sentAt: DateTime.parse(map['sent_at'] as String),
+      sentAt: DateFormat('yyyy-MM-ddTHH:mm:ss').parseUtc(map['sent_at'] as String).toLocal(),
       reactions: map['reactions'] == null
           ? {}
           : Set<Reaction>.from(
