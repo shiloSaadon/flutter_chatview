@@ -60,7 +60,7 @@ class ReactionPopupState extends State<ReactionPopup> with SingleTickerProviderS
   bool get showPopUp => widget.showPopUp;
   double _yCoordinate = 0.0;
   double _xCoordinate = 0.0;
-  Message? _message;
+  UserMessage? _message;
 
   ChatController? chatController;
   ChatUser? currentUser;
@@ -157,7 +157,7 @@ class ReactionPopupState extends State<ReactionPopup> with SingleTickerProviderS
       );
 
   void refreshWidget({
-    required Message message,
+    required UserMessage message,
     required double xCoordinate,
     required double yCoordinate,
   }) {

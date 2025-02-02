@@ -33,10 +33,10 @@ class SwipeToReplyConfiguration {
   final Color? replyIconBackgroundColor;
 
   /// Provides callback when user swipe chat bubble from left side.
-  final void Function(Message<MessageContent> message)? onLeftSwipe;
+  final void Function(UserMessage<MessageContent> message)? onLeftSwipe;
 
   /// Provides callback when user swipe chat bubble from right side.
-  final void Function(Message<MessageContent> message)? onRightSwipe;
+  final void Function(UserMessage<MessageContent> message)? onRightSwipe;
 
   const SwipeToReplyConfiguration({
     this.replyIconColor,

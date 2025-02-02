@@ -28,7 +28,7 @@ import 'package:flutter/material.dart';
 
 class ChatController {
   /// Represents initial message list in chat which can be add by user.
-  Set<Message<MessageContent>> initialMessageList;
+  Set<MessageBase<MessageContent>> initialMessageList;
 
   ScrollController scrollController;
 
@@ -94,7 +94,7 @@ class ChatController {
   });
 
   /// Represents message stream of chat
-  StreamController<Set<Message<MessageContent>>> messageStreamController = StreamController();
+  StreamController<Set<MessageBase<MessageContent>>> messageStreamController = StreamController();
 
   /// Used to dispose ValueNotifiers and Streams.
   void dispose() {
@@ -105,9 +105,9 @@ class ChatController {
   }
 
   /// Set status of a message in message list.
-  void setMessageStatus(Message<MessageContent> message, MessageStatus status) {
+  void setMessageStatus(MessageBase<MessageContent> message, MessageStatus status) {
     initialMessageList.remove(message);
-    initialMessageList.add(message.copyWith(status: status));
+    initialMessageList.add(message.asUserMsg.copyWith(status: status));
     if (!messageStreamController.isClosed) {
       messageStreamController.sink.add(initialMessageList);
     }
@@ -129,7 +129,7 @@ class ChatController {
     required String idUser,
     required String? emoji,
   }) {
-    final message = initialMessageList.where((m) => m.id == messageId).firstOrNull;
+    final message = initialMessageList.where((m) => m.id == messageId).firstOrNull?.asUserMsg;
     if (message == null) return;
     final reaction = message.reactions.where((r) => r.idMessage == message.id && r.idUser == idUser).firstOrNull;
     // There is no reaction on this message by this user
@@ -179,7 +179,7 @@ class ChatController {
     required String messageId,
     required String idUser,
   }) {
-    final message = initialMessageList.where((m) => m.id == messageId).firstOrNull;
+    final message = initialMessageList.where((m) => m.id == messageId).firstOrNull?.asUserMsg;
     if (message == null) return;
     initialMessageList = {
       ...initialMessageList.where((m) => m.id != message.id),
@@ -206,7 +206,7 @@ class ChatController {
       );
 
   /// Used to add message in message list.
-  void addMessage(Message<MessageContent> message) {
+  void addMessage(UserMessage<MessageContent> message) {
     // initialMessageList.add(message);
     initialMessageList = {message, ...initialMessageList};
     if (!messageStreamController.isClosed) {
@@ -216,7 +216,7 @@ class ChatController {
   }
 
   /// Function for loading data while pagination.
-  void loadMoreData(Set<Message<MessageContent>> messageList) {
+  void loadMoreData(Set<UserMessage<MessageContent>> messageList) {
     /// Here, we have passed 0 index as we need to add data before first data
     initialMessageList = {...messageList, ...initialMessageList};
     if (!messageStreamController.isClosed) {
@@ -226,7 +226,7 @@ class ChatController {
   }
 
   /// Function for adding messages. This replaces all existing data.
-  void addMessages(Set<Message<MessageContent>> messageList) {
+  void addMessages(Set<UserMessage<MessageContent>> messageList) {
     initialMessageList = {...messageList};
     if (!messageStreamController.isClosed) {
       messageStreamController.sink.add(initialMessageList);

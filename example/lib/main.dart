@@ -376,7 +376,7 @@ class _ChatScreenState extends State<ChatScreen> {
     ReplyMessage? replyMessage,
   ) {
     _chatController.addMessage(
-      Message<MessageContent>(
+      UserMessage<MessageContent>(
         id: DateTime.now().toString(),
         idGroup: '1',
         sentAt: DateTime.now(),

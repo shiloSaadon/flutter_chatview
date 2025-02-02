@@ -24,16 +24,48 @@ import 'package:chatview/chatview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-class Message<Content extends MessageContent> {
+abstract class MessageBase<Content extends MessageContent> {
   final String id;
   final String idGroup;
-  final GlobalKey key;
-  final String sentBy;
   final DateTime sentAt;
+  final Content content;
+  final GlobalKey key;
+  MessageBase({
+    required this.id,
+    required this.idGroup,
+    required this.sentAt,
+    required this.content,
+  }) : key = GlobalKey();
+  bool get isSystemMsg => this is SystemMessage;
+  SystemMessage get asSystemMsg {
+    if (!isSystemMsg) {
+      throw Exception('Message is not system message');
+    }
+    return this as SystemMessage;
+  }
+
+  bool get isUserMsg => this is UserMessage;
+  UserMessage get asUserMsg {
+    if (!isUserMsg) {
+      throw Exception('Message is not user message');
+    }
+    return this as UserMessage;
+  }
+
+  factory MessageBase.fromJson(Map<String, dynamic> json) {
+    final sentBy = json['sent_by'] as String?;
+    if (sentBy == null) {
+      return SystemMessage.fromJson(json) as MessageBase<Content>;
+    }
+    return UserMessage.fromJson(json);
+  }
+}
+
+class UserMessage<Content extends MessageContent> extends MessageBase<Content> {
+  final String sentBy;
   final Set<Reaction> reactions;
   final bool isStarred;
   final Set<String> readBy;
-  final Content content;
   final ReplyMessage? _replyOfMsg;
   final MessageStatus status;
 
@@ -45,19 +77,18 @@ class Message<Content extends MessageContent> {
   /// Is user in the [readBy] set of users
   bool isMsgReadBy(ChatUser user) => readBy.contains(user.id);
 
-  Message({
-    required this.id,
-    required this.idGroup,
+  UserMessage({
+    required super.id,
+    required super.idGroup,
     required this.sentBy,
-    required this.sentAt,
+    required super.sentAt,
     this.reactions = const {},
     this.isStarred = false,
     this.readBy = const {},
-    required this.content,
+    required super.content,
     this.status = MessageStatus.pending,
     ReplyMessage? replyOfMsg,
-  })  : _replyOfMsg = replyOfMsg,
-        key = GlobalKey();
+  }) : _replyOfMsg = replyOfMsg;
 
   ReplyMessage get asReply => ReplyMessage(
         id: id,
@@ -70,7 +101,7 @@ class Message<Content extends MessageContent> {
         content: content,
       );
 
-  Message<Content> copyWith<MessageContent>({
+  UserMessage<Content> copyWith<MessageContent>({
     String? id,
     GlobalKey? key,
     String? sentBy,
@@ -82,9 +113,9 @@ class Message<Content extends MessageContent> {
     ReplyMessage? replyTo,
     MessageStatus? status,
   }) {
-    return Message<Content>(
+    return UserMessage<Content>(
       id: id ?? this.id,
-      idGroup: this.idGroup,
+      idGroup: idGroup,
       sentBy: sentBy ?? this.sentBy,
       sentAt: sentAt ?? this.sentAt,
       reactions: reactions ?? this.reactions,
@@ -111,10 +142,10 @@ class Message<Content extends MessageContent> {
     };
   }
 
-  factory Message.fromJson(Map<String, dynamic> map) {
+  factory UserMessage.fromJson(Map<String, dynamic> map) {
     final type = MessageType.tryParse(map['type'] as String);
     assert(type != null, "Message type must be provided");
-    return Message<Content>(
+    return UserMessage<Content>(
       id: map['id'] as String,
       idGroup: map['id_group'] as String,
       sentBy: map['sent_by'] as String,
@@ -138,7 +169,7 @@ class Message<Content extends MessageContent> {
   }
 
   @override
-  bool operator ==(covariant Message<Content> other) {
+  bool operator ==(covariant UserMessage<Content> other) {
     if (identical(this, other)) return true;
 
     return other.id == id;
@@ -152,5 +183,45 @@ class Message<Content extends MessageContent> {
   @override
   String toString() {
     return 'Message(id: $id, sentBy: $sentBy, sentAt: $sentAt, reactions: $reactions, isStarred: $isStarred, readBy: $readBy, content: $content, replyOfMsg: $replyOfMsg, status: $status)';
+  }
+}
+
+class SystemMessage extends MessageBase<TextMessage> {
+  @override
+  final GlobalKey key;
+
+  SystemMessage({
+    required super.id,
+    required super.idGroup,
+    required super.sentAt,
+    required super.content,
+  }) : key = GlobalKey();
+
+  Map<String, dynamic> toJson() => throw UnimplementedError();
+
+  factory SystemMessage.fromJson(Map<String, dynamic> map) {
+    return SystemMessage(
+      id: map['id'] as String,
+      idGroup: map['id_group'] as String,
+      sentAt: DateFormat('yyyy-MM-ddTHH:mm:ss').parseUtc(map['sent_at'] as String).toLocal(),
+      content: TextMessage.fromJson(map['content'] as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  bool operator ==(covariant SystemMessage other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode;
+  }
+
+  @override
+  String toString() {
+    return 'Message(id: $id, sentAt: $sentAt, content: $content)';
   }
 }

@@ -8,7 +8,7 @@ Widget messageWrapperBuilder(
   bool isMessageBySender,
   bool highlightMessage,
   Color highlightColor,
-  Message message,
+  UserMessage message,
   ChatBubble? inComingChatBubbleConfig,
   ChatBubble? outgoingChatBubbleConfig,
   VoiceMessageConfiguration? voiceMessageConfiguration,

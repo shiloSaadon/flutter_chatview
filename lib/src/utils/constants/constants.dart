@@ -76,7 +76,7 @@ Widget sendMessageAnimationBuilder(MessageStatus status) {
 
 /// Default builder when the message has got seen as of now
 /// is visible at the bottom of the chat bubble
-Widget lastSeenAgoBuilder(Message message, String formattedDate) {
+Widget lastSeenAgoBuilder(UserMessage message, String formattedDate) {
   return Padding(
     padding: const EdgeInsets.all(2),
     child: Text(

@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 import 'package:flutter/material.dart';
+
 import '../../chatview.dart';
 
 class ChatBubble {
@@ -50,7 +51,7 @@ class ChatBubble {
 
   /// Callback when a message has been displayed for the first
   /// time only
-  final Function(Message message)? onMessageRead;
+  final Function(UserMessage message)? onMessageRead;
 
   const ChatBubble({
     this.color,

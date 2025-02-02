@@ -5,7 +5,7 @@ class ImageMessageWrapper extends StatelessWidget {
   final bool isMessageBySender;
   final bool highlightMessage;
   final Color highlightColor;
-  final Message message;
+  final UserMessage message;
   final ChatBubble? inComingChatBubbleConfig;
   final ChatBubble? outgoingChatBubbleConfig;
   final Widget messageDataWidget;

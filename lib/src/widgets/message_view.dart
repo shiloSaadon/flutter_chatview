@@ -52,7 +52,7 @@ class MessageView<Content extends MessageContent> extends StatefulWidget {
   }) : super(key: key);
 
   /// Provides message instance of chat.
-  final Message<Content> message;
+  final UserMessage<Content> message;
 
   /// Represents current message is sent by current user.
   final bool isMessageBySender;
@@ -191,7 +191,8 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
     final useInternalMessageWrapper = messageConfig.customMessageWrapperBuilder == null;
 
     final Widget messageData = switch (widget.message) {
-      Message(content: TextMessage content, reactions: final reactions) => content.text.isAllEmoji
+      SystemMessage(content: final content) => Text(content.text),
+      UserMessage(content: TextMessage content, reactions: final reactions) => content.text.isAllEmoji
           ? Padding(
               padding: emojiMessageConfiguration?.padding ??
                   EdgeInsets.fromLTRB(
@@ -220,7 +221,7 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
               highlightMessage: widget.shouldHighlight,
               useIndernalMessageWrpper: useInternalMessageWrapper,
             ),
-      Message(content: ImageMessage content, id: final idMsg, reactions: final reactions) => ImageMessageView(
+      UserMessage(content: ImageMessage content, id: final idMsg, reactions: final reactions) => ImageMessageView(
           idMsg: idMsg,
           messageContent: content,
           reactions: reactions,
@@ -230,7 +231,7 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
           highlightImage: widget.shouldHighlight,
           highlightScale: widget.highlightScale,
         ),
-      Message(content: VoiceMessage content, reactions: final reactions) => VoiceMessageView(
+      UserMessage(content: VoiceMessage content, reactions: final reactions) => VoiceMessageView(
           screenWidth: MediaQuery.of(context).size.width,
           messageContent: content,
           reactions: reactions,

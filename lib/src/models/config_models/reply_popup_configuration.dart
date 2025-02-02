@@ -29,8 +29,7 @@ class ReplyPopupConfiguration {
   final Color? backgroundColor;
 
   /// Provides builder for creating reply pop-up widget.
-  final Widget Function(Message message, bool sentByCurrentUser)?
-      replyPopupBuilder;
+  final Widget Function(UserMessage message, bool sentByCurrentUser)? replyPopupBuilder;
 
   /// Provides callback on unSend button.
   final MessageCallBack? onUnsendTap;

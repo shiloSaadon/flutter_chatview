@@ -189,6 +189,7 @@ class _ChatViewState extends State<ChatView> with SingleTickerProviderStateMixin
       onReplyCallback: (reply) => replyMessage.value = reply,
       onReplyCloseCallback: () => replyMessage.value = null,
       currentUser: chatController.currentUser,
+      //! Handle Banners
       repliedUser: (replayMessage) => replayMessage == null ? null : chatController.getUserFromId(replayMessage.sentBy),
     );
   }

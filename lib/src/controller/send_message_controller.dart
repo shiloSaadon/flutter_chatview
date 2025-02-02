@@ -69,7 +69,7 @@ class SendMessageController extends ChangeNotifier {
     resetReply();
   }
 
-  void assignReplyMessage(Message message, BuildContext context) {
+  void assignReplyMessage(UserMessage message, BuildContext context) {
     if (currentUser != null) {
       replyMessageListener.value = message.asReply;
     }

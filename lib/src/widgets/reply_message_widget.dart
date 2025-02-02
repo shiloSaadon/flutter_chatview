@@ -54,6 +54,7 @@ class ReplyMessageWidget extends StatelessWidget {
     final currentUser = chatController?.currentUser;
     final replyBySender = message.sentBy == currentUser?.id;
     final textTheme = Theme.of(context).textTheme;
+    //! Handle Banners
     final messagedUser = chatController?.getUserFromId(message.sentBy);
     final replyBy = replyBySender ? PackageStrings.you : messagedUser?.name;
     return GestureDetector(

@@ -54,7 +54,7 @@ class ChatGroupedListWidget extends StatefulWidget {
   final VoidCallBack onChatListTap;
 
   /// Provides callback when user press chat bubble for certain time then usual.
-  final void Function(double, double, Message) onChatBubbleLongPress;
+  final void Function(double, double, UserMessage) onChatBubbleLongPress;
 
   /// Provide flag for turn on/off to see message crated time view when user
   /// swipe whole chat.
@@ -153,7 +153,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
     );
   }
 
-  Future<void> _onReplyTap(String id, Set<Message>? messages) async {
+  Future<void> _onReplyTap(String id, Set<MessageBase>? messages) async {
     // Finds the replied message if exists
     final repliedMessages = messages?.firstWhere((message) => id == message.id);
     final repliedMsgAutoScrollConfig = chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig;
@@ -209,7 +209,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
 
   Widget get _chatStreamBuilder {
     // DateTime lastMatchedDate = DateTime.now();
-    return StreamBuilder<Set<Message>>(
+    return StreamBuilder<Set<MessageBase>>(
       stream: chatController?.messageStreamController.stream,
       builder: (context, snapshot) {
         if (!snapshot.connectionState.isActive) {
@@ -270,9 +270,12 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
               return ValueListenableBuilder<String?>(
                 valueListenable: _replyId,
                 builder: (context, state, child) {
-                  final message = item as Message;
+                  final message = item as UserMessage;
                   final enableScrollToRepliedMsg =
                       chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig.enableScrollToRepliedMsg ?? false;
+                  if (message.isSystemMsg) {
+                    return Text(message.asSystemMsg.content.text);
+                  }
 
                   return ChatBubbleWidget(
                     key: message.key,
@@ -309,7 +312,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
     return 10.0;
   }
 
-  Set<Message<MessageContent>> sortMessage(Set<Message<MessageContent>> messages) {
+  Set<MessageBase<MessageContent>> sortMessage(Set<MessageBase<MessageContent>> messages) {
     final elements = [...messages];
     elements.sort(
       chatBackgroundConfig.messageSorter ?? (a, b) => a.sentAt.compareTo(b.sentAt),
@@ -323,7 +326,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
 
   /// return DateTime by checking lastMatchedDate and message created DateTime
   DateTime _groupBy(
-    Message message,
+    UserMessage message,
     DateTime lastMatchedDate,
   ) {
     /// If the conversation is ongoing on the same date,

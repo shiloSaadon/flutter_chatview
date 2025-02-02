@@ -3,8 +3,8 @@ import 'package:chatview/chatview.dart';
 class Data {
   static const profileImage =
       "https://raw.githubusercontent.com/SimformSolutionsPvtLtd/flutter_showcaseview/master/example/assets/simform.png";
-  static final messageList = <Message>{
-    Message(
+  static final messageList = <UserMessage>{
+    UserMessage(
       id: '-1',
       idGroup: '1',
       content: TextMessage(text: "Day ago"),
@@ -12,7 +12,7 @@ class Data {
       sentBy: '1', // userId of who sends the message
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '-2',
       idGroup: '1',
       content: TextMessage(text: "2 Days ago"),
@@ -20,7 +20,7 @@ class Data {
       sentBy: '2',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '-3',
       idGroup: '1',
       content: TextMessage(text: "3 Days ago"),
@@ -28,7 +28,7 @@ class Data {
       sentBy: '1',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '-4',
       idGroup: '1',
       content: TextMessage(text: "50 Days ago"),
@@ -36,7 +36,7 @@ class Data {
       sentBy: '1',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '1',
       idGroup: '1',
       content: TextMessage(text: "Hi!"),
@@ -44,7 +44,7 @@ class Data {
       sentBy: '1', // userId of who sends the message
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '2',
       idGroup: '1',
       content: TextMessage(text: "Hi!"),
@@ -52,7 +52,7 @@ class Data {
       sentBy: '2',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '3',
       idGroup: '1',
       content: TextMessage(text: "We can meet?I am free"),
@@ -60,16 +60,15 @@ class Data {
       sentBy: '1',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '4',
       idGroup: '1',
-      content:
-          TextMessage(text: "Can you write the time and place of the meeting?"),
+      content: TextMessage(text: "Can you write the time and place of the meeting?"),
       sentAt: DateTime.now(),
       sentBy: '1',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '5',
       idGroup: '1',
       content: TextMessage(text: "That's fine"),
@@ -78,7 +77,7 @@ class Data {
       reactions: {},
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '6',
       idGroup: '1',
       content: TextMessage(text: "When to go ?"),
@@ -86,7 +85,7 @@ class Data {
       sentBy: '3',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '7',
       idGroup: '1',
       content: TextMessage(text: "I guess Simform will reply"),
@@ -94,7 +93,7 @@ class Data {
       sentBy: '4',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '8',
       idGroup: '1',
       content: TextMessage(text: "https://bit.ly/3JHS2Wl"),
@@ -106,12 +105,11 @@ class Data {
         id: '4',
         sentAt: DateTime.now(),
         idGroup: '1',
-        content: TextMessage(
-            text: "Can you write the time and place of the meeting?"),
+        content: TextMessage(text: "Can you write the time and place of the meeting?"),
         sentBy: '2',
       ),
     ),
-    Message(
+    UserMessage(
       id: '9',
       idGroup: '1',
       content: TextMessage(text: "Done"),
@@ -120,7 +118,7 @@ class Data {
       status: MessageStatus.delivered,
       reactions: {},
     ),
-    Message(
+    UserMessage(
       id: '12',
       idGroup: '1',
       content: TextMessage(text: "🤩🤩"),
@@ -128,7 +126,7 @@ class Data {
       sentBy: '2',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '-100',
       idGroup: '1',
       content: TextMessage(text: "Day ago"),
@@ -136,7 +134,7 @@ class Data {
       sentBy: '1', // userId of who sends the message
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '-200',
       idGroup: '1',
       content: TextMessage(text: "2 Days ago"),
@@ -144,7 +142,7 @@ class Data {
       sentBy: '2',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '-300',
       idGroup: '1',
       content: TextMessage(text: "3 Days ago"),
@@ -152,7 +150,7 @@ class Data {
       sentBy: '1',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '-400',
       idGroup: '1',
       content: TextMessage(text: "50 Days ago"),
@@ -160,7 +158,7 @@ class Data {
       sentBy: '1',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '100',
       idGroup: '1',
       content: TextMessage(text: "Hi!"),
@@ -168,7 +166,7 @@ class Data {
       sentBy: '1', // userId of who sends the message
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '200',
       idGroup: '1',
       content: TextMessage(text: "Hi!"),
@@ -176,7 +174,7 @@ class Data {
       sentBy: '2',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '300',
       idGroup: '1',
       content: TextMessage(text: "We can meet?I am free"),
@@ -184,16 +182,15 @@ class Data {
       sentBy: '1',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '400',
       idGroup: '1',
-      content:
-          TextMessage(text: "Can you write the time and place of the meeting?"),
+      content: TextMessage(text: "Can you write the time and place of the meeting?"),
       sentAt: DateTime.now(),
       sentBy: '1',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '500',
       idGroup: '1',
       content: TextMessage(text: "That's fine"),
@@ -202,7 +199,7 @@ class Data {
       reactions: {},
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '600',
       idGroup: '1',
       content: TextMessage(text: "When to go ?"),
@@ -210,7 +207,7 @@ class Data {
       sentBy: '3',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '700',
       idGroup: '1',
       content: TextMessage(text: "I guess Simform will reply"),
@@ -218,7 +215,7 @@ class Data {
       sentBy: '4',
       status: MessageStatus.delivered,
     ),
-    Message(
+    UserMessage(
       id: '800',
       idGroup: '1',
       content: TextMessage(text: "https://bit.ly/3JHS2Wl"),
@@ -230,12 +227,11 @@ class Data {
         id: '400',
         sentAt: DateTime.now(),
         idGroup: '1',
-        content: TextMessage(
-            text: "Can you write the time and place of the meeting?"),
+        content: TextMessage(text: "Can you write the time and place of the meeting?"),
         sentBy: '2',
       ),
     ),
-    Message(
+    UserMessage(
       id: '900',
       idGroup: '1',
       content: TextMessage(text: "Done"),
@@ -244,7 +240,7 @@ class Data {
       status: MessageStatus.delivered,
       reactions: {},
     ),
-    Message(
+    UserMessage(
       id: '1200',
       idGroup: '1',
       content: TextMessage(text: "🤩🤩"),

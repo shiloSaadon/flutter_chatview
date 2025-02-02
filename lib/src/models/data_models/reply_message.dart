@@ -91,7 +91,7 @@ import 'package:chatview/chatview.dart';
 //   }
 // }
 
-class ReplyMessage<Content extends MessageContent> extends Message<Content> {
+class ReplyMessage<Content extends MessageContent> extends UserMessage<Content> {
   ReplyMessage({
     required super.id,
     required super.idGroup,
@@ -108,11 +108,11 @@ class ReplyMessage<Content extends MessageContent> extends Message<Content> {
   ReplyMessage? get replyOfMsg => null;
 
   factory ReplyMessage.fromJson(Map<String, dynamic> map) {
-    final message = Message<Content>.fromJson(map);
+    final message = UserMessage<Content>.fromJson(map);
     return ReplyMessage<Content>(
       id: message.id,
       idGroup: message.idGroup,
-      sentBy: message.sentBy,
+      sentBy: message.sentBy!,
       sentAt: message.sentAt,
       reactions: message.reactions,
       isStarred: message.isStarred,
