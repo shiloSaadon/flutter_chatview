@@ -105,9 +105,9 @@ class ChatController {
   }
 
   /// Set status of a message in message list.
-  void setMessageStatus(MessageBase<MessageContent> message, MessageStatus status) {
+  void setMessageStatus(UserMessage<MessageContent> message, MessageStatus status) {
     initialMessageList.remove(message);
-    initialMessageList.add(message.asUserMsg.copyWith(status: status));
+    initialMessageList.add(message.copyWith(status: status));
     if (!messageStreamController.isClosed) {
       messageStreamController.sink.add(initialMessageList);
     }

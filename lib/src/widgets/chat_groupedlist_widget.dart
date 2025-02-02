@@ -274,7 +274,8 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
                   final enableScrollToRepliedMsg =
                       chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig.enableScrollToRepliedMsg ?? false;
                   if (message.isSystemMsg) {
-                    return Text(message.asSystemMsg.content.text);
+                    //! Handle Banners -> Is this required???
+                    return Text(message.asSystemMsg!.content.text);
                   }
 
                   return ChatBubbleWidget(

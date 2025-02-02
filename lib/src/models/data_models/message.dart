@@ -37,18 +37,14 @@ abstract class MessageBase<Content extends MessageContent> {
     required this.content,
   }) : key = GlobalKey();
   bool get isSystemMsg => this is SystemMessage;
-  SystemMessage get asSystemMsg {
-    if (!isSystemMsg) {
-      throw Exception('Message is not system message');
-    }
+  SystemMessage? get asSystemMsg {
+    if (!isSystemMsg) return null;
     return this as SystemMessage;
   }
 
   bool get isUserMsg => this is UserMessage;
-  UserMessage get asUserMsg {
-    if (!isUserMsg) {
-      throw Exception('Message is not user message');
-    }
+  UserMessage? get asUserMsg {
+    if (!isUserMsg) return null;
     return this as UserMessage;
   }
 
