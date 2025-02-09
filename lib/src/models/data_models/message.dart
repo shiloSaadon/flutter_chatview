@@ -55,6 +55,8 @@ abstract class MessageBase<Content extends MessageContent> {
     }
     return UserMessage.fromJson(json);
   }
+
+  Map<String, dynamic> toJson() => throw UnimplementedError();
 }
 
 class UserMessage<Content extends MessageContent> extends MessageBase<Content> {
@@ -123,6 +125,7 @@ class UserMessage<Content extends MessageContent> extends MessageBase<Content> {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'id': id,
@@ -193,6 +196,7 @@ class SystemMessage extends MessageBase<TextMessage> {
     required super.content,
   }) : key = GlobalKey();
 
+  @override
   Map<String, dynamic> toJson() => throw UnimplementedError();
 
   factory SystemMessage.fromJson(Map<String, dynamic> map) {
