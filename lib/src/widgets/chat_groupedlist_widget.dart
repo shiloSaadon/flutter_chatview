@@ -270,22 +270,22 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget> with Tick
               return ValueListenableBuilder<String?>(
                 valueListenable: _replyId,
                 builder: (context, state, child) {
-                  final message = item as UserMessage;
+                  final message = item as MessageBase;
                   final enableScrollToRepliedMsg =
                       chatListConfig.repliedMessageConfig?.repliedMsgAutoScrollConfig.enableScrollToRepliedMsg ?? false;
                   if (message.isSystemMsg) {
-                    //! Handle Banners -> Is this required???
+                    //! Handle Banners
                     return Text(message.asSystemMsg!.content.text);
                   }
-
+                  final userMessage = message.asUserMsg!;
                   return ChatBubbleWidget(
                     key: message.key,
-                    message: message,
+                    message: userMessage,
                     slideAnimation: _slideAnimation,
                     onLongPress: (yCoordinate, xCoordinate) => widget.onChatBubbleLongPress(
                       yCoordinate,
                       xCoordinate,
-                      message,
+                      userMessage,
                     ),
                     onSwipe: widget.assignReplyMessage,
                     shouldHighlight: state == message.id,

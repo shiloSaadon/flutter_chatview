@@ -191,7 +191,6 @@ class _MessageViewState extends State<MessageView> with SingleTickerProviderStat
     final useInternalMessageWrapper = messageConfig.customMessageWrapperBuilder == null;
 
     final Widget messageData = switch (widget.message) {
-      SystemMessage(content: final content) => Text(content.text),
       UserMessage(content: TextMessage content, reactions: final reactions) => content.text.isAllEmoji
           ? Padding(
               padding: emojiMessageConfiguration?.padding ??
