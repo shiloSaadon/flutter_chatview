@@ -206,7 +206,7 @@ class ChatController {
       );
 
   /// Used to add message in message list.
-  void addMessage(UserMessage<MessageContent> message) {
+  void addMessage(MessageBase<MessageContent> message) {
     // initialMessageList.add(message);
     initialMessageList = {message, ...initialMessageList};
     if (!messageStreamController.isClosed) {
@@ -216,7 +216,7 @@ class ChatController {
   }
 
   /// Function for loading data while pagination.
-  void loadMoreData(Set<UserMessage<MessageContent>> messageList) {
+  void loadMoreData(Set<MessageBase<MessageContent>> messageList) {
     /// Here, we have passed 0 index as we need to add data before first data
     initialMessageList = {...messageList, ...initialMessageList};
     if (!messageStreamController.isClosed) {
@@ -226,7 +226,7 @@ class ChatController {
   }
 
   /// Function for adding messages. This replaces all existing data.
-  void addMessages(Set<UserMessage<MessageContent>> messageList) {
+  void addMessages(Set<MessageBase<MessageContent>> messageList) {
     initialMessageList = {...messageList};
     if (!messageStreamController.isClosed) {
       messageStreamController.sink.add(initialMessageList);
