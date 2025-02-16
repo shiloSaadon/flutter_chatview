@@ -3,7 +3,13 @@ import 'package:chatview/chatview.dart';
 class Data {
   static const profileImage =
       "https://raw.githubusercontent.com/SimformSolutionsPvtLtd/flutter_showcaseview/master/example/assets/simform.png";
-  static final messageList = <UserMessage>{
+  static final messageList = <MessageBase>{
+    SystemMessage(
+      id: '-7868543',
+      idGroup: '1',
+      content: TextMessage(text: "System message!!!!!!"),
+      sentAt: DateTime.now().subtract(const Duration(days: 1)),
+    ),
     UserMessage(
       id: '-1',
       idGroup: '1',
@@ -63,7 +69,8 @@ class Data {
     UserMessage(
       id: '4',
       idGroup: '1',
-      content: TextMessage(text: "Can you write the time and place of the meeting?"),
+      content:
+          TextMessage(text: "Can you write the time and place of the meeting?"),
       sentAt: DateTime.now(),
       sentBy: '1',
       status: MessageStatus.delivered,
@@ -105,7 +112,8 @@ class Data {
         id: '4',
         sentAt: DateTime.now(),
         idGroup: '1',
-        content: TextMessage(text: "Can you write the time and place of the meeting?"),
+        content: TextMessage(
+            text: "Can you write the time and place of the meeting?"),
         sentBy: '2',
       ),
     ),
@@ -185,7 +193,8 @@ class Data {
     UserMessage(
       id: '400',
       idGroup: '1',
-      content: TextMessage(text: "Can you write the time and place of the meeting?"),
+      content:
+          TextMessage(text: "Can you write the time and place of the meeting?"),
       sentAt: DateTime.now(),
       sentBy: '1',
       status: MessageStatus.delivered,
@@ -227,7 +236,8 @@ class Data {
         id: '400',
         sentAt: DateTime.now(),
         idGroup: '1',
-        content: TextMessage(text: "Can you write the time and place of the meeting?"),
+        content: TextMessage(
+            text: "Can you write the time and place of the meeting?"),
         sentBy: '2',
       ),
     ),

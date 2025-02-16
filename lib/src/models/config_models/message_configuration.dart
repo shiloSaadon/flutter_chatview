@@ -46,6 +46,9 @@ class MessageConfiguration {
   /// To customise the containder of the message
   final CustomMessageWrapperBuilder? customMessageWrapperBuilder;
 
+  /// To customise the containder of the System messages
+  final CustomSystemMessageWrapperBuilder? customSystemMessageWrapper;
+
   const MessageConfiguration({
     required this.imageMessageConfig,
     this.messageReactionConfig,
@@ -54,5 +57,6 @@ class MessageConfiguration {
     this.voiceMessageConfig,
     this.customMessageReplyViewBuilder,
     this.customMessageWrapperBuilder,
+    this.customSystemMessageWrapper,
   });
 }
