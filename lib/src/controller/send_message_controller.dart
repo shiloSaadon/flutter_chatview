@@ -102,8 +102,14 @@ class SendMessageController extends ChangeNotifier {
     }
     // Attach the message to the last image
     else {
+      final List<ChatImage> images = [];
+      waitingForSendAttachmentsListener.value.forEach((file) {
+        if (file is ChatImage) {
+          images.add(file);
+        }
+      });
       sendImages(
-        waitingForSendAttachmentsListener.value as List<ChatImage>,
+        images,
         caption: textToSend,
       );
     }
