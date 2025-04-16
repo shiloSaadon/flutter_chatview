@@ -1,4 +1,5 @@
 import 'package:chatview/chatview.dart';
+import 'package:chatview/src/models/data_models/attachment_file.dart';
 import 'package:chatview/src/utils/package_strings.dart';
 import 'package:flutter/material.dart';
 
@@ -18,8 +19,12 @@ class SendMessageController extends ChangeNotifier {
   // Use to focue the chat textField
   final focusNode = FocusNode();
 
-  /// The crrent message that been replyed as ValueListener
+  /// The current message that been replyed as ValueListener
   final ValueNotifier<ReplyMessage?> replyMessageListener = ValueNotifier(null);
+
+  /// The current attachment files that been waiting to be sent as ValueListener
+  final ValueNotifier<List<AttachmentFile>> waitingForSendAttachmentsListener =
+      ValueNotifier([]);
 
   final ValueNotifier<bool> messagesListSizeUpdated = ValueNotifier(false);
 
@@ -40,8 +45,9 @@ class SendMessageController extends ChangeNotifier {
   /// The current message that been replyed
   ReplyMessage? get replyMessage => replyMessageListener.value;
 
-  String get replyTo =>
-      replyMessage?.sentBy == currentUser?.id ? PackageStrings.you : repliedUser(replyMessage)?.name ?? '';
+  String get replyTo => replyMessage?.sentBy == currentUser?.id
+      ? PackageStrings.you
+      : repliedUser(replyMessage)?.name ?? '';
 
   void onRecordingComplete(VoiceMessage voiceMsg) {
     onSendTap.call(voiceMsg, replyMessage);

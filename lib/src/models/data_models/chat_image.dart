@@ -1,8 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chatview/src/models/data_models/attachment_file.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/v4.dart';
 
-class ChatImage {
+class ChatImage extends AttachmentFile {
   /// This is the path of the image in the [chats] bucket in the backend
   final String id;
 
@@ -67,15 +68,25 @@ class ChatImage {
   }
 
   @override
-  String toString() => 'ChatImage(id: $id, name: $name, file: $file, ext: $ext, mimeType: $mimeType)';
+  String toString() =>
+      'ChatImage(id: $id, name: $name, file: $file, ext: $ext, mimeType: $mimeType)';
 
   @override
   bool operator ==(covariant ChatImage other) {
     if (identical(this, other)) return true;
 
-    return other.id == id && other.name == name && other.file == file && other.ext == ext && other.mimeType == mimeType;
+    return other.id == id &&
+        other.name == name &&
+        other.file == file &&
+        other.ext == ext &&
+        other.mimeType == mimeType;
   }
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ file.hashCode ^ ext.hashCode ^ mimeType.hashCode;
+  int get hashCode =>
+      id.hashCode ^
+      name.hashCode ^
+      file.hashCode ^
+      ext.hashCode ^
+      mimeType.hashCode;
 }
