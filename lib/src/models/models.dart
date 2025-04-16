@@ -43,6 +43,7 @@ export 'config_models/suggestion_list_config.dart';
 export 'config_models/swipe_to_reply_configuration.dart';
 export 'config_models/type_indicator_configuration.dart';
 export 'config_models/voice_message_configuration.dart';
+export 'data_models/attachment_file.dart';
 export 'data_models/chat_image.dart';
 export 'data_models/chat_user.dart';
 export 'data_models/message.dart';
