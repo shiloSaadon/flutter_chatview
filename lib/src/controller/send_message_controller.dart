@@ -1,5 +1,4 @@
 import 'package:chatview/chatview.dart';
-import 'package:chatview/src/models/data_models/attachment_file.dart';
 import 'package:chatview/src/utils/package_strings.dart';
 import 'package:flutter/material.dart';
 
@@ -55,11 +54,13 @@ class SendMessageController extends ChangeNotifier {
   }
 
   void onImageSelected(List<ChatImage> images) {
-    debugPrint('Call in Send Message Widget');
+    debugPrint('Call in add image to attachments');
     for (var img in images) {
-      onSendTap.call(ImageMessage(image: img), replyMessage);
+      waitingForSendAttachmentsListener.value.add(img);
+      // onSendTap.call(ImageMessage(image: img), replyMessage);
     }
-    resetReply();
+    waitingForSendAttachmentsListener.notifyListeners();
+    // resetReply();
   }
 
   void resetReply() {
