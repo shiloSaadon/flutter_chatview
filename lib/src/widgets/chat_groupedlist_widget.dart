@@ -263,7 +263,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
           combinedList = combinedList.reversed.toList();
 
           return ListView.builder(
-            cacheExtent: 0,
+            cacheExtent: chatListConfig.messageConfig.cacheExtent,
             controller: widget.scrollController,
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             key: widget.key,

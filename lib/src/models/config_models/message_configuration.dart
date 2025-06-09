@@ -49,6 +49,9 @@ class MessageConfiguration {
   /// To customise the containder of the System messages
   final CustomSystemMessageWrapperBuilder? customSystemMessageWrapper;
 
+  /// Cache extent for the messages
+  final double cacheExtent;
+
   const MessageConfiguration({
     required this.imageMessageConfig,
     this.messageReactionConfig,
@@ -58,5 +61,6 @@ class MessageConfiguration {
     this.customMessageReplyViewBuilder,
     this.customMessageWrapperBuilder,
     this.customSystemMessageWrapper,
+    this.cacheExtent = 0.0,
   });
 }
