@@ -71,6 +71,7 @@ class _SwipeToReplyState extends State<SwipeToReply> {
                 initialTouchPoint = details.globalPosition.dx,
             onHorizontalDragEnd: (details) => setState(
               () {
+                _onHorizontalDragEnd(details);
                 paddingValue = 0;
                 isCallBackTriggered = false;
               },
@@ -119,20 +120,32 @@ class _SwipeToReplyState extends State<SwipeToReply> {
     final swipeDistance = isMessageByCurrentUser
         ? (initialTouchPoint - details.globalPosition.dx)
         : (details.globalPosition.dx - initialTouchPoint);
+
     if (swipeDistance >= 0 && trackPaddingValue < paddingLimit) {
       setState(() {
         paddingValue = swipeDistance;
       });
-    } else if (paddingValue >= paddingLimit) {
+    }
+    // else if (paddingValue >= paddingLimit) {
+    //   // if (!isCallBackTriggered) {
+    //   //   widget.onSwipe();
+    //   //   isCallBackTriggered = true;
+    //   // }
+    // } else {
+    //   setState(() {
+    //     paddingValue = 0;
+    //   });
+    // }
+    trackPaddingValue = swipeDistance;
+  }
+
+  void _onHorizontalDragEnd(DragEndDetails details) {
+    // Handle other logic
+    if (paddingValue >= paddingLimit) {
       if (!isCallBackTriggered) {
         widget.onSwipe();
         isCallBackTriggered = true;
       }
-    } else {
-      setState(() {
-        paddingValue = 0;
-      });
     }
-    trackPaddingValue = swipeDistance;
   }
 }
