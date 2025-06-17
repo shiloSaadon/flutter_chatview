@@ -209,13 +209,13 @@ class ChatController {
 
   /// Function to scroll to last messages in chat view
   void scrollToLastMessage() => Timer(
-        const Duration(milliseconds: 10000),
+        const Duration(milliseconds: 300),
         () {
           if (!scrollController.hasClients) return;
           scrollController.animateTo(
             scrollController.positions.last.minScrollExtent,
             curve: Curves.easeIn,
-            duration: const Duration(milliseconds: 10000),
+            duration: const Duration(milliseconds: 300),
           );
         },
       );
