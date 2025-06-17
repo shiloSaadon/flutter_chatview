@@ -274,7 +274,7 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
             padding: EdgeInsets.only(
                 bottom: chatTextFieldHeight,
                 top: chatListConfig.appBarConfiguration.extendListBelowAppbar
-                    ? appBarSize
+                    ? 100
                     : 10),
             shrinkWrap: false,
             reverse: true,
