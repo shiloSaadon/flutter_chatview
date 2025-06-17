@@ -26,8 +26,12 @@ class AppBarConfiguration {
   /// If true allow the message the be below the app bar
   final bool extendListBelowAppbar;
 
+  /// The size of the AppBar
+  final double? appBarSize;
+
   /// The app bar global key to calculate its size
   final GlobalKey? key;
 
-  const AppBarConfiguration({this.extendListBelowAppbar = false, this.key});
+  const AppBarConfiguration(
+      {this.extendListBelowAppbar = false, this.appBarSize, this.key});
 }
