@@ -275,6 +275,7 @@ class _ChatViewState extends State<ChatView>
                   ),
                 ),
                 Scaffold(
+                  resizeToAvoidBottomInset: false,
                   backgroundColor: Colors.transparent,
                   body: Stack(
                     children: [
@@ -364,17 +365,24 @@ class _ChatViewState extends State<ChatView>
                                                 );
                                               }),
                                         if (featureActiveConfig.enableTextField)
-                                          SendMessageWidget(
-                                            key: _sendMessageKey,
-                                            sendMessageBuilder:
-                                                widget.sendMessageBuilder,
-                                            sendMessageConfig:
-                                                widget.sendMessageConfig,
-                                            sendMessageController:
-                                                sendMessageController,
-                                            messageConfig: widget.messageConfig,
-                                            replyMessageBuilder:
-                                                widget.replyMessageBuilder,
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: MediaQuery.of(context)
+                                                    .viewInsets
+                                                    .bottom),
+                                            child: SendMessageWidget(
+                                              key: _sendMessageKey,
+                                              sendMessageBuilder:
+                                                  widget.sendMessageBuilder,
+                                              sendMessageConfig:
+                                                  widget.sendMessageConfig,
+                                              sendMessageController:
+                                                  sendMessageController,
+                                              messageConfig:
+                                                  widget.messageConfig,
+                                              replyMessageBuilder:
+                                                  widget.replyMessageBuilder,
+                                            ),
                                           ),
                                       ],
                                     );

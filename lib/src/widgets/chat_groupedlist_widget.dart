@@ -272,7 +272,8 @@ class _ChatGroupedListWidgetState extends State<ChatGroupedListWidget>
                 ? const NeverScrollableScrollPhysics()
                 : const AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.only(
-                bottom: chatTextFieldHeight,
+                bottom: chatTextFieldHeight +
+                    MediaQuery.of(context).viewInsets.bottom,
                 top: chatListConfig.appBarConfiguration.extendListBelowAppbar
                     ? chatListConfig.appBarConfiguration.appBarSize ??
                         appBarSize
